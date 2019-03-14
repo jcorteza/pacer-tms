@@ -16,17 +16,18 @@ $(document).ready(function() {
     //Display
     $.ajax({
         method: "GET",
-        url: "/api/batches"
-    })
-        .then(function(data) {
-            // let batches = JSON.parse(data);
-            data.forEach(function(batch) {
+        url: "/api/batches",
+        success: function(data) {
+            let batches = JSON.parse(data);
+            for (const key in batches) {
+                const batch = batches[key];
                 let rangeInfo = $("<td>").text(batch.products.range);
                 let finishInfo = $("<td>").text(batch.products.finish);
                 let locationInfo = $("<td>").text(batch.products.location);
                 let qtyInfo = $("<td>").text(batch.so.orderQty);
                 let statusInfo = $("<td>").text(batch.products.status);
                 let tableRow = $("<tr>")
+                    .attr("id", key)
                     .attr("data-finish", batch.products.finish)
                     .attr("data-range", batch.products.range)
                     .attr("data-qty", batch.so.orderQty)
@@ -40,11 +41,12 @@ $(document).ready(function() {
                         statusInfo
                     );
                 $("tbody").append(tableRow);
-            });
-        })
-        .catch(function(err) {
-            console.log(JSON.stringify(err));
-        });
+            }
+        },
+        error: function(response) {
+            console.log(JSON.stringify(response));
+        }
+    });
 
     $("table").on("click", "tr", function() {
         $("tr").removeAttr("class");

@@ -38,8 +38,9 @@ module.exports = function(app) {
     });
 
     app.get("/api/batches", function (req, res){
-        let batchesData = JSON.stringify(batches);
-        res.json(batches);
+        // let batchesData = JSON.stringify(batches);
+        console.log(JSON.stringify(batches, null, 2));
+        res.status(200).json(batches);
     });
 
     app.put("/api/batches", function(req, res) {
