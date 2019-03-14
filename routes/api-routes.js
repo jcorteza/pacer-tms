@@ -3,6 +3,7 @@ const db = require("../models");
 const passport = require("../config/passport");
 const fs = require("fs");
 let batches = require("../public/batches.json");
+const checkKey = require("../checkKey");
 
 module.exports = function(app) {
     // Using the passport.authenticate middleware with our local strategy.
@@ -42,7 +43,9 @@ module.exports = function(app) {
     });
 
     app.put("/api/batches", function(req, res) {
-        batches.push(req.body);
+        const token = checkKey(batches);
+        batches[token] = req.body;
+        // batches.push({ [token]: req.body });
         fs.writeFile(
             "public/batches.json",
             JSON.stringify(batches),

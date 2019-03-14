@@ -67,7 +67,7 @@ $(document).ready(function() {
     // Does a post to the signup route. If successful, we are redirected to the members page
     // Otherwise we log any errors
     function sendData(data) {
-        console.log("inside sendata function");
+        console.log("inside sendData function");
         console.log(data);
         $.ajax({
             method: "PUT",
