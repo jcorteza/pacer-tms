@@ -37,7 +37,7 @@ module.exports = function(app) {
             });
     });
 
-    app.get("/api/batches", function (req, res){
+    app.get("/api/batches", function(_, res) {
         // let batchesData = JSON.stringify(batches);
         // console.log(JSON.stringify(batches, null, 2));
         res.status(200).json(batches);
@@ -120,7 +120,8 @@ module.exports = function(app) {
                             })
                             .catch(function(error) {
                                 res.status(500).json({
-                                    message: "There was a problem submitting the data.",
+                                    message:
+                                        "There was a problem submitting the data.",
                                     Error: error
                                 });
                             });
