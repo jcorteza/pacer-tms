@@ -5,7 +5,7 @@ $(document).ready(function() {
     let warehouse = $("#warehouse");
     let material = $("#materialGrade");
     let description = $("#description");
-    let productDescription = $("#discription-po");
+    let productDescription = $("#description-po");
     let purchaseOrder = $("#purchaseOrder");
     let salesOrder = $("#salesOrder");
     let customerName = $("#customerName");
@@ -55,7 +55,7 @@ $(document).ready(function() {
         let qty = $(this).attr("data-qty");
         let location = $(this).attr("data-location");
         let status = $(this).attr("data-status");
-        let key = $(this).attr("id");
+        const key = $(this).attr("id");
         $(this).attr("class", "bg-light");
 
         officeClerkForm.on("submit", function(event) {
@@ -86,25 +86,28 @@ $(document).ready(function() {
             };
             console.log(dbData);
             if (
-                !dbData.products.warehouse ||
-                !dbData.products.description ||
-                !dbData.so.salesOrder ||
-                !dbData.so.desription ||
-                !dbData.so.material ||
-                !dbData.po.purchaseOrder ||
-                !dbData.po.contact ||
-                !dbData.po.customer
+                !dbData.info.products.warehouse ||
+                !dbData.info.products.description ||
+                !dbData.info.so.salesOrder ||
+                !dbData.info.so.desription ||
+                !dbData.info.so.material ||
+                !dbData.info.po.purchaseOrder ||
+                !dbData.info.po.contact ||
+                !dbData.info.po.customer
             ) {
                 console.log("you forgot to fill out one of the fields");
                 return;
             }
             // If we have an email and password, run the signUpUser function
-            addToDB(forkliftData);
-            groundOpsForm.val("");
-            finishKind.val("");
-            pipeRange.val("");
-            batchQty.val("");
-            location.val("");
+            const dataAdded = addToDB(dbData);
+            if (dataAdded) {
+                $(`#${key}`).remove();
+            }
+            // groundOpsForm.val("");
+            // finish.val("");
+            // pipeRange.val("");
+            // batchQty.val("");
+            // location.val("");
         });
 
         function addToDB(data) {
@@ -114,11 +117,13 @@ $(document).ready(function() {
                 url: "/api/newData",
                 data: data,
                 dataType: "json",
-                success: function(message) {
-                    console.log(message.success);
+                success: function(response) {
+                    console.log(response.message);
+                    return true;
                 },
-                error: function(error) {
-                    console.log(JSON.stringify(error));
+                error: function(response) {
+                    console.log(JSON.stringify(response));
+                    return false;
                 }
             });
         }

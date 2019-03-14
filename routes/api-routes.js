@@ -39,7 +39,7 @@ module.exports = function(app) {
 
     app.get("/api/batches", function (req, res){
         // let batchesData = JSON.stringify(batches);
-        console.log(JSON.stringify(batches, null, 2));
+        // console.log(JSON.stringify(batches, null, 2));
         res.status(200).json(batches);
     });
 
@@ -90,28 +90,54 @@ module.exports = function(app) {
 
     app.post("/api/newData", function(req, res) {
         console.log(req.body.key);
-        console.log(JSON.stringify(req.body.info.product));
-        console.log(JSON.stringify(req.body.info.so));
-        console.log(JSON.stringify(req.body.info.po));
-        // db.Product.create(req.body.info.products);
-        // db.SO.create(req.body.info.so);
-        // db.PO.create(req.body.info.po);
-        // delete batches[req.body.key];
-        // fs.writeFile(
-        //     "public/batches.json",
-        //     JSON.stringify(batches),
-        //     "utf-8",
-        //     function(err) {
-        //         if (err !== undefined) {
-        //             console.log(
-        //                 "Something went wrong trying to update the batches.json file."
-        //             );
-        //         } else {
-        //             console.log("batches.json updated");
-        //         }
-        //     }
-        // );
-        res.json({ repsonse: "attempted post to /api/newData route" });
+        // console.log(JSON.stringify(req.body.info.products));
+        // console.log(JSON.stringify(req.body.info.so));
+        // console.log(JSON.stringify(req.body.info.po));
+        db.Product.create(req.body.info.products)
+            .then(function() {
+                db.SO.create(req.body.info.so)
+                    .then(function() {
+                        db.PO.create(req.body.info.po)
+                            .then(function() {
+                                delete batches[req.body.key];
+                                fs.writeFile(
+                                    "public/batches.json",
+                                    JSON.stringify(batches),
+                                    "utf-8",
+                                    function(err) {
+                                        if (err !== undefined) {
+                                            console.log(
+                                                "Something went wrong trying to update the batches.json file."
+                                            );
+                                        } else {
+                                            console.log("batches.json updated");
+                                        }
+                                    }
+                                );
+                                res.status(200).json({
+                                    message: "Submission successfull."
+                                });
+                            })
+                            .catch(function(error) {
+                                res.status(500).json({
+                                    message: "There was a problem submitting the data.",
+                                    Error: error
+                                });
+                            });
+                    })
+                    .catch(function(error) {
+                        res.status(500).json({
+                            message: "There was a problem submitting the data.",
+                            Error: error
+                        });
+                    });
+            })
+            .catch(function(error) {
+                res.status(500).json({
+                    message: "There was a problem submitting the data.",
+                    Error: error
+                });
+            });
     });
 
     app.get("/api/manager", function(req, res) {
