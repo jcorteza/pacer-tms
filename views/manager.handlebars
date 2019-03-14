@@ -46,10 +46,13 @@
             </thead>
             <tbody id="inventoryTable">
               <tr>
-                {{#each Product}}
-                <td>{{this}}</td>
-                {{/each}}
-                
+                {{#if Products}}
+                  {{#each Products}}
+                    <td>{{this}}</td>
+                  {{/each}}
+                {{else}}
+                  <td colspan="9" id="tdEmpty">No Data to Display</td>
+                {{/if}}
               </tr>
             </tbody>
           </table>
@@ -99,4 +102,4 @@
   </footer>
 
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-  <script type="text/javascript" src="js/members.js"></script>
+  <script type="text/javascript" src="js/manager.js"></script>

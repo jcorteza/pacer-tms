@@ -96,11 +96,10 @@ module.exports = function(app) {
 
     app.get("/api/manager", function(req, res) {
         db.Product.findAll().then(function(Products) {
-            let hbsObj = { Product: Products };
+            console.log(JSON.stringify(Products));
+            let hbsObj = { Products: JSON.stringify(Products) };
             res.render("manager", hbsObj);
-            console.log(hbsObj);
         });
-        res.json({success: "get was successful"});
     });
 
     // db.SO.findAll().then(SOs => console.log(SOs));
