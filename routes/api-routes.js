@@ -39,7 +39,7 @@ module.exports = function(app) {
 
     app.get("/api/batches", function (req, res){
         let batchesData = JSON.stringify(batches);
-        res.json(batchesData);
+        res.json(batches);
     });
 
     app.put("/api/batches", function(req, res) {
@@ -87,11 +87,12 @@ module.exports = function(app) {
         }
     });
 
-    app.post("/api", function(req, res) {
+    app.post("/api/newData", function(req, res) {
         console.log(req.body);
         console.log(req.body.product);
         console.log(req.body.so);
         console.log(req.body.po);
+        res.json({ repsonse: "attempted post to /api/newData route" });
         /*db.Product.create(req.body.products);
         db.SO.create(req.body.so);
         db.PO.create(req.body.po);*/

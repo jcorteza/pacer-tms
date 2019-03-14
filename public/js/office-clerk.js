@@ -1,15 +1,15 @@
 $(document).ready(function() {
     // Getting references to our form and input
-     //const batches = require("../public/batches.json");
-     const officeClerkForm = $("form.office");
-     let warehouse = $("#warehouse");
-     let material = $("#materialGrade");
-     let description = $("#description");
+    //const batches = require("../public/batches.json");
+    const officeClerkForm = $("form.office");
+    let warehouse = $("#warehouse");
+    let material = $("#materialGrade");
+    let description = $("#description");
     let productDescription = $("#discription-po");
-     let purchaseOrder = $("#purchaseOrder");
-     let salesOrder = $("#salesOrder");
-     let customerName = $("#customerName");
-     let contact = $("#contact");
+    let purchaseOrder = $("#purchaseOrder");
+    let salesOrder = $("#salesOrder");
+    let customerName = $("#customerName");
+    let contact = $("#contact");
 
     // Does a post to the signup route. If successful, we are redirected to the members page
     // Otherwise we log any errors
@@ -19,8 +19,8 @@ $(document).ready(function() {
         url: "/api/batches"
     })
         .then(function(data) {
-            let batches = JSON.parse(data);
-            batches.forEach(function(batch) {
+            // let batches = JSON.parse(data);
+            data.forEach(function(batch) {
                 let rangeInfo = $("<td>").text(batch.products.range);
                 let finishInfo = $("<td>").text(batch.products.finish);
                 let locationInfo = $("<td>").text(batch.products.location);
@@ -42,7 +42,7 @@ $(document).ready(function() {
                 $("tbody").append(tableRow);
             });
         })
-         .catch(function(err) {
+        .catch(function(err) {
             console.log(JSON.stringify(err));
         });
 
@@ -105,13 +105,13 @@ $(document).ready(function() {
             console.log("Inside addToDB function");
             $.ajax({
                 method: "POST",
-                url : "/api",
-                data : data,
-                dataType : "json",
-                success : function(message) {
+                url: "/api/newData",
+                data: data,
+                dataType: "json",
+                success: function(message) {
                     console.log(message.success);
                 },
-                error : function (error) {
+                error: function(error) {
                     console.log(JSON.stringify(error));
                 }
             });
