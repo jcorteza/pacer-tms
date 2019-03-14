@@ -89,28 +89,28 @@ module.exports = function(app) {
     });
 
     app.post("/api/newData", function(req, res) {
-        console.log(req.body);
-        console.log(req.body.product);
-        console.log(req.body.so);
-        console.log(req.body.po);
+        console.log(req.body.key);
+        console.log(JSON.stringify(req.body.info.product));
+        console.log(JSON.stringify(req.body.info.so));
+        console.log(JSON.stringify(req.body.info.po));
         // db.Product.create(req.body.info.products);
         // db.SO.create(req.body.info.so);
         // db.PO.create(req.body.info.po);
-        delete batches[req.body.key];
-        fs.writeFile(
-            "public/batches.json",
-            JSON.stringify(batches),
-            "utf-8",
-            function(err) {
-                if (err !== undefined) {
-                    console.log(
-                        "Something went wrong trying to update the batches.json file."
-                    );
-                } else {
-                    console.log("batches.json updated");
-                }
-            }
-        );
+        // delete batches[req.body.key];
+        // fs.writeFile(
+        //     "public/batches.json",
+        //     JSON.stringify(batches),
+        //     "utf-8",
+        //     function(err) {
+        //         if (err !== undefined) {
+        //             console.log(
+        //                 "Something went wrong trying to update the batches.json file."
+        //             );
+        //         } else {
+        //             console.log("batches.json updated");
+        //         }
+        //     }
+        // );
         res.json({ repsonse: "attempted post to /api/newData route" });
     });
 
