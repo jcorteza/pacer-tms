@@ -54,7 +54,8 @@ $(document).ready(function() {
         let range = $(this).attr("data-range");
         let qty = $(this).attr("data-qty");
         let location = $(this).attr("data-location");
-        let status = $(this).attr("data-status");
+        // eslint-disable-next-line prettier/prettier
+        let status = $(this).attr("data-status").toUpperCase();
         const key = $(this).attr("id");
         $(this).attr("class", "bg-light");
 

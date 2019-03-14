@@ -28,11 +28,8 @@ module.exports = function(sequelize, DataTypes) {
             }
         },
         warehouse: {
-            type: DataTypes.STRING,
-            allowNull: false,
-            validate: {
-                is: /[A-Z]+\d+$/
-            }
+            type: DataTypes.INTEGER,
+            allowNull: false
         },
         description: {
             type: DataTypes.STRING,

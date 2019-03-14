@@ -119,6 +119,7 @@ module.exports = function(app) {
                                 });
                             })
                             .catch(function(error) {
+                                console.log(error);
                                 res.status(500).json({
                                     message:
                                         "There was a problem submitting the data.",
@@ -127,6 +128,7 @@ module.exports = function(app) {
                             });
                     })
                     .catch(function(error) {
+                        console.log(error);
                         res.status(500).json({
                             message: "There was a problem submitting the data.",
                             Error: error
@@ -134,6 +136,7 @@ module.exports = function(app) {
                     });
             })
             .catch(function(error) {
+                console.log(error);
                 res.status(500).json({
                     message: "There was a problem submitting the data.",
                     Error: error
