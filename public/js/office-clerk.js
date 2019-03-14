@@ -55,29 +55,33 @@ $(document).ready(function() {
         let qty = $(this).attr("data-qty");
         let location = $(this).attr("data-location");
         let status = $(this).attr("data-status");
+        let key = $(this).attr("id");
         $(this).attr("class", "bg-light");
 
         officeClerkForm.on("submit", function(event) {
             event.preventDefault();
             let dbData = {
-                products: {
-                    range: range,
-                    finish: finish,
-                    location: location,
-                    warehouse: warehouse.val(),
-                    description: productDescription.val().trim(),
-                    status: status
-                },
-                so: {
-                    salesOrder: salesOrder.val().trim(),
-                    desription: description.val().trim(),
-                    material: material.val(),
-                    orderQty: qty
-                },
-                po: {
-                    purchaseOrder: purchaseOrder.val().trim(),
-                    contact: contact.val().trim(),
-                    customer: customerName.val().trim()
+                key: key,
+                info: {
+                    products: {
+                        range: range,
+                        finish: finish,
+                        location: location,
+                        warehouse: warehouse.val(),
+                        description: productDescription.val().trim(),
+                        status: status
+                    },
+                    so: {
+                        salesOrder: salesOrder.val().trim(),
+                        desription: description.val().trim(),
+                        material: material.val(),
+                        orderQty: qty
+                    },
+                    po: {
+                        purchaseOrder: purchaseOrder.val().trim(),
+                        contact: contact.val().trim(),
+                        customer: customerName.val().trim()
+                    }
                 }
             };
             console.log(dbData);

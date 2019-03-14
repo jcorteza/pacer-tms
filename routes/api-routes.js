@@ -93,10 +93,25 @@ module.exports = function(app) {
         console.log(req.body.product);
         console.log(req.body.so);
         console.log(req.body.po);
+        // db.Product.create(req.body.info.products);
+        // db.SO.create(req.body.info.so);
+        // db.PO.create(req.body.info.po);
+        delete batches[req.body.key];
+        fs.writeFile(
+            "public/batches.json",
+            JSON.stringify(batches),
+            "utf-8",
+            function(err) {
+                if (err !== undefined) {
+                    console.log(
+                        "Something went wrong trying to update the batches.json file."
+                    );
+                } else {
+                    console.log("batches.json updated");
+                }
+            }
+        );
         res.json({ repsonse: "attempted post to /api/newData route" });
-        /*db.Product.create(req.body.products);
-        db.SO.create(req.body.so);
-        db.PO.create(req.body.po);*/
     });
 
     app.get("/api/manager", function(req, res) {
