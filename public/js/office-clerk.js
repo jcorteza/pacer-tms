@@ -18,9 +18,9 @@ $(document).ready(function() {
         method: "GET",
         url: "/api/batches",
         success: function(data) {
-            let batches = JSON.parse(data);
-            for (const key in batches) {
-                const batch = batches[key];
+            // let batches = JSON.parse(data);
+            for (const key in data) {
+                const batch = data[key];
                 let rangeInfo = $("<td>").text(batch.products.range);
                 let finishInfo = $("<td>").text(batch.products.finish);
                 let locationInfo = $("<td>").text(batch.products.location);
