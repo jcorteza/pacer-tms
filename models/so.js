@@ -12,6 +12,7 @@ module.exports = function(sequelize, DataTypes) {
         material: {
             type: DataTypes.STRING,
             allowNull: false,
+            defaultValue: "H40",
             validate: {
                 isIn: [["H40", "J55", "K55", "N80-1", "L80"]]
             }
@@ -25,12 +26,12 @@ module.exports = function(sequelize, DataTypes) {
             }
         }
     });
-    SO.associate = function(models) {
-        SO.belongsTo(models.PO, {
-            foreignKey: "purchaseOrder",
-            targetKey: "purchaseOrder"
-        });
-        // SO.hasMany(models.Product, {foreignKey: "id", sourceKey: "id"});
-    };
+    // SO.associate = function(models) {
+    SO.belongsTo(models.PO, {
+        as: "purchaseOrder"
+    });
+    // SO.hasMany(models.Product, {foreignKey: "id", sourceKey: "id"});
+    // need to addd purchase order id
+    // };
     return SO;
 };

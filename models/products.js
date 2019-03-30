@@ -42,12 +42,12 @@ module.exports = function(sequelize, DataTypes) {
                 isIn: [["DAMAGED", "GOOD", "QC-INSPECT"]]
             }
         }
+        // need to add sales order number
     });
-    Product.associate = function(models) {
-        Product.belongsTo(models.SO, {
-            foreignKey: "salesOrder",
-            targetKey: "salesOrder"
-        });
-    };
+    // Product.associate = function(models) {
+    Product.belongsTo(models.SO, {
+        as: "salesOrder"
+    });
+    // };
     return Product;
 };
