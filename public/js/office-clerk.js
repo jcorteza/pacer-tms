@@ -4,8 +4,8 @@ $(document).ready(function() {
     const officeClerkForm = $("form.office");
     let warehouse = $("#warehouse");
     let material = $("#materialGrade");
-    let description = $("#description");
-    let productDescription = $("#description-po");
+    let descriptionSO = $("#description-so");
+    let descriptionProduct = $("#description-product");
     let purchaseOrder = $("#purchaseOrder");
     let salesOrder = $("#salesOrder");
     let customerName = $("#customerName");
@@ -69,12 +69,12 @@ $(document).ready(function() {
                         finish: finish,
                         location: location,
                         warehouse: warehouse.val(),
-                        description: productDescription.val().trim(),
+                        description: descriptionProduct.val().trim(),
                         status: status
                     },
                     so: {
                         salesOrder: salesOrder.val().trim(),
-                        desription: description.val().trim(),
+                        description: descriptionSO.val().trim(),
                         material: material.val(),
                         orderQty: qty
                     },
