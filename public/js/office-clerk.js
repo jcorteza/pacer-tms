@@ -90,7 +90,7 @@ $(document).ready(function() {
                 !dbData.info.products.warehouse ||
                 !dbData.info.products.description ||
                 !dbData.info.so.salesOrder ||
-                !dbData.info.so.desription ||
+                !dbData.info.so.description ||
                 !dbData.info.so.material ||
                 !dbData.info.po.purchaseOrder ||
                 !dbData.info.po.contact ||
