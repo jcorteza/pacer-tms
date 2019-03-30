@@ -14,7 +14,6 @@ module.exports = function(sequelize, DataTypes) {
             type: DataTypes.STRING,
             allowNull: false
         }
-        // need to ad sales order id
     });
     return PO;
 };
