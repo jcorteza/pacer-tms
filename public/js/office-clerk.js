@@ -100,11 +100,11 @@ $(document).ready(function() {
                 return;
             }
             const dataAdded = addToDB(dbData);
-            console.log(`dataAdded: ${dataAdded}`);
+            console.log(`dataAdded: ${JSON.stringify(dataAdded)}`);
             if (dataAdded) {
                 $(`#${key}`).remove();
-                $("#warehouse").selectedIndex = -1;
-                $("#materialGrade").selectedIndex = -1;
+                $("#warehouse").prop("selectedIndex", 0);
+                $("#materialGrade").prop("selectedIndex", 0);
                 $("#purchaseOrder").val("");
                 $("#description-product").val("");
                 $("#salesOrder").val("");

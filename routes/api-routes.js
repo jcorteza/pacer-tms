@@ -89,10 +89,6 @@ module.exports = function(app) {
     });
 
     app.post("/api/newData", function(req, res) {
-        console.log(req.body.key);
-        // console.log(JSON.stringify(req.body.info.products));
-        // console.log(JSON.stringify(req.body.info.so));
-        // console.log(JSON.stringify(req.body.info.po));
         db.Product.create(req.body.info.products)
             .then(function() {
                 db.SO.create(req.body.info.so)
