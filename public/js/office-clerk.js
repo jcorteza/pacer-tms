@@ -103,12 +103,15 @@ $(document).ready(function() {
             console.log(`dataAdded: ${dataAdded}`);
             if (dataAdded) {
                 $(`#${key}`).remove();
+                $("#warehouse").selectedIndex = -1;
+                $("#materialGrade").selectedIndex = -1;
+                $("#purchaseOrder").val("");
+                $("#description-product").val("");
+                $("#salesOrder").val("");
+                $("#description-so").val("");
+                $("#customerName").val("");
+                $("#contact").val("");
             }
-            // groundOpsForm.val("");
-            // finish.val("");
-            // pipeRange.val("");
-            // batchQty.val("");
-            // location.val("");
         });
 
         function addToDB(data) {
