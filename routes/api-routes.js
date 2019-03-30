@@ -91,9 +91,11 @@ module.exports = function(app) {
     app.post("/api/newData", function(req, res) {
         db.Product.create(req.body.info.products)
             .then(function() {
-                db.SO.create(req.body.info.so)
+                db.Product.setSO(req.body.info.so.salesOrder);
+                db.SO.findOrCreate({ where: req.body.info.so })
                     .then(function() {
-                        db.PO.create(req.body.info.po)
+                        db.SO.setPO(req.body.info.po.purchaseOrder);
+                        db.PO.findOrCreate({ where: req.body.info.po })
                             .then(function() {
                                 delete batches[req.body.key];
                                 fs.writeFile(
