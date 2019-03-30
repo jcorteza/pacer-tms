@@ -105,9 +105,12 @@ module.exports = function(app) {
                                     JSON.stringify(batches),
                                     "utf-8",
                                     function(err) {
-                                        if (err !== undefined) {
+                                        if (err !== null) {
                                             console.log(
                                                 "Something went wrong trying to update the batches.json file."
+                                            );
+                                            console.log(
+                                                `Error: ${JSON.stringify(err)}`
                                             );
                                         } else {
                                             console.log("batches.json updated");

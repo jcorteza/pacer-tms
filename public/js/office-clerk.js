@@ -99,8 +99,8 @@ $(document).ready(function() {
                 console.log("you forgot to fill out one of the fields");
                 return;
             }
-            // If we have an email and password, run the signUpUser function
             const dataAdded = addToDB(dbData);
+            console.log(`dataAdded: ${dataAdded}`);
             if (dataAdded) {
                 $(`#${key}`).remove();
             }
@@ -113,7 +113,7 @@ $(document).ready(function() {
 
         function addToDB(data) {
             console.log("Inside addToDB function");
-            $.ajax({
+            return $.ajax({
                 method: "POST",
                 url: "/api/newData",
                 data: data,
