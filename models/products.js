@@ -44,10 +44,10 @@ module.exports = function(sequelize, DataTypes) {
         }
         // need to add sales order number
     });
-    // Product.associate = function(models) {
-    Product.belongsTo(models.SO, {
-        as: "salesOrder"
-    });
-    // };
+    Product.associate = function(models) {
+        Product.belongsTo(models.SO, {
+            as: "salesOrder"
+        });
+    };
     return Product;
 };

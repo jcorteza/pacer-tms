@@ -16,11 +16,5 @@ module.exports = function(sequelize, DataTypes) {
         }
         // need to ad sales order id
     });
-    // PO.associate = function(models) {
-    //     PO.hasMany(models.SO, {
-    //         foreignKey: "purchaseOrder",
-    //         sourceKey: "purchaseOrder"
-    //     });
-    // };
     return PO;
 };

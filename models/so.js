@@ -26,12 +26,10 @@ module.exports = function(sequelize, DataTypes) {
             }
         }
     });
-    // SO.associate = function(models) {
-    SO.belongsTo(models.PO, {
-        as: "purchaseOrder"
-    });
-    // SO.hasMany(models.Product, {foreignKey: "id", sourceKey: "id"});
-    // need to addd purchase order id
-    // };
+    SO.associate = function(models) {
+        SO.belongsTo(models.PO, {
+            as: "purchaseOrder"
+        });
+    };
     return SO;
 };
