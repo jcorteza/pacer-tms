@@ -98,7 +98,9 @@ module.exports = function(app) {
                         newProduct.setSO(newSO[0]);
                         db.PO.findOrCreate({ where: req.body.info.po })
                             .then(function(newPO) {
-                                newSO[0].setPO(newPO[0]);
+                                newPO[0].getSOs().then((salesOrders) => {
+                                    newPO[0].setSOs([...salesOrders, newSO[0]]);
+                                });
                                 delete batches[req.body.key];
                                 fs.writeFile(
                                     "public/batches.json",

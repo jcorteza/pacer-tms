@@ -15,5 +15,10 @@ module.exports = function(sequelize, DataTypes) {
             allowNull: false
         }
     });
+    PO.associate = function(models) {
+        PO.hasMany(models.SO, {
+            foreignKey: "purchaseOrder"
+        });
+    };
     return PO;
 };
