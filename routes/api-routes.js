@@ -90,13 +90,15 @@ module.exports = function(app) {
 
     app.post("/api/newData", function(req, res) {
         db.Product.create(req.body.info.products)
-            .then(function() {
-                db.Product.setSO(req.body.info.so.salesOrder);
+            .then(function(newProduct) {
+                console.log(req.body.info.so);
+                console.log(JSON.stringify(req.body.info));
                 db.SO.findOrCreate({ where: req.body.info.so })
-                    .then(function() {
-                        db.SO.setPO(req.body.info.po.purchaseOrder);
+                    .then(function(newSO) {
+                        newProduct.setSO(newSO[0]);
                         db.PO.findOrCreate({ where: req.body.info.po })
-                            .then(function() {
+                            .then(function(newPO) {
+                                newSO[0].setPO(newPO[0]);
                                 delete batches[req.body.key];
                                 fs.writeFile(
                                     "public/batches.json",

@@ -27,7 +27,7 @@ module.exports = function(sequelize, DataTypes) {
         }
     });
     SO.associate = function(models) {
-        SO.belongsTo(models.PO, {
+        SO.PO = SO.belongsTo(models.PO, {
             foreignKey: "purchaseOrder",
             targetKey: "purchaseOrder"
         });
