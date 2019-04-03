@@ -1,3 +1,6 @@
+import "../js/validate/validateGroundops";
+import validateGroundops from "../js/validate/validateGroundops";
+
 $(document).ready(function() {
     // Getting references to our form and input
     const groundOpsForm = $("form.groundops");
@@ -8,11 +11,9 @@ $(document).ready(function() {
     let location = $("select#location");
     let status = $("#status");
 
-    // When the add button is clicked, we validate that none of the inputs are blank
-
     groundOpsForm.on("submit", function(event) {
-        console.log("groundOps on submit");
         event.preventDefault();
+        $("#addError").attr("class", "d-none");
         let forkliftData = {
             products: {
                 range: pipeRange.val().toUpperCase(),
@@ -34,34 +35,16 @@ $(document).ready(function() {
                 customer: ""
             }
         };
-
-        if (
-            !forkliftData.so.material ||
-            !forkliftData.products.range ||
-            !forkliftData.products.finish ||
-            !forkliftData.products.location ||
-            !forkliftData.so.orderQty
-        ) {
-            // console.log("you forgot to fill out one of the fields");
-            $("#addError").attr("class", "alert alert-danger text-center");
-            return;
+        let validate = validateGroundops(forkliftData);
+        console.log(JSON.stringify(validate));
+        if (validate.valid) {
+            sendData(forkliftData);
         } else {
-            $("#addBtn").text("Information Added");
-
-            if ($("#addBtn").text() === "Information Added") {
-                setTimeout(function() {
-                    $("#addBtn").text("Add");
-                }, 1000);
-            }
+            $("#addError")
+                .attr("class", "alert alert-danger text-center")
+                .text(validate.message)
+                .atrr("class", "d-block");
         }
-        // If we have an email and password, run the signUpUser function
-        sendData(forkliftData);
-        groundOpsForm.val("");
-        material.val("");
-        finishKind.val("");
-        pipeRange.val("");
-        batchQty.val("");
-        location.val("");
     });
 
     // Does a post to the signup route. If successful, we are redirected to the members page
@@ -74,8 +57,21 @@ $(document).ready(function() {
             url: "/api/batches",
             data: data,
             dataType: "json",
-            success: function(message) {
-                console.log(`${JSON.stringify(message.success)}`);
+            success: function() {
+                $("#addBtn")
+                    .text("Success!")
+                    .attr("disabled", true);
+                setTimeout(function() {
+                    material.prop("selected", 0);
+                    finishKind.prop("selected", 0);
+                    pipeRange.prop("selected", 0);
+                    batchQty.val("");
+                    location.prop("selected", 0);
+                    status.prop("selected", 0);
+                    $("#addBtn")
+                        .text("Add")
+                        .attr("disabled", false);
+                }, 1000);
             },
             error: function(err) {
                 console.log(
@@ -83,18 +79,11 @@ $(document).ready(function() {
                         err.error
                     )}`
                 );
-            },
-            complete: function() {
-                console.log("batches.json successfully updated");
-                // $("#addBtn").text("Add");
+                $("#addError")
+                    .attr("class", "alert alert-danger text-center")
+                    .text("Something went wrong. Please try again.")
+                    .atrr("class", "d-block");
             }
         });
-        /*$.post("/api/batches", data)
-            .then(function(message) {
-                console.log(message);
-            })
-            .catch(function(err) {
-                console.log(err);
-            });*/
     }
 });
