@@ -1,9 +1,9 @@
 {
     "development": {
-        "username": "root",
-        "password": "",
-        "database": "pacer_db",
-        "host": "localhost",
+        "username": "t92gj6ztrw9nieex",
+        "password": "xidfh6zzwoww41ii",
+        "database": "cnk0y29doxiuskpf",
+        "host": "fnx6frzmhxw45qcb.cbetxkdyhwsb.us-east-1.rds.amazonaws.com",
         "dialect": "mysql",
         "PORT": 3306
     },

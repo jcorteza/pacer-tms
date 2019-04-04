@@ -4,7 +4,7 @@
   "description": "## Pacer Transportation Management System.",
   "main": "server.js",
   "scripts": {
-    "start": "node server.js",
+    "start": "node server.js && NODE_ENV=development",
     "lint": "eslint **/*.js --quiet",
     "fix": "eslint --fix .",
     "test": "npm run lint && NODE_ENV=test mocha -u tdd --reporter spec --exit"
