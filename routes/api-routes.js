@@ -93,18 +93,10 @@ module.exports = function(app) {
             .then(function(newProduct) {
                 console.log(req.body.info.so);
                 console.log(JSON.stringify(req.body.info));
-                db.SO.findOrCreate({
-                    where: {
-                        salesOrder: req.body.info.so.salesOrder
-                    }
-                })
+                db.SO.findOrCreate({ where: req.body.info.so })
                     .then(function(newSO) {
                         newProduct.setSO(newSO[0]);
-                        db.PO.findOrCreate({
-                            where: {
-                                purchaseOrder: req.body.info.po.purchaseOrder
-                            }
-                        })
+                        db.PO.findOrCreate({ where: req.body.info.po })
                             .then(function(newPO) {
                                 // eslint-disable-next-line prettier/prettier
                                 newPO[0].getSOs().then((salesOrders) => {

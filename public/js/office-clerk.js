@@ -129,7 +129,7 @@ $(document).ready(function() {
                     }, 1000);
                 },
                 error: function(response) {
-                    console.log(JSON.stringify(response.errors));
+                    console.log(JSON.stringify(response));
                     $("#addError")
                         .attr("class", "alert alert-danger text-center d-block")
                         .text("Something went wrong. Please try again.");
