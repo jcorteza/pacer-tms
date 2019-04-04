@@ -96,7 +96,7 @@ $(document).ready(function() {
                 addToDB(dbData);
             } else {
                 $("#addBtn")
-                    .text("Add")
+                    .text("Submit")
                     .attr("disabled", false);
                 $("#addError")
                     .attr("class", "alert alert-danger text-center d-block")
@@ -124,7 +124,7 @@ $(document).ready(function() {
                         $("#customerName").val("");
                         $("#contact").val("");
                         $("#addBtn")
-                            .text("Add")
+                            .text("Submit")
                             .attr("disabled", false);
                     }, 1000);
                 },

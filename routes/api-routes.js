@@ -98,6 +98,7 @@ module.exports = function(app) {
                         newProduct.setSO(newSO[0]);
                         db.PO.findOrCreate({ where: req.body.info.po })
                             .then(function(newPO) {
+                                // eslint-disable-next-line prettier/prettier
                                 newPO[0].getSOs().then((salesOrders) => {
                                     newPO[0].setSOs([...salesOrders, newSO[0]]);
                                 });
