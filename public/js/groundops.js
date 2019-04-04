@@ -1,5 +1,4 @@
-import "../js/validate/validateGroundops";
-import validateGroundops from "../js/validate/validateGroundops";
+import validateGroundops from "./validate/validateGroundops.js";
 
 $(document).ready(function() {
     // Getting references to our form and input
@@ -21,7 +20,7 @@ $(document).ready(function() {
                 location: location.val().toUpperCase(),
                 warehouse: "",
                 description: "",
-                status: status.val()
+                status: status.val().toUpperCase()
             },
             so: {
                 salesOrder: "",
@@ -36,22 +35,18 @@ $(document).ready(function() {
             }
         };
         let validate = validateGroundops(forkliftData);
-        console.log(JSON.stringify(validate));
         if (validate.valid) {
             sendData(forkliftData);
         } else {
             $("#addError")
-                .attr("class", "alert alert-danger text-center")
-                .text(validate.message)
-                .atrr("class", "d-block");
+                .attr("class", "alert alert-danger text-center d-block")
+                .text(validate.message);
         }
     });
 
     // Does a post to the signup route. If successful, we are redirected to the members page
     // Otherwise we log any errors
     function sendData(data) {
-        console.log("inside sendData function");
-        console.log(data);
         $.ajax({
             method: "PUT",
             url: "/api/batches",
@@ -62,12 +57,12 @@ $(document).ready(function() {
                     .text("Success!")
                     .attr("disabled", true);
                 setTimeout(function() {
-                    material.prop("selected", 0);
-                    finishKind.prop("selected", 0);
-                    pipeRange.prop("selected", 0);
+                    material.prop("selectedIndex", 0);
+                    finishKind.prop("selectedIndex", 0);
+                    pipeRange.prop("selectedIndex", 0);
                     batchQty.val("");
-                    location.prop("selected", 0);
-                    status.prop("selected", 0);
+                    location.prop("selectedIndex", 0);
+                    status.prop("selectedIndex", 0);
                     $("#addBtn")
                         .text("Add")
                         .attr("disabled", false);
@@ -80,9 +75,8 @@ $(document).ready(function() {
                     )}`
                 );
                 $("#addError")
-                    .attr("class", "alert alert-danger text-center")
-                    .text("Something went wrong. Please try again.")
-                    .atrr("class", "d-block");
+                    .attr("class", "alert alert-danger text-center d-block")
+                    .text("Something went wrong. Please try again.");
             }
         });
     }
