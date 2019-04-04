@@ -148,8 +148,7 @@ module.exports = function(app) {
     app.get("/api/manager", function(req, res) {
         db.Product.findAll().then(function(Products) {
             console.log(JSON.stringify(Products));
-            let hbsObj = { Products: JSON.stringify(Products) };
-            res.render("manager", hbsObj);
+            res.json({ sample: "sample data" });
         });
     });
 

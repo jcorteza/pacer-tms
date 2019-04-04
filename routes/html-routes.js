@@ -18,8 +18,8 @@ module.exports = function(app) {
         /*if (req.user) {
             let type = req.user.employeeType;
             if (type === "Manager" || type === "HR") {*/
-                res.render("signup");
-            /*} else {
+        res.render("signup");
+        /*} else {
                 let page;
                 switch (type) {
                     case "Forklift":
