@@ -2,7 +2,7 @@
 const db = require("../models");
 const passport = require("../config/passport");
 const fs = require("fs");
-let batches = require("../public/batches.json");
+let batches = require("../batches.json");
 const checkKey = require("../checkKey");
 
 module.exports = function(app) {
@@ -93,14 +93,27 @@ module.exports = function(app) {
             .then(function(newProduct) {
                 console.log(req.body.info.so);
                 console.log(JSON.stringify(req.body.info));
-                db.SO.findOrCreate({ where: req.body.info.so })
+                db.SO.findOrCreate({
+                    where: {
+                        salesOrder: req.body.info.so.salesOrder
+                    }
+                })
                     .then(function(newSO) {
                         newProduct.setSO(newSO[0]);
-                        db.PO.findOrCreate({ where: req.body.info.po })
+                        db.PO.findOrCreate({
+                            where: {
+                                purchaseOrder: req.body.info.po.purchaseOrder
+                            }
+                        })
                             .then(function(newPO) {
                                 // eslint-disable-next-line prettier/prettier
                                 newPO[0].getSOs().then((salesOrders) => {
-                                    newPO[0].setSOs([...salesOrders, newSO[0]]);
+                                    if (!salesOrders.includes(newSO[0])) {
+                                        newPO[0].setSOs([
+                                            ...salesOrders,
+                                            newSO[0]
+                                        ]);
+                                    }
                                 });
                                 delete batches[req.body.key];
                                 fs.writeFile(
@@ -126,27 +139,17 @@ module.exports = function(app) {
                             })
                             .catch(function(error) {
                                 console.log(error);
-                                res.status(500).json({
-                                    message:
-                                        "There was a problem submitting the data.",
-                                    Error: error
-                                });
+                                res.status(500).json(error);
                             });
                     })
                     .catch(function(error) {
                         console.log(error);
-                        res.status(500).json({
-                            message: "There was a problem submitting the data.",
-                            Error: error
-                        });
+                        res.status(500).json(error);
                     });
             })
             .catch(function(error) {
                 console.log(error);
-                res.status(500).json({
-                    message: "There was a problem submitting the data.",
-                    Error: error
-                });
+                res.status(500).json(error);
             });
     });
 

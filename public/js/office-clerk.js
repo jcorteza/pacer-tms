@@ -64,7 +64,7 @@ $(document).ready(function() {
         officeClerkForm.on("submit", function(event) {
             event.preventDefault();
             $("#addError").attr("class", "d-none");
-            $("#addBtn")
+            $("#submitBtn")
                 .text("Working...")
                 .attr("disabled", true);
             let dbData = {
@@ -74,7 +74,7 @@ $(document).ready(function() {
                         range: range,
                         finish: finish,
                         location: location,
-                        warehouse: warehouse.val(),
+                        warehouse: parseInt(warehouse.val()),
                         description: descriptionProduct.val().trim(),
                         status: status
                     },
@@ -95,7 +95,7 @@ $(document).ready(function() {
             if (validate.valid) {
                 addToDB(dbData);
             } else {
-                $("#addBtn")
+                $("#submitBtn")
                     .text("Submit")
                     .attr("disabled", false);
                 $("#addError")
@@ -112,7 +112,7 @@ $(document).ready(function() {
                 data: data,
                 dataType: "json",
                 success: function() {
-                    $("#addBtn").text("Success!");
+                    $("#submitBtn").text("Success!");
                     setTimeout(function() {
                         $(`#${data.key}`).remove();
                         $("#warehouse").prop("selectedIndex", 0);
@@ -123,13 +123,13 @@ $(document).ready(function() {
                         $("#description-so").val("");
                         $("#customerName").val("");
                         $("#contact").val("");
-                        $("#addBtn")
+                        $("#submitBtn")
                             .text("Submit")
                             .attr("disabled", false);
                     }, 1000);
                 },
                 error: function(response) {
-                    console.log(JSON.stringify(response));
+                    console.log(JSON.stringify(response.errors));
                     $("#addError")
                         .attr("class", "alert alert-danger text-center d-block")
                         .text("Something went wrong. Please try again.");
