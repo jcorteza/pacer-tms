@@ -1,3 +1,5 @@
+import validateOfficeClerk from "./validate/validateOfficeClerk.js";
+
 $(document).ready(function() {
     // Getting references to our form and input
     //const batches = require("../public/batches.json");
@@ -61,6 +63,10 @@ $(document).ready(function() {
 
         officeClerkForm.on("submit", function(event) {
             event.preventDefault();
+            $("#addError").attr("class", "d-none");
+            $("#addBtn")
+                .text("Working...")
+                .attr("disabled", true);
             let dbData = {
                 key: key,
                 info: {
@@ -85,32 +91,16 @@ $(document).ready(function() {
                     }
                 }
             };
-            console.log(dbData);
-            if (
-                !dbData.info.products.warehouse ||
-                !dbData.info.products.description ||
-                !dbData.info.so.salesOrder ||
-                !dbData.info.so.description ||
-                !dbData.info.so.material ||
-                !dbData.info.po.purchaseOrder ||
-                !dbData.info.po.contact ||
-                !dbData.info.po.customer
-            ) {
-                console.log("you forgot to fill out one of the fields");
-                return;
-            }
-            const dataAdded = addToDB(dbData);
-            console.log(`dataAdded: ${JSON.stringify(dataAdded)}`);
-            if (dataAdded) {
-                $(`#${key}`).remove();
-                $("#warehouse").prop("selectedIndex", 0);
-                $("#materialGrade").prop("selectedIndex", 0);
-                $("#purchaseOrder").val("");
-                $("#description-product").val("");
-                $("#salesOrder").val("");
-                $("#description-so").val("");
-                $("#customerName").val("");
-                $("#contact").val("");
+            let validate = validateOfficeClerk(dbData.info);
+            if (validate.valid) {
+                addToDB(dbData);
+            } else {
+                $("#addBtn")
+                    .text("Add")
+                    .attr("disabled", false);
+                $("#addError")
+                    .attr("class", "alert alert-danger text-center d-block")
+                    .text(validate.message);
             }
         });
 
@@ -121,13 +111,28 @@ $(document).ready(function() {
                 url: "/api/newData",
                 data: data,
                 dataType: "json",
-                success: function(response) {
-                    console.log(response.message);
-                    return true;
+                success: function() {
+                    $("#addBtn").text("Success!");
+                    setTimeout(function() {
+                        $(`#${data.key}`).remove();
+                        $("#warehouse").prop("selectedIndex", 0);
+                        $("#materialGrade").prop("selectedIndex", 0);
+                        $("#purchaseOrder").val("");
+                        $("#description-product").val("");
+                        $("#salesOrder").val("");
+                        $("#description-so").val("");
+                        $("#customerName").val("");
+                        $("#contact").val("");
+                        $("#addBtn")
+                            .text("Add")
+                            .attr("disabled", false);
+                    }, 1000);
                 },
                 error: function(response) {
                     console.log(JSON.stringify(response));
-                    return false;
+                    $("#addError")
+                        .attr("class", "alert alert-danger text-center d-block")
+                        .text("Something went wrong. Please try again.");
                 }
             });
         }

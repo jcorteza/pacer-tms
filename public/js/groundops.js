@@ -13,6 +13,9 @@ $(document).ready(function() {
     groundOpsForm.on("submit", function(event) {
         event.preventDefault();
         $("#addError").attr("class", "d-none");
+        $("#addBtn")
+            .text("Working...")
+            .attr("disabled", true);
         let forkliftData = {
             products: {
                 range: pipeRange.val().toUpperCase(),
@@ -38,6 +41,9 @@ $(document).ready(function() {
         if (validate.valid) {
             sendData(forkliftData);
         } else {
+            $("#addBtn")
+                .text("Add")
+                .attr("disabled", false);
             $("#addError")
                 .attr("class", "alert alert-danger text-center d-block")
                 .text(validate.message);
@@ -53,9 +59,7 @@ $(document).ready(function() {
             data: data,
             dataType: "json",
             success: function() {
-                $("#addBtn")
-                    .text("Success!")
-                    .attr("disabled", true);
+                $("#addBtn").text("Success!");
                 setTimeout(function() {
                     material.prop("selectedIndex", 0);
                     finishKind.prop("selectedIndex", 0);
