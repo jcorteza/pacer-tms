@@ -21,6 +21,7 @@ h2 {
 
 .jumbotron, footer{
   background: none;
+  margin: 0;
 }
 
 a, a:hover {
