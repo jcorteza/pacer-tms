@@ -146,24 +146,44 @@ module.exports = function(app) {
     });
 
     app.get("/api/manager", function(req, res) {
-        db.Product.findAll().then(function(Products) {
-            console.log(JSON.stringify(Products));
-            res.json({ sample: "sample data" });
-        });
+        let managerData = {
+            products: [],
+            purchaseOrders: []
+        };
+        db.Product.findAll()
+            .then(function(products) {
+                managerData.products = products;
+                console.log(`Then response: ${JSON.stringify(managerData)}\n`);
+                // res.json(products);
+            })
+            .catch(function(productsError) {
+                console.log(
+                    `db.Product.findAll Error: ${JSON.stringify(productsError)}`
+                );
+            })
+            .finally(function(productsResponse) {
+                console.log(
+                    `db.Product.findAll finally response: ${JSON.stringify(
+                        productsResponse
+                    )}\n`
+                );
+                db.PO.findAll()
+                    .then(function(purchaseOrders) {
+                        managerData.purchaseOrders = purchaseOrders;
+                    })
+                    .catch(function(posError) {
+                        console.log(
+                            `db.PO.findAll Error: ${JSON.stringify(posError)}`
+                        );
+                    })
+                    .finally(function(posResponse) {
+                        console.log(
+                            `db.Product.findAll finally response: ${JSON.stringify(
+                                posResponse
+                            )}\n`
+                        );
+                        res.json(managerData);
+                    });
+            });
     });
-
-    // db.SO.findAll().then(SOs => console.log(SOs));
-
-    // db.PO.findAll().then(POs => console.log(POs));
-    // res.json({
-    //     id: db.products.id,
-    //     orderQTY: db.so.orderQty,
-    //     range: db.products.range,
-    //     finish: db.products.finish,
-    //     location: db.products.location,
-    //     warehouse: db.products.warehouse,
-    //     material: db.so.material,
-    //     description: db.products.description,
-    //     status: db.products.status
-    // });
 };
