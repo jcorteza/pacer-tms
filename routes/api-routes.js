@@ -146,10 +146,7 @@ module.exports = function(app) {
     });
 
     app.get("/api/manager", function(req, res) {
-        let managerData = {
-            products: [],
-            purchaseOrders: []
-        };
+        let managerData = {};
         db.Product.findAll()
             .then(function(products) {
                 managerData.products = products;
@@ -160,6 +157,7 @@ module.exports = function(app) {
                 console.log(
                     `db.Product.findAll Error: ${JSON.stringify(productsError)}`
                 );
+                managerData.errors.products = productsError;
             })
             .finally(function(productsResponse) {
                 console.log(
@@ -175,6 +173,7 @@ module.exports = function(app) {
                         console.log(
                             `db.PO.findAll Error: ${JSON.stringify(posError)}`
                         );
+                        managerData.errors.pos = posError;
                     })
                     .finally(function(posResponse) {
                         console.log(
