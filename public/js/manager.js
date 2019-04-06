@@ -8,7 +8,7 @@ $(document).ready(() => {
             if (response.products) {
                 $("#inventoryTable").empty();
                 console.log(JSON.stringify(response.products));
-                response.products.each((product) => {
+                response.products.forEach((product) => {
                     console.log(JSON.stringify(product));
                     const productID = $("td").text(product.id);
                     const productRange = $("td").text(product.range);
@@ -32,7 +32,7 @@ $(document).ready(() => {
             }
             if (response.purchaseOrders) {
                 $("#poTable").empty();
-                response.purchaseOrders.each((po) => {
+                response.purchaseOrders.forEach((po) => {
                     const poID = $("td").text(po.purchaseOrder);
                     const poCustomer = $("td").text(po.customer);
                     const poContact = $("td").text(po.contact);
