@@ -149,12 +149,16 @@ module.exports = function(app) {
         let managerData = {};
         db.Product.findAll()
             .then(function(products) {
-                managerData.products = products;
-                console.log(`Then response: ${JSON.stringify(managerData)}\n`);
-                // res.json(products);
+                // eslint-disable-next-line curly
+                if (products.length !== 0) {
+                    managerData.products = products;
+                }
                 db.PO.findAll()
                     .then(function(purchaseOrders) {
-                        managerData.purchaseOrders = purchaseOrders;
+                        // eslint-disable-next-line curly
+                        if (purchaseOrders.length !== 0) {
+                            managerData.purchaseOrders = purchaseOrders;
+                        }
                         res.json(managerData);
                     })
                     .catch(function(posError) {
