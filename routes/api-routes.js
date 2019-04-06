@@ -152,37 +152,23 @@ module.exports = function(app) {
                 managerData.products = products;
                 console.log(`Then response: ${JSON.stringify(managerData)}\n`);
                 // res.json(products);
-            })
-            .catch(function(productsError) {
-                console.log(
-                    `db.Product.findAll Error: ${JSON.stringify(productsError)}`
-                );
-                managerData.errors.products = productsError;
-            })
-            .finally(function(productsResponse) {
-                console.log(
-                    `db.Product.findAll finally response: ${JSON.stringify(
-                        productsResponse
-                    )}\n`
-                );
                 db.PO.findAll()
                     .then(function(purchaseOrders) {
                         managerData.purchaseOrders = purchaseOrders;
+                        res.json(managerData);
                     })
                     .catch(function(posError) {
                         console.log(
                             `db.PO.findAll Error: ${JSON.stringify(posError)}`
                         );
                         managerData.errors.pos = posError;
-                    })
-                    .finally(function(posResponse) {
-                        console.log(
-                            `db.Product.findAll finally response: ${JSON.stringify(
-                                posResponse
-                            )}\n`
-                        );
-                        res.json(managerData);
                     });
+            })
+            .catch(function(productsError) {
+                console.log(
+                    `db.Product.findAll Error: ${JSON.stringify(productsError)}`
+                );
+                managerData.errors.products = productsError;
             });
     });
 };

@@ -3,13 +3,13 @@ $(document).ready(() => {
         method: "GET",
         url: "/api/manager",
         // eslint-disable-next-line prettier/prettier
-        complete: (response) => {
+        success: (response) => {
             const data = response.responseText;
             console.log(JSON.stringify(response));
             console.log(JSON.stringify(data));
             console.log(JSON.stringify(data.products));
             console.log(data.hasOwnProperty("products"));
-            if (data.hasOwnProperty("products")) {
+            if (data.products) {
                 console.log("data has products property");
                 $("#inventoryTable").empty();
                 console.log(JSON.stringify(data.products));
@@ -35,7 +35,7 @@ $(document).ready(() => {
                     $("#inventoryTable").append(row);
                 }
             }
-            if (data.hasOwnProperty("purchaseOrders")) {
+            if (data.purchaseOrders) {
                 console.log("data has purchaseOrders property");
                 $("#poTable").empty();
                 data.purchaseOrders.each((po) => {
