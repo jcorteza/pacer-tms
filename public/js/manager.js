@@ -5,7 +5,7 @@ $(document).ready(() => {
         // eslint-disable-next-line prettier/prettier
         complete: (response) => {
             const data = response.responseText;
-            if (data.products) {
+            if ("products" in data) {
                 $("#inventoryTable").empty();
                 console.log(JSON.stringify(data.products));
                 for (const product in data.products) {
@@ -30,7 +30,7 @@ $(document).ready(() => {
                     $("#inventoryTable").append(row);
                 }
             }
-            if (data.purchaseOrders) {
+            if ("purchaseOrders" in data) {
                 $("#poTable").empty();
                 data.purchaseOrders.each((po) => {
                     const poID = $("td").text(po.purchaseOrder);
