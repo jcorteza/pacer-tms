@@ -5,10 +5,10 @@ $(document).ready(() => {
         // eslint-disable-next-line prettier/prettier
         complete: (response) => {
             const data = response.responseText;
-            console.log(JSON.stringify(data));
             if (data.products) {
                 $("#inventoryTable").empty();
                 data.products.each((product) => {
+                    console.log(JSON.stringify(product));
                     const productID = $("td").text(product.id);
                     const productRange = $("td").text(product.range);
                     const productFinish = $("td").text(product.finish);
