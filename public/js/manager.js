@@ -5,9 +5,10 @@ $(document).ready(() => {
         // eslint-disable-next-line prettier/prettier
         complete: (response) => {
             console.log(JSON.stringify(response));
-            if (response.products) {
+            const data = response.responseText;
+            if (data.products) {
                 $("#inventoryTable").empty();
-                response.products.each((product) => {
+                data.products.each((product) => {
                     const productID = $("td").text(product.id);
                     const productRange = $("td").text(product.range);
                     const productFinish = $("td").text(product.finish);
@@ -28,9 +29,9 @@ $(document).ready(() => {
                     $("#inventoryTable").append(row);
                 });
             }
-            if (response.purchaseOrders) {
+            if (data.purchaseOrders) {
                 $("#poTable").empty();
-                response.purchaseOrders.each((po) => {
+                data.purchaseOrders.each((po) => {
                     const poID = $("td").text(po.purchaseOrder);
                     const poCustomer = $("td").text(po.customer);
                     const poContact = $("td").text(po.contact);
