@@ -6,6 +6,8 @@ $(document).ready(() => {
         complete: (response) => {
             const data = response.responseText;
             console.log(JSON.stringify(data));
+            console.log(data.hasOwnProperty("products"));
+            console.log(data.hasOwnProperty("purchaseOrders"));
             if (data.hasOwnProperty("products")) {
                 console.log("data has products property");
                 $("#inventoryTable").empty();
