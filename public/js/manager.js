@@ -7,6 +7,7 @@ $(document).ready(() => {
             const data = response.responseText;
             if (data.products) {
                 $("#inventoryTable").empty();
+                console.log(JSON.stringify(data.products));
                 for (const product in data.products) {
                     console.log(JSON.stringify(product));
                     const productID = $("td").text(product.id);
