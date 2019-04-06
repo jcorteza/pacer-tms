@@ -5,6 +5,7 @@ $(document).ready(() => {
         // eslint-disable-next-line prettier/prettier
         complete: (response) => {
             const data = response.responseText;
+            console.log(JSON.stringify(response));
             console.log(JSON.stringify(data));
             console.log(JSON.stringify(data.products));
             console.log(data.hasOwnProperty("products"));
