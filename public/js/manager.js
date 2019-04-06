@@ -6,6 +6,7 @@ $(document).ready(() => {
         complete: (response) => {
             const data = response.responseText;
             if (data.hasOwnProperty("products")) {
+                console.log("data has products property");
                 $("#inventoryTable").empty();
                 console.log(JSON.stringify(data.products));
                 for (const product in data.products) {
@@ -31,6 +32,7 @@ $(document).ready(() => {
                 }
             }
             if (data.hasOwnProperty("purchaseOrders")) {
+                console.log("data has purchaseOrders property");
                 $("#poTable").empty();
                 data.purchaseOrders.each((po) => {
                     const poID = $("td").text(po.purchaseOrder);
