@@ -7,7 +7,7 @@ $(document).ready(() => {
             console.log(JSON.stringify(response));
             if (response.products) {
                 $("#inventoryTable").empty();
-                for (const product in response.products) {
+                response.products.each((product) => {
                     console.log(JSON.stringify(product));
                     const productID = $("td").text(product.id);
                     const productRange = $("td").text(product.range);
@@ -27,7 +27,7 @@ $(document).ready(() => {
                         .append(productStatus)
                         .append(productSO);
                     $("#inventoryTable").append(row);
-                }
+                });
             }
             if (response.purchaseOrders) {
                 $("#poTable").empty();
