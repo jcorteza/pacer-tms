@@ -7,9 +7,7 @@ $(document).ready(() => {
             console.log(JSON.stringify(response));
             if (response.products) {
                 $("#inventoryTable").empty();
-                console.log(JSON.stringify(response.products));
                 response.products.forEach((product) => {
-                    console.log(JSON.stringify(product));
                     const productID = $("td").text(product.id);
                     const productRange = $("td").text(product.range);
                     const productFinish = $("td").text(product.finish);
