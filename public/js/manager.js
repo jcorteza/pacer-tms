@@ -5,6 +5,7 @@ $(document).ready(() => {
         // eslint-disable-next-line prettier/prettier
         complete: (response) => {
             const data = response.responseText;
+            console.log(JSON.stringify(data));
             if (data.hasOwnProperty("products")) {
                 console.log("data has products property");
                 $("#inventoryTable").empty();
