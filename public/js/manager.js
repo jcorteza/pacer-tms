@@ -4,12 +4,11 @@ $(document).ready(() => {
         url: "/api/manager",
         // eslint-disable-next-line prettier/prettier
         complete: (response) => {
-            // console.log(JSON.stringify(response));
             const data = response.responseText;
+            console.log(JSON.stringify(data));
             if (data.products) {
                 $("#inventoryTable").empty();
                 data.products.each((product) => {
-                    console.log(product);
                     const productID = $("td").text(product.id);
                     const productRange = $("td").text(product.range);
                     const productFinish = $("td").text(product.finish);
