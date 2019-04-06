@@ -4,16 +4,10 @@ $(document).ready(() => {
         url: "/api/manager",
         // eslint-disable-next-line prettier/prettier
         success: (response) => {
-            const data = response.responseText;
             console.log(JSON.stringify(response));
-            console.log(JSON.stringify(data));
-            console.log(JSON.stringify(data.products));
-            console.log(data.hasOwnProperty("products"));
-            if (data.products) {
-                console.log("data has products property");
+            if (response.products) {
                 $("#inventoryTable").empty();
-                console.log(JSON.stringify(data.products));
-                for (const product in data.products) {
+                for (const product in response.products) {
                     console.log(JSON.stringify(product));
                     const productID = $("td").text(product.id);
                     const productRange = $("td").text(product.range);
@@ -35,10 +29,9 @@ $(document).ready(() => {
                     $("#inventoryTable").append(row);
                 }
             }
-            if (data.purchaseOrders) {
-                console.log("data has purchaseOrders property");
+            if (response.purchaseOrders) {
                 $("#poTable").empty();
-                data.purchaseOrders.each((po) => {
+                response.purchaseOrders.each((po) => {
                     const poID = $("td").text(po.purchaseOrder);
                     const poCustomer = $("td").text(po.customer);
                     const poContact = $("td").text(po.contact);
