@@ -1,0 +1,17 @@
+**/node_modules
+**/dist
+**/dist-ssr
+**/build
+**/coverage
+**/*.tsbuildinfo
+
+**/.env
+**/.env.*
+**/*.local
+
+**/*.log
+**/logs
+
+**/.DS_Store
+*.md
+.git
