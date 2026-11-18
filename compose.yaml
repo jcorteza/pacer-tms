@@ -3,11 +3,11 @@ name: pacer-tms
 services:
     db:
         image: postgres:18
-        restart: unless-stopped
+        restart: always
         # set shared memory limit when using docker compose
         shm_size: 128mb
         volumes:
-            - pacer-demo-data:/var/lib/postgresql
+            - pg-data:/var/lib/postgresql
         env_file: .env
         healthcheck:
             test: ["CMD-SHELL", "pg_isready -U postgres -d pacer"]
@@ -38,4 +38,4 @@ services:
             - "5173:5173"
 
 volumes:
-    pacer-demo-data:
+    pg-data:
