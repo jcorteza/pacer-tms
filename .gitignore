@@ -6,6 +6,7 @@ dist
 dist-ssr
 /build
 *.tsbuildinfo
+.pnpm-store
 
 # Tests
 /coverage

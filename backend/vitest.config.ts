@@ -8,5 +8,7 @@ export default defineConfig({
     globals: true,
     root: './',
     include: ['**/*.spec.ts'],
+    // DB integration tests have their own config (src/db/test/vitest.config.ts).
+    exclude: ['**/node_modules/**', 'src/db/test/**'],
   },
 });

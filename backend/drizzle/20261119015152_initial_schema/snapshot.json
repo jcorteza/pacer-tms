@@ -1,0 +1,3583 @@
+{
+  "type": "base",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "ba369031-daf6-483e-8d0e-9a6898cd60bb",
+  "prevIds": [
+    "00000000-0000-0000-0000-000000000000"
+  ],
+  "footprints": [
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "sessions"
+      ],
+      "writes": [
+        "s|tbl|public.sessions",
+        "n|tbl|public.sessions",
+        "e|tbl|public.sessions",
+        "n|rel|public.sessions",
+        "n|type|public.sessions",
+        "n|rel|public.sessions_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "users"
+      ],
+      "writes": [
+        "s|tbl|public.users",
+        "n|tbl|public.users",
+        "e|tbl|public.users",
+        "n|rel|public.users",
+        "n|type|public.users",
+        "n|rel|public.users_pkey",
+        "n|rel|public.users_email_key"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "clients"
+      ],
+      "writes": [
+        "s|tbl|public.clients",
+        "n|tbl|public.clients",
+        "e|tbl|public.clients",
+        "n|rel|public.clients",
+        "n|type|public.clients",
+        "n|rel|public.clients_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipping_addresses"
+      ],
+      "writes": [
+        "s|tbl|public.shipping_addresses",
+        "n|tbl|public.shipping_addresses",
+        "e|tbl|public.shipping_addresses",
+        "n|rel|public.shipping_addresses",
+        "n|type|public.shipping_addresses",
+        "n|rel|public.shipping_addresses_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "items"
+      ],
+      "writes": [
+        "s|tbl|public.items",
+        "n|tbl|public.items",
+        "e|tbl|public.items",
+        "n|rel|public.items",
+        "n|type|public.items",
+        "n|rel|public.items_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "building_codes"
+      ],
+      "writes": [
+        "s|tbl|public.building_codes",
+        "n|tbl|public.building_codes",
+        "e|tbl|public.building_codes",
+        "n|rel|public.building_codes",
+        "n|type|public.building_codes",
+        "n|rel|public.building_codes_pkey",
+        "n|rel|public.building_codes_code_key"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "item_locations"
+      ],
+      "writes": [
+        "s|tbl|public.item_locations",
+        "n|tbl|public.item_locations",
+        "e|tbl|public.item_locations",
+        "n|rel|public.item_locations",
+        "n|type|public.item_locations",
+        "n|rel|public.item_locations_pkey",
+        "n|rel|public.item_locations_code_key",
+        "n|rel|public.item_locations_item_id_key"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "warehouse_codes"
+      ],
+      "writes": [
+        "s|tbl|public.warehouse_codes",
+        "n|tbl|public.warehouse_codes",
+        "e|tbl|public.warehouse_codes",
+        "n|rel|public.warehouse_codes",
+        "n|type|public.warehouse_codes",
+        "n|rel|public.warehouse_codes_pkey",
+        "n|rel|public.warehouse_codes_code_key"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "carrier_invoices"
+      ],
+      "writes": [
+        "s|tbl|public.carrier_invoices",
+        "n|tbl|public.carrier_invoices",
+        "e|tbl|public.carrier_invoices",
+        "n|rel|public.carrier_invoices",
+        "n|type|public.carrier_invoices",
+        "n|rel|public.carrier_invoices_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "carriers"
+      ],
+      "writes": [
+        "s|tbl|public.carriers",
+        "n|tbl|public.carriers",
+        "e|tbl|public.carriers",
+        "n|rel|public.carriers",
+        "n|type|public.carriers",
+        "n|rel|public.carriers_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "orders"
+      ],
+      "writes": [
+        "s|tbl|public.orders",
+        "n|tbl|public.orders",
+        "e|tbl|public.orders",
+        "n|rel|public.orders",
+        "n|type|public.orders",
+        "n|rel|public.orders_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipment_handoffs"
+      ],
+      "writes": [
+        "s|tbl|public.shipment_handoffs",
+        "n|tbl|public.shipment_handoffs",
+        "e|tbl|public.shipment_handoffs",
+        "n|rel|public.shipment_handoffs",
+        "n|type|public.shipment_handoffs",
+        "n|rel|public.shipment_handoffs_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipments"
+      ],
+      "writes": [
+        "s|tbl|public.shipments",
+        "n|tbl|public.shipments",
+        "e|tbl|public.shipments",
+        "n|rel|public.shipments",
+        "n|type|public.shipments",
+        "n|rel|public.shipments_pkey",
+        "n|rel|public.shipments_tracking_code_key"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "invoices"
+      ],
+      "writes": [
+        "s|tbl|public.invoices",
+        "n|tbl|public.invoices",
+        "e|tbl|public.invoices",
+        "n|rel|public.invoices",
+        "n|type|public.invoices",
+        "n|rel|public.invoices_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "documents"
+      ],
+      "writes": [
+        "s|tbl|public.documents",
+        "n|tbl|public.documents",
+        "e|tbl|public.documents",
+        "n|rel|public.documents",
+        "n|type|public.documents",
+        "n|rel|public.documents_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_table",
+      "statementTarget": [
+        "table",
+        "public",
+        "status_change_log"
+      ],
+      "writes": [
+        "s|tbl|public.status_change_log",
+        "n|tbl|public.status_change_log",
+        "e|tbl|public.status_change_log",
+        "n|rel|public.status_change_log",
+        "n|type|public.status_change_log",
+        "n|rel|public.status_change_log_pkey"
+      ],
+      "reads": [
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "sessions"
+      ],
+      "writes": [
+        "s|fk|public.sessions.sessions_user_id_users_id_fkey",
+        "n|fk|public.sessions.sessions_user_id_users_id_fkey",
+        "e|fk|public.sessions.sessions_user_id_users_id_fkey",
+        "n|con|public.sessions.sessions_user_id_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.sessions",
+        "n|sch|public",
+        "n|tbl|public.users",
+        "n|sch|public",
+        "n|col|public.sessions.user_id",
+        "n|col|public.users.id",
+        "e|uniqueness|public.users.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipping_addresses"
+      ],
+      "writes": [
+        "s|fk|public.shipping_addresses.shipping_addresses_client_id_clients_id_fkey",
+        "n|fk|public.shipping_addresses.shipping_addresses_client_id_clients_id_fkey",
+        "e|fk|public.shipping_addresses.shipping_addresses_client_id_clients_id_fkey",
+        "n|con|public.shipping_addresses.shipping_addresses_client_id_clients_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.shipping_addresses",
+        "n|sch|public",
+        "n|tbl|public.clients",
+        "n|sch|public",
+        "n|col|public.shipping_addresses.client_id",
+        "n|col|public.clients.id",
+        "e|uniqueness|public.clients.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "items"
+      ],
+      "writes": [
+        "s|fk|public.items.items_client_id_clients_id_fkey",
+        "n|fk|public.items.items_client_id_clients_id_fkey",
+        "e|fk|public.items.items_client_id_clients_id_fkey",
+        "n|con|public.items.items_client_id_clients_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.items",
+        "n|sch|public",
+        "n|tbl|public.clients",
+        "n|sch|public",
+        "n|col|public.items.client_id",
+        "n|col|public.clients.id",
+        "e|uniqueness|public.clients.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "building_codes"
+      ],
+      "writes": [
+        "s|fk|public.building_codes.building_codes_warehouse_id_warehouse_codes_id_fkey",
+        "n|fk|public.building_codes.building_codes_warehouse_id_warehouse_codes_id_fkey",
+        "e|fk|public.building_codes.building_codes_warehouse_id_warehouse_codes_id_fkey",
+        "n|con|public.building_codes.building_codes_warehouse_id_warehouse_codes_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.building_codes",
+        "n|sch|public",
+        "n|tbl|public.warehouse_codes",
+        "n|sch|public",
+        "n|col|public.building_codes.warehouse_id",
+        "n|col|public.warehouse_codes.id",
+        "e|uniqueness|public.warehouse_codes.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "item_locations"
+      ],
+      "writes": [
+        "s|fk|public.item_locations.item_locations_building_id_building_codes_id_fkey",
+        "n|fk|public.item_locations.item_locations_building_id_building_codes_id_fkey",
+        "e|fk|public.item_locations.item_locations_building_id_building_codes_id_fkey",
+        "n|con|public.item_locations.item_locations_building_id_building_codes_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.item_locations",
+        "n|sch|public",
+        "n|tbl|public.building_codes",
+        "n|sch|public",
+        "n|col|public.item_locations.building_id",
+        "n|col|public.building_codes.id",
+        "e|uniqueness|public.building_codes.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "item_locations"
+      ],
+      "writes": [
+        "s|fk|public.item_locations.item_locations_item_id_items_id_fkey",
+        "n|fk|public.item_locations.item_locations_item_id_items_id_fkey",
+        "e|fk|public.item_locations.item_locations_item_id_items_id_fkey",
+        "n|con|public.item_locations.item_locations_item_id_items_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.item_locations",
+        "n|sch|public",
+        "n|tbl|public.items",
+        "n|sch|public",
+        "n|col|public.item_locations.item_id",
+        "n|col|public.items.id",
+        "e|uniqueness|public.items.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "warehouse_codes"
+      ],
+      "writes": [
+        "s|fk|public.warehouse_codes.warehouse_codes_manager_id_users_id_fkey",
+        "n|fk|public.warehouse_codes.warehouse_codes_manager_id_users_id_fkey",
+        "e|fk|public.warehouse_codes.warehouse_codes_manager_id_users_id_fkey",
+        "n|con|public.warehouse_codes.warehouse_codes_manager_id_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.warehouse_codes",
+        "n|sch|public",
+        "n|tbl|public.users",
+        "n|sch|public",
+        "n|col|public.warehouse_codes.manager_id",
+        "n|col|public.users.id",
+        "e|uniqueness|public.users.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "carrier_invoices"
+      ],
+      "writes": [
+        "s|fk|public.carrier_invoices.carrier_invoices_carrier_id_carriers_id_fkey",
+        "n|fk|public.carrier_invoices.carrier_invoices_carrier_id_carriers_id_fkey",
+        "e|fk|public.carrier_invoices.carrier_invoices_carrier_id_carriers_id_fkey",
+        "n|con|public.carrier_invoices.carrier_invoices_carrier_id_carriers_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.carrier_invoices",
+        "n|sch|public",
+        "n|tbl|public.carriers",
+        "n|sch|public",
+        "n|col|public.carrier_invoices.carrier_id",
+        "n|col|public.carriers.id",
+        "e|uniqueness|public.carriers.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "orders"
+      ],
+      "writes": [
+        "s|fk|public.orders.orders_client_id_clients_id_fkey",
+        "n|fk|public.orders.orders_client_id_clients_id_fkey",
+        "e|fk|public.orders.orders_client_id_clients_id_fkey",
+        "n|con|public.orders.orders_client_id_clients_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.orders",
+        "n|sch|public",
+        "n|tbl|public.clients",
+        "n|sch|public",
+        "n|col|public.orders.client_id",
+        "n|col|public.clients.id",
+        "e|uniqueness|public.clients.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipment_handoffs"
+      ],
+      "writes": [
+        "s|fk|public.shipment_handoffs.shipment_handoffs_shipment_id_shipments_id_fkey",
+        "n|fk|public.shipment_handoffs.shipment_handoffs_shipment_id_shipments_id_fkey",
+        "e|fk|public.shipment_handoffs.shipment_handoffs_shipment_id_shipments_id_fkey",
+        "n|con|public.shipment_handoffs.shipment_handoffs_shipment_id_shipments_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.shipment_handoffs",
+        "n|sch|public",
+        "n|tbl|public.shipments",
+        "n|sch|public",
+        "n|col|public.shipment_handoffs.shipment_id",
+        "n|col|public.shipments.id",
+        "e|uniqueness|public.shipments.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipment_handoffs"
+      ],
+      "writes": [
+        "s|fk|public.shipment_handoffs.shipment_handoffs_warehouse_id_warehouse_codes_id_fkey",
+        "n|fk|public.shipment_handoffs.shipment_handoffs_warehouse_id_warehouse_codes_id_fkey",
+        "e|fk|public.shipment_handoffs.shipment_handoffs_warehouse_id_warehouse_codes_id_fkey",
+        "n|con|public.shipment_handoffs.shipment_handoffs_warehouse_id_warehouse_codes_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.shipment_handoffs",
+        "n|sch|public",
+        "n|tbl|public.warehouse_codes",
+        "n|sch|public",
+        "n|col|public.shipment_handoffs.warehouse_id",
+        "n|col|public.warehouse_codes.id",
+        "e|uniqueness|public.warehouse_codes.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipment_handoffs"
+      ],
+      "writes": [
+        "s|fk|public.shipment_handoffs.shipment_handoffs_building_id_building_codes_id_fkey",
+        "n|fk|public.shipment_handoffs.shipment_handoffs_building_id_building_codes_id_fkey",
+        "e|fk|public.shipment_handoffs.shipment_handoffs_building_id_building_codes_id_fkey",
+        "n|con|public.shipment_handoffs.shipment_handoffs_building_id_building_codes_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.shipment_handoffs",
+        "n|sch|public",
+        "n|tbl|public.building_codes",
+        "n|sch|public",
+        "n|col|public.shipment_handoffs.building_id",
+        "n|col|public.building_codes.id",
+        "e|uniqueness|public.building_codes.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipment_handoffs"
+      ],
+      "writes": [
+        "s|fk|public.shipment_handoffs.shipment_handoffs_scanned_by_users_id_fkey",
+        "n|fk|public.shipment_handoffs.shipment_handoffs_scanned_by_users_id_fkey",
+        "e|fk|public.shipment_handoffs.shipment_handoffs_scanned_by_users_id_fkey",
+        "n|con|public.shipment_handoffs.shipment_handoffs_scanned_by_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.shipment_handoffs",
+        "n|sch|public",
+        "n|tbl|public.users",
+        "n|sch|public",
+        "n|col|public.shipment_handoffs.scanned_by",
+        "n|col|public.users.id",
+        "e|uniqueness|public.users.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipments"
+      ],
+      "writes": [
+        "s|fk|public.shipments.shipments_order_id_orders_id_fkey",
+        "n|fk|public.shipments.shipments_order_id_orders_id_fkey",
+        "e|fk|public.shipments.shipments_order_id_orders_id_fkey",
+        "n|con|public.shipments.shipments_order_id_orders_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.shipments",
+        "n|sch|public",
+        "n|tbl|public.orders",
+        "n|sch|public",
+        "n|col|public.shipments.order_id",
+        "n|col|public.orders.id",
+        "e|uniqueness|public.orders.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipments"
+      ],
+      "writes": [
+        "s|fk|public.shipments.shipments_client_id_clients_id_fkey",
+        "n|fk|public.shipments.shipments_client_id_clients_id_fkey",
+        "e|fk|public.shipments.shipments_client_id_clients_id_fkey",
+        "n|con|public.shipments.shipments_client_id_clients_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.shipments",
+        "n|sch|public",
+        "n|tbl|public.clients",
+        "n|sch|public",
+        "n|col|public.shipments.client_id",
+        "n|col|public.clients.id",
+        "e|uniqueness|public.clients.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipments"
+      ],
+      "writes": [
+        "s|fk|public.shipments.shipments_item_id_items_id_fkey",
+        "n|fk|public.shipments.shipments_item_id_items_id_fkey",
+        "e|fk|public.shipments.shipments_item_id_items_id_fkey",
+        "n|con|public.shipments.shipments_item_id_items_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.shipments",
+        "n|sch|public",
+        "n|tbl|public.items",
+        "n|sch|public",
+        "n|col|public.shipments.item_id",
+        "n|col|public.items.id",
+        "e|uniqueness|public.items.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipments"
+      ],
+      "writes": [
+        "s|fk|public.shipments.shipments_delivery_address_id_shipping_addresses_id_fkey",
+        "n|fk|public.shipments.shipments_delivery_address_id_shipping_addresses_id_fkey",
+        "e|fk|public.shipments.shipments_delivery_address_id_shipping_addresses_id_fkey",
+        "n|con|public.shipments.shipments_delivery_address_id_shipping_addresses_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.shipments",
+        "n|sch|public",
+        "n|tbl|public.shipping_addresses",
+        "n|sch|public",
+        "n|col|public.shipments.delivery_address_id",
+        "n|col|public.shipping_addresses.id",
+        "e|uniqueness|public.shipping_addresses.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipments"
+      ],
+      "writes": [
+        "s|fk|public.shipments.shipments_carrier_id_carriers_id_fkey",
+        "n|fk|public.shipments.shipments_carrier_id_carriers_id_fkey",
+        "e|fk|public.shipments.shipments_carrier_id_carriers_id_fkey",
+        "n|con|public.shipments.shipments_carrier_id_carriers_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.shipments",
+        "n|sch|public",
+        "n|tbl|public.carriers",
+        "n|sch|public",
+        "n|col|public.shipments.carrier_id",
+        "n|col|public.carriers.id",
+        "e|uniqueness|public.carriers.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "shipments"
+      ],
+      "writes": [
+        "s|fk|public.shipments.shipments_carrier_invoice_id_carrier_invoices_id_fkey",
+        "n|fk|public.shipments.shipments_carrier_invoice_id_carrier_invoices_id_fkey",
+        "e|fk|public.shipments.shipments_carrier_invoice_id_carrier_invoices_id_fkey",
+        "n|con|public.shipments.shipments_carrier_invoice_id_carrier_invoices_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.shipments",
+        "n|sch|public",
+        "n|tbl|public.carrier_invoices",
+        "n|sch|public",
+        "n|col|public.shipments.carrier_invoice_id",
+        "n|col|public.carrier_invoices.id",
+        "e|uniqueness|public.carrier_invoices.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "invoices"
+      ],
+      "writes": [
+        "s|fk|public.invoices.invoices_client_id_clients_id_fkey",
+        "n|fk|public.invoices.invoices_client_id_clients_id_fkey",
+        "e|fk|public.invoices.invoices_client_id_clients_id_fkey",
+        "n|con|public.invoices.invoices_client_id_clients_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.invoices",
+        "n|sch|public",
+        "n|tbl|public.clients",
+        "n|sch|public",
+        "n|col|public.invoices.client_id",
+        "n|col|public.clients.id",
+        "e|uniqueness|public.clients.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "invoices"
+      ],
+      "writes": [
+        "s|fk|public.invoices.invoices_order_id_orders_id_fkey",
+        "n|fk|public.invoices.invoices_order_id_orders_id_fkey",
+        "e|fk|public.invoices.invoices_order_id_orders_id_fkey",
+        "n|con|public.invoices.invoices_order_id_orders_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.invoices",
+        "n|sch|public",
+        "n|tbl|public.orders",
+        "n|sch|public",
+        "n|col|public.invoices.order_id",
+        "n|col|public.orders.id",
+        "e|uniqueness|public.orders.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "documents"
+      ],
+      "writes": [
+        "s|fk|public.documents.documents_client_id_clients_id_fkey",
+        "n|fk|public.documents.documents_client_id_clients_id_fkey",
+        "e|fk|public.documents.documents_client_id_clients_id_fkey",
+        "n|con|public.documents.documents_client_id_clients_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.documents",
+        "n|sch|public",
+        "n|tbl|public.clients",
+        "n|sch|public",
+        "n|col|public.documents.client_id",
+        "n|col|public.clients.id",
+        "e|uniqueness|public.clients.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "documents"
+      ],
+      "writes": [
+        "s|fk|public.documents.documents_order_id_orders_id_fkey",
+        "n|fk|public.documents.documents_order_id_orders_id_fkey",
+        "e|fk|public.documents.documents_order_id_orders_id_fkey",
+        "n|con|public.documents.documents_order_id_orders_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.documents",
+        "n|sch|public",
+        "n|tbl|public.orders",
+        "n|sch|public",
+        "n|col|public.documents.order_id",
+        "n|col|public.orders.id",
+        "e|uniqueness|public.orders.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "documents"
+      ],
+      "writes": [
+        "s|fk|public.documents.documents_shipment_id_shipments_id_fkey",
+        "n|fk|public.documents.documents_shipment_id_shipments_id_fkey",
+        "e|fk|public.documents.documents_shipment_id_shipments_id_fkey",
+        "n|con|public.documents.documents_shipment_id_shipments_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.documents",
+        "n|sch|public",
+        "n|tbl|public.shipments",
+        "n|sch|public",
+        "n|col|public.documents.shipment_id",
+        "n|col|public.shipments.id",
+        "e|uniqueness|public.shipments.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "documents"
+      ],
+      "writes": [
+        "s|fk|public.documents.documents_carrier_id_carriers_id_fkey",
+        "n|fk|public.documents.documents_carrier_id_carriers_id_fkey",
+        "e|fk|public.documents.documents_carrier_id_carriers_id_fkey",
+        "n|con|public.documents.documents_carrier_id_carriers_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.documents",
+        "n|sch|public",
+        "n|tbl|public.carriers",
+        "n|sch|public",
+        "n|col|public.documents.carrier_id",
+        "n|col|public.carriers.id",
+        "e|uniqueness|public.carriers.id"
+      ]
+    },
+    {
+      "statementType": "create_fk",
+      "statementTarget": [
+        "table",
+        "public",
+        "status_change_log"
+      ],
+      "writes": [
+        "s|fk|public.status_change_log.status_change_log_user_id_users_id_fkey",
+        "n|fk|public.status_change_log.status_change_log_user_id_users_id_fkey",
+        "e|fk|public.status_change_log.status_change_log_user_id_users_id_fkey",
+        "n|con|public.status_change_log.status_change_log_user_id_users_id_fkey"
+      ],
+      "reads": [
+        "n|tbl|public.status_change_log",
+        "n|sch|public",
+        "n|tbl|public.users",
+        "n|sch|public",
+        "n|col|public.status_change_log.user_id",
+        "n|col|public.users.id",
+        "e|uniqueness|public.users.id"
+      ]
+    }
+  ],
+  "ddl": [
+    {
+      "schema": "public",
+      "name": "sessions",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "users",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "clients",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "shipping_addresses",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "items",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "building_codes",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "item_locations",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "warehouse_codes",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "carrier_invoices",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "carriers",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "orders",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "shipment_handoffs",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "shipments",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "invoices",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "documents",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "name": "status_change_log",
+      "isRlsEnabled": false,
+      "entityType": "tables"
+    },
+    {
+      "schema": "public",
+      "table": "sessions",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "sessions",
+      "name": "expires_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now() + interval '12 hours'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "sessions",
+      "name": "user_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "users",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "users",
+      "name": "first_name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "users",
+      "name": "last_name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "users",
+      "name": "email",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "users",
+      "name": "password_hash",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "users",
+      "name": "roles",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 1,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "users",
+      "name": "settings",
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'{}'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "clients",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "clients",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "clients",
+      "name": "billing_address",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "clients",
+      "name": "billing_contact",
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "clients",
+      "name": "shipping_contact",
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "clients",
+      "name": "notes",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipping_addresses",
+      "name": "id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipping_addresses",
+      "name": "client_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipping_addresses",
+      "name": "nickname",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipping_addresses",
+      "name": "address",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipping_addresses",
+      "name": "city",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipping_addresses",
+      "name": "state",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipping_addresses",
+      "name": "zip",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "items_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "client_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "sku",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "stock",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "0",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "description",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "weight_lbs",
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "length_in",
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "width_in",
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "height_in",
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "cost",
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "building_codes",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "building_codes_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "building_codes",
+      "name": "code",
+      "type": "varchar(4)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "building_codes",
+      "name": "warehouse_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "building_codes",
+      "name": "building",
+      "type": "char(1)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "building_codes",
+      "name": "description",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "item_locations",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "item_locations_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "item_locations",
+      "name": "code",
+      "type": "varchar(4)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "item_locations",
+      "name": "building_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "item_locations",
+      "name": "item_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "item_locations",
+      "name": "description",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "warehouse_codes",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "warehouse_codes_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "warehouse_codes",
+      "name": "code",
+      "type": "varchar(4)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "warehouse_codes",
+      "name": "manager_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "warehouse_codes",
+      "name": "phone",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "warehouse_codes",
+      "name": "address",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "warehouse_codes",
+      "name": "city",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "warehouse_codes",
+      "name": "state",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "warehouse_codes",
+      "name": "zip",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carrier_invoices",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "carrier_invoices_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carrier_invoices",
+      "name": "received_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carrier_invoices",
+      "name": "deadline",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carrier_invoices",
+      "name": "carrier_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carrier_invoices",
+      "name": "invoice_number",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carrier_invoices",
+      "name": "amount",
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carrier_invoices",
+      "name": "status",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carrier_invoices",
+      "name": "url",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carrier_invoices",
+      "name": "notes",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carriers",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "carriers_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carriers",
+      "name": "name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carriers",
+      "name": "contact_name",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carriers",
+      "name": "contact_phone",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carriers",
+      "name": "contact_email",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carriers",
+      "name": "carrier_number",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carriers",
+      "name": "carrier_number_type",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carriers",
+      "name": "service_levels",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 1,
+      "default": "'{}'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "carriers",
+      "name": "notes",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "orders",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "orders_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "orders",
+      "name": "po",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "orders",
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "orders",
+      "name": "closed_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "orders",
+      "name": "client_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "orders",
+      "name": "status",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "orders",
+      "name": "requested_delivery_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "orders",
+      "name": "estimated_delivery_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "orders",
+      "name": "notes",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipment_handoffs",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "shipment_handoffs_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipment_handoffs",
+      "name": "shipment_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipment_handoffs",
+      "name": "warehouse_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipment_handoffs",
+      "name": "building_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipment_handoffs",
+      "name": "scanned_by",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipment_handoffs",
+      "name": "scanned_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "shipments_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "tracking_code",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "gen_random_uuid()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "order_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "client_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "item_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "item_count",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "delivery_address_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "container",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "weight",
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "volume",
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "status",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "contents",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "estimated_delivery_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "sent_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "delivered_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "carrier_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "carrier_tracking_number",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "carrier_invoice_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "service_level",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "payment_terms",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "declared_value",
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "insurance_coverage",
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "notes",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invoices",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "invoices_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invoices",
+      "name": "created_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invoices",
+      "name": "sent_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invoices",
+      "name": "paid_at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invoices",
+      "name": "client_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invoices",
+      "name": "order_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invoices",
+      "name": "amount",
+      "type": "numeric(12,2)",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invoices",
+      "name": "status",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "invoices",
+      "name": "notes",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "documents_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "type",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "metadata",
+      "type": "jsonb",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "'{}'",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "client_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "order_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "shipment_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "carrier_id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "url",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "status",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "notes",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": false,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "status_change_log",
+      "name": "id",
+      "type": "integer",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": {
+        "type": "always",
+        "name": "status_change_log_id_seq",
+        "increment": "1",
+        "startWith": "1",
+        "minValue": "1",
+        "maxValue": "2147483647",
+        "cache": 1,
+        "cycle": false
+      },
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "status_change_log",
+      "name": "entity_type",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "status_change_log",
+      "name": "entity_id",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "status_change_log",
+      "name": "action",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "status_change_log",
+      "name": "description",
+      "type": "text",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "status_change_log",
+      "name": "user_id",
+      "type": "uuid",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": null,
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "status_change_log",
+      "name": "at",
+      "type": "timestamp with time zone",
+      "typeSchema": null,
+      "notNull": true,
+      "dimensions": 0,
+      "default": "now()",
+      "generated": null,
+      "identity": null,
+      "entityType": "columns"
+    },
+    {
+      "schema": "public",
+      "table": "sessions",
+      "name": "sessions_user_id_users_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "CASCADE",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "shipping_addresses",
+      "name": "shipping_addresses_client_id_clients_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "client_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "clients",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "items_client_id_clients_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "client_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "clients",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "building_codes",
+      "name": "building_codes_warehouse_id_warehouse_codes_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "warehouse_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "warehouse_codes",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "item_locations",
+      "name": "item_locations_building_id_building_codes_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "building_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "building_codes",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "item_locations",
+      "name": "item_locations_item_id_items_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "item_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "items",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "warehouse_codes",
+      "name": "warehouse_codes_manager_id_users_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "manager_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "carrier_invoices",
+      "name": "carrier_invoices_carrier_id_carriers_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "carrier_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "carriers",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "orders",
+      "name": "orders_client_id_clients_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "client_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "clients",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "shipment_handoffs",
+      "name": "shipment_handoffs_shipment_id_shipments_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "shipment_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "shipments",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "shipment_handoffs",
+      "name": "shipment_handoffs_warehouse_id_warehouse_codes_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "warehouse_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "warehouse_codes",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "shipment_handoffs",
+      "name": "shipment_handoffs_building_id_building_codes_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "building_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "building_codes",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "shipment_handoffs",
+      "name": "shipment_handoffs_scanned_by_users_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "scanned_by"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "shipments_order_id_orders_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "order_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "orders",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "shipments_client_id_clients_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "client_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "clients",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "shipments_item_id_items_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "item_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "items",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "shipments_delivery_address_id_shipping_addresses_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "delivery_address_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "shipping_addresses",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "shipments_carrier_id_carriers_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "carrier_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "carriers",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "shipments_carrier_invoice_id_carrier_invoices_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "carrier_invoice_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "carrier_invoices",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "invoices",
+      "name": "invoices_client_id_clients_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "client_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "clients",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "invoices",
+      "name": "invoices_order_id_orders_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "order_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "orders",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "documents_client_id_clients_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "client_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "clients",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "documents_order_id_orders_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "order_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "orders",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "documents_shipment_id_shipments_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "shipment_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "shipments",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "documents_carrier_id_carriers_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "carrier_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "carriers",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "status_change_log",
+      "name": "status_change_log_user_id_users_id_fkey",
+      "nameExplicit": false,
+      "columns": [
+        "user_id"
+      ],
+      "schemaTo": "public",
+      "tableTo": "users",
+      "columnsTo": [
+        "id"
+      ],
+      "onUpdate": "NO ACTION",
+      "onDelete": "NO ACTION",
+      "entityType": "fks"
+    },
+    {
+      "schema": "public",
+      "table": "sessions",
+      "name": "sessions_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "users",
+      "name": "users_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "clients",
+      "name": "clients_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "shipping_addresses",
+      "name": "shipping_addresses_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "items",
+      "name": "items_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "building_codes",
+      "name": "building_codes_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "item_locations",
+      "name": "item_locations_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "warehouse_codes",
+      "name": "warehouse_codes_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "carrier_invoices",
+      "name": "carrier_invoices_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "carriers",
+      "name": "carriers_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "orders",
+      "name": "orders_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "shipment_handoffs",
+      "name": "shipment_handoffs_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "shipments_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "invoices",
+      "name": "invoices_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "documents",
+      "name": "documents_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "status_change_log",
+      "name": "status_change_log_pkey",
+      "columns": [
+        "id"
+      ],
+      "nameExplicit": false,
+      "entityType": "pks"
+    },
+    {
+      "schema": "public",
+      "table": "users",
+      "name": "users_email_key",
+      "nameExplicit": false,
+      "columns": [
+        "email"
+      ],
+      "nullsNotDistinct": false,
+      "entityType": "uniques"
+    },
+    {
+      "schema": "public",
+      "table": "building_codes",
+      "name": "building_codes_code_key",
+      "nameExplicit": false,
+      "columns": [
+        "code"
+      ],
+      "nullsNotDistinct": false,
+      "entityType": "uniques"
+    },
+    {
+      "schema": "public",
+      "table": "item_locations",
+      "name": "item_locations_code_key",
+      "nameExplicit": false,
+      "columns": [
+        "code"
+      ],
+      "nullsNotDistinct": false,
+      "entityType": "uniques"
+    },
+    {
+      "schema": "public",
+      "table": "item_locations",
+      "name": "item_locations_item_id_key",
+      "nameExplicit": false,
+      "columns": [
+        "item_id"
+      ],
+      "nullsNotDistinct": false,
+      "entityType": "uniques"
+    },
+    {
+      "schema": "public",
+      "table": "warehouse_codes",
+      "name": "warehouse_codes_code_key",
+      "nameExplicit": false,
+      "columns": [
+        "code"
+      ],
+      "nullsNotDistinct": false,
+      "entityType": "uniques"
+    },
+    {
+      "schema": "public",
+      "table": "shipments",
+      "name": "shipments_tracking_code_key",
+      "nameExplicit": false,
+      "columns": [
+        "tracking_code"
+      ],
+      "nullsNotDistinct": false,
+      "entityType": "uniques"
+    },
+    {
+      "schema": "public",
+      "table": "users",
+      "name": "users_has_role",
+      "value": "cardinality(\"roles\") >= 1",
+      "entityType": "checks"
+    },
+    {
+      "schema": "public",
+      "table": "building_codes",
+      "name": "building_codes_code_length",
+      "value": "char_length(\"code\") >= 2",
+      "entityType": "checks"
+    },
+    {
+      "schema": "public",
+      "table": "item_locations",
+      "name": "item_locations_code_length",
+      "value": "char_length(\"code\") >= 2",
+      "entityType": "checks"
+    },
+    {
+      "schema": "public",
+      "table": "warehouse_codes",
+      "name": "warehouse_codes_code_length",
+      "value": "char_length(\"code\") >= 2",
+      "entityType": "checks"
+    },
+    {
+      "schema": "public",
+      "table": "carriers",
+      "name": "carriers_number_type",
+      "value": "\"carrier_number_type\" in ('usdot', 'mc')",
+      "entityType": "checks"
+    }
+  ]
+}

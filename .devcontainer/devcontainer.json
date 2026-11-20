@@ -3,5 +3,6 @@
     "features": {
         "ghcr.io/anthropics/devcontainer-features/claude-code:1.0": {}
     },
-    "postCreateCommand": "apt-get update && apt-get install -y bubblewrap socat"
+    "postCreateCommand": "apt-get update && apt-get install -y bubblewrap socat && npm install -g pnpm@12.21.0",
+    "runArgs": ["--network=pacer-tms_api"]
 }

@@ -1,15 +1,8 @@
 import { Module } from '@nestjs/common';
-import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
 import { DrizzleModule } from '@nestjs/drizzle';
 import { drizzle } from 'drizzle-orm/node-postgres';
-
-
-@Module({
-  imports: [],
-  controllers: [AppController],
-  providers: [AppService],
-})
+import { AppController } from './app.controller.js';
+import { AppService } from './app.service.js';
 
 @Module({
   imports: [
@@ -18,6 +11,7 @@ import { drizzle } from 'drizzle-orm/node-postgres';
       connection: process.env.DATABASE_URL!,
     }),
   ],
+  controllers: [AppController],
+  providers: [AppService],
 })
-
 export class AppModule {}
