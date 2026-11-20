@@ -1,7 +1,7 @@
 import { integer, jsonb, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { carriers } from './carriers.js';
 import { clients } from './clients.js';
-import { intId } from './columns.js';
+import { deletedAt, intId } from './columns.js';
 import { orders, shipments } from './orders.js';
 
 /**
@@ -11,6 +11,7 @@ import { orders, shipments } from './orders.js';
  */
 export const documents = pgTable('documents', {
   id: intId(),
+  deletedAt: deletedAt(),
   /** shipment label, carrier insurance, bill of lading, packing list, ... */
   type: text('type').notNull(),
   /** Type-specific extras, e.g. tracking code (label) or expiration (insurance). */

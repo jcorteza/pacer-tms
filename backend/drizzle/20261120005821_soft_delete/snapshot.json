@@ -1,0 +1,455 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "dd9fa9e4-5e07-42f9-8a36-dc5bb83cec7c",
+  "prevIds": [
+    "ba369031-daf6-483e-8d0e-9a6898cd60bb"
+  ],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "clients",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.clients.deleted_at",
+        "n|col|public.clients.deleted_at",
+        "e|col|public.clients.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.clients",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "shipping_addresses",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.shipping_addresses.deleted_at",
+        "n|col|public.shipping_addresses.deleted_at",
+        "e|col|public.shipping_addresses.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.shipping_addresses",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "items",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.items.deleted_at",
+        "n|col|public.items.deleted_at",
+        "e|col|public.items.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.items",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "building_codes",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.building_codes.deleted_at",
+        "n|col|public.building_codes.deleted_at",
+        "e|col|public.building_codes.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.building_codes",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "item_locations",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.item_locations.deleted_at",
+        "n|col|public.item_locations.deleted_at",
+        "e|col|public.item_locations.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.item_locations",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "warehouse_codes",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.warehouse_codes.deleted_at",
+        "n|col|public.warehouse_codes.deleted_at",
+        "e|col|public.warehouse_codes.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.warehouse_codes",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "carrier_invoices",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.carrier_invoices.deleted_at",
+        "n|col|public.carrier_invoices.deleted_at",
+        "e|col|public.carrier_invoices.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.carrier_invoices",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "carriers",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.carriers.deleted_at",
+        "n|col|public.carriers.deleted_at",
+        "e|col|public.carriers.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.carriers",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "orders",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.orders.deleted_at",
+        "n|col|public.orders.deleted_at",
+        "e|col|public.orders.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.orders",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "shipments",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.shipments.deleted_at",
+        "n|col|public.shipments.deleted_at",
+        "e|col|public.shipments.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.shipments",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "invoices",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.invoices.deleted_at",
+        "n|col|public.invoices.deleted_at",
+        "e|col|public.invoices.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.invoices",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "documents",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.documents.deleted_at",
+        "n|col|public.documents.deleted_at",
+        "e|col|public.documents.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.documents",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "status_change_log",
+        "deleted_at"
+      ],
+      "writes": [
+        "s|col|public.status_change_log.deleted_at",
+        "n|col|public.status_change_log.deleted_at",
+        "e|col|public.status_change_log.deleted_at"
+      ],
+      "reads": [
+        "n|tbl|public.status_change_log",
+        "n|sch|public"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "clients",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "shipping_addresses",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "items",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "building_codes",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "item_locations",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "warehouse_codes",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "carrier_invoices",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "carriers",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "orders",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "shipments",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "invoices",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "documents",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "status_change_log",
+        "name": "deleted_at",
+        "type": "timestamp with time zone",
+        "typeSchema": null,
+        "notNull": false,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    }
+  ]
+}

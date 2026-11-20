@@ -1,10 +1,11 @@
 import { pgTable, text, uuid } from 'drizzle-orm/pg-core';
-import { intId, timestamptz } from './columns.js';
+import { deletedAt, intId, timestamptz } from './columns.js';
 import { users } from './users.js';
 
 /** Append-only audit trail of who changed what, and when. */
 export const statusChangeLog = pgTable('status_change_log', {
   id: intId(),
+  deletedAt: deletedAt(),
   /** item, shipment, order, ... */
   entityType: text('entity_type').notNull(),
   entityId: text('entity_id').notNull(),
