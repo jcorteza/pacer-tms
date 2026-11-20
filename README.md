@@ -39,3 +39,4 @@ The app is for a single example company, Larkspur Freight, and its staff. There'
 - Every change starts with a plan and a testing plan, and tests are written and approved before implementation.
 - Claude Code runs inside a dev container with the sandbox enabled, so what it can access is explicit and reviewable.
 - Project instructions for the AI live in [`CLAUDE.md`](./CLAUDE.md).
+- The UI layout, styling and responsiveness rules are in the [frontend README](./frontend/README.md).
