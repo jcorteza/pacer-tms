@@ -185,6 +185,7 @@ export const resources: Resource[] = [
       const manager = await createUser();
       return (n) => ({
         code: code('WH', n),
+        name: `Site ${n}`,
         managerId: manager.id,
         phone: '555-0103',
         address: '5 Depot Way',
@@ -202,9 +203,9 @@ export const resources: Resource[] = [
     pageSize: 50,
     setup: async () => {
       const warehouse = await createWarehouse();
-      return (n) => ({ code: code('BA', n), warehouseId: warehouse.id, building: 'A' });
+      return (n) => ({ code: code('BA', n), warehouseId: warehouse.id, name: `Building ${n}`, type: 'storage' });
     },
-    patch: { description: 'North building' },
+    patch: { type: 'transport' },
   },
   {
     path: 'item-locations',

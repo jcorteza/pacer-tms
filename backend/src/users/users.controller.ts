@@ -1,11 +1,27 @@
-import { Body, Controller, Delete, HttpCode, Inject, Param, ParseUUIDPipe, Patch, Post } from '@nestjs/common';
+import { Body, Controller, Delete, Get, HttpCode, Inject, Param, ParseUUIDPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import { SessionGuard } from '../auth/session.guard.js';
 import type { Role } from './roles.js';
-import { addRoleBody, changePasswordBody, createUserBody, roleParam, settingsBody, updateUserBody } from './users.schemas.js';
+import {
+  addRoleBody,
+  changePasswordBody,
+  createUserBody,
+  listUsersQuery,
+  roleParam,
+  settingsBody,
+  updateUserBody,
+} from './users.schemas.js';
 import { UsersService } from './users.service.js';
 
 @Controller('users')
 export class UsersController {
   constructor(@Inject(UsersService) private readonly users: UsersService) {}
+
+  /** Guarded: the list shows every user's email, unlike creating the first account. */
+  @Get()
+  @UseGuards(SessionGuard)
+  list(@Query({ schema: listUsersQuery }) query: { page: number; role?: Role }) {
+    return this.users.list(query.page, query.role);
+  }
 
   @Post()
   create(@Body({ schema: createUserBody }) body: Parameters<UsersService['create']>[0]) {

@@ -15,6 +15,7 @@ export const warehouseCodes = pgTable(
     id: intId(),
     deletedAt: deletedAt(),
     code: code(),
+    name: text('name').notNull(),
     managerId: uuid('manager_id')
       .notNull()
       .references(() => users.id),
@@ -36,11 +37,17 @@ export const buildingCodes = pgTable(
     warehouseId: integer('warehouse_id')
       .notNull()
       .references(() => warehouseCodes.id),
-    /** The building's letter or number in the site address, separate from the shorthand code. */
-    building: char('building', { length: 1 }).notNull(),
+    name: text('name').notNull(),
+    /** Storage holds stock; transport is where shipments load and unload. */
+    type: text('type').$type<'storage' | 'transport'>().notNull(),
+    /** The building's letter or number in the site address, if it has one; separate from the shorthand code. */
+    building: char('building', { length: 1 }),
     description: text('description'),
   },
-  (t) => [codeIsTwoToFourChars('building_codes', t.code)],
+  (t) => [
+    codeIsTwoToFourChars('building_codes', t.code),
+    check('building_codes_type', sql`${t.type} in ('storage', 'transport')`),
+  ],
 );
 
 export const itemLocations = pgTable(

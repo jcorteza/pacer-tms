@@ -1,0 +1,154 @@
+/* Pacer TMS design tokens (from the design system's tokens.json) and the shared component styles. */
+:root {
+  --surface-page: #f4f5f6;
+  --surface-card: #ffffff;
+  --surface-subtle: #fafbfb;
+  --line: #e1e4e8;
+  --line-subtle: #eef0f2;
+  --control-border: #767f8c;
+  --ink: #342e37;
+  --ink-muted: #5b6573;
+  --ink-inverse: #ffffff;
+  --brand: #355c1e;
+  --brand-pressed: #2f4b26;
+  --disabled-bg: #eef0f2;
+  --disabled-border: #d5d9df;
+  --disabled-ink: #7f8896;
+  --msg-info-bg: #e8ebef;
+  --msg-status-bg: #ddefd0;
+  --msg-status-ink: #1f3f10;
+  --msg-alert-bg: #342e37;
+  --msg-alert-ink: #ffffff;
+  --scrim: rgba(52, 46, 55, 0.55);
+  --radius-md: 10px;
+  --radius-lg: 14px;
+
+  /*
+   * Sizes are rem so they follow the user's browser text size, and are minimums (never fixed heights)
+   * so larger text or a wrapped label grows the control instead of clipping it.
+   */
+  --control: 2.75rem; /* 44px: the minimum comfortable target for a pointer or finger */
+  --control-lg: 3rem; /* the primary action on the login card */
+  --rail: clamp(13.75rem, 16vw, 17rem); /* nav rail: ~220px, a little wider on big screens */
+  --content-max: 90rem; /* stops tables and forms stretching edge to edge on very wide screens */
+  --page-gutter: clamp(1rem, 2vw, 1.75rem);
+}
+
+*, *::before, *::after { box-sizing: border-box; }
+
+body {
+  margin: 0;
+  font-family: "Archivo", system-ui, -apple-system, "Segoe UI", sans-serif;
+  font-stretch: 105%;
+  font-size: 14px;
+  line-height: 20px;
+  color: var(--ink);
+  background: var(--surface-page);
+}
+
+:focus-visible { outline: 2px solid var(--brand); outline-offset: 2px; }
+
+h1, h2 { margin: 0; }
+
+/* ---- Header and navigation ---- */
+.app { min-height: 100vh; min-height: 100dvh; display: flex; flex-direction: column; }
+.header { display: flex; align-items: center; gap: 16px; min-height: 4rem; padding: 0.5rem 1.25rem; background: var(--surface-card); border-bottom: 1px solid var(--line); }
+.brand { display: flex; align-items: center; gap: 10px; flex: none; }
+.wordmark { font-size: 17px; line-height: 1; font-weight: 700; letter-spacing: 0.14em; text-transform: uppercase; font-stretch: 125%; color: var(--ink); }
+/* A decorative hairline; its height is fixed on purpose so it reads as a short rule, not a full-height edge. */
+.divider { width: 1px; height: 1.75rem; background: var(--line); flex: none; }
+.customer { font-size: 18px; line-height: 22px; font-weight: 700; font-stretch: 112%; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; min-width: 0; }
+.spacer { flex: 1; }
+.account { position: relative; }
+.account-btn { display: flex; align-items: center; gap: 8px; min-height: var(--control); padding: 0 12px; border: 1px solid var(--control-border); border-radius: var(--radius-md); background: var(--surface-card); color: var(--ink); font: inherit; font-weight: 600; font-size: 13px; cursor: pointer; min-width: 0; }
+.account-btn span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.menu { position: absolute; right: 0; top: calc(100% + 0.5rem); z-index: 5; min-width: 11rem; padding: 6px; background: var(--surface-card); border: 1px solid var(--line); border-radius: var(--radius-md); }
+.menu button { display: block; width: 100%; min-height: var(--control); padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font: inherit; font-weight: 600; text-align: left; cursor: pointer; }
+.menu button:hover { background: var(--line-subtle); }
+
+/* Rail beside the page; below 760px the rail becomes a scrolling strip above it. */
+.body { flex: 1; display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); align-items: stretch; }
+.rail { display: flex; flex-direction: column; gap: 4px; padding: 16px 12px; background: var(--surface-card); border-right: 1px solid var(--line); }
+.nav-item { display: flex; align-items: center; gap: 12px; min-height: var(--control); padding: 0 12px; border-radius: var(--radius-md); color: var(--ink-muted); text-decoration: none; font-weight: 600; white-space: nowrap; }
+.nav-item:hover { background: var(--line-subtle); }
+.nav-item[aria-current="page"] { background: var(--brand); color: var(--ink-inverse); }
+.nav-item[aria-current="page"]:hover { background: var(--brand-pressed); }
+.main { min-width: 0; max-width: var(--content-max); padding: 1.5rem var(--page-gutter); display: flex; flex-direction: column; gap: 20px; }
+.page-header { display: flex; flex-direction: column; gap: 8px; }
+.page-title { font-size: 28px; line-height: 34px; font-weight: 700; font-stretch: 112%; letter-spacing: -0.01em; }
+.anchors { display: flex; flex-wrap: wrap; gap: 4px 20px; }
+.anchor { color: var(--brand); font-weight: 700; text-decoration: underline; }
+/* A readable measure for single-column forms; a maximum, so it still shrinks with the window. */
+.narrow { max-width: 45rem; display: flex; flex-direction: column; gap: 20px; }
+
+@media (max-width: 760px) {
+  .body { grid-template-columns: minmax(0, 1fr); }
+  .rail { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+  .account-btn span { display: none; }
+}
+
+/* ---- Cards ---- */
+.card { background: var(--surface-card); border: 1px solid var(--line); border-radius: var(--radius-lg); min-width: 0; }
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 16px 20px; border-bottom: 1px solid var(--line-subtle); }
+.card-head h2 { font-size: 16px; line-height: 22px; font-weight: 700; }
+.caption { font-size: 12px; line-height: 16px; color: var(--ink-muted); }
+.card-body { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
+.card-foot { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 12px; padding: 16px 20px; background: var(--surface-subtle); border-top: 1px solid var(--line-subtle); border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
+
+/* ---- Forms ---- */
+.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+/* Fields side by side share the row, each at least ~10rem before wrapping to the next line. */
+.row { display: flex; flex-wrap: wrap; gap: 12px; }
+.row > .field { flex: 1 1 10rem; }
+.label { font-size: 13px; line-height: 18px; font-weight: 600; }
+.hint { font-size: 12px; line-height: 16px; color: var(--ink-muted); }
+.error { font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink); }
+.input { min-height: var(--control); width: 100%; padding: 0 12px; border: 1px solid var(--control-border); border-radius: var(--radius-md); background: var(--surface-card); color: var(--ink); font: inherit; font-stretch: 105%; }
+.input:disabled { background: var(--disabled-bg); border-color: var(--disabled-border); color: var(--disabled-ink); }
+.input[aria-invalid="true"] { border-width: 2px; }
+.select { position: relative; }
+.select select { appearance: none; -webkit-appearance: none; padding-right: 36px; }
+.select svg { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--ink); }
+
+.btn { min-height: var(--control); padding: 0 20px; border: 0; border-radius: var(--radius-md); background: var(--brand); color: var(--ink-inverse); font: inherit; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.btn:hover { background: var(--brand-pressed); }
+.btn:disabled { background: var(--disabled-bg); color: var(--disabled-ink); cursor: not-allowed; }
+.btn-block { width: 100%; min-height: var(--control-lg); justify-content: center; font-size: 15px; }
+.btn-secondary { min-height: var(--control); padding: 0 16px; border: 1px solid var(--control-border); border-radius: var(--radius-md); background: var(--surface-card); color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; }
+.link-btn { min-height: 2.5rem; padding: 0 8px; border: 0; background: transparent; color: var(--brand); font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
+.icon-btn { min-width: var(--control); min-height: var(--control); padding: 0; border: 0; background: transparent; border-radius: var(--radius-md); display: grid; place-items: center; color: var(--ink); cursor: pointer; flex: none; }
+.icon-btn:hover { background: var(--line-subtle); }
+
+/* ---- Messages ---- */
+.message { display: flex; gap: 8px; align-items: flex-start; padding: 12px 14px; border-radius: var(--radius-md); font-size: 13px; line-height: 18px; background: var(--msg-info-bg); }
+.message-alert { background: var(--msg-alert-bg); color: var(--msg-alert-ink); font-weight: 600; }
+.message-status { background: var(--msg-status-bg); color: var(--msg-status-ink); font-weight: 600; }
+
+/* ---- Tables ---- */
+.table-wrap { overflow-x: auto; }
+.table { width: 100%; border-collapse: collapse; }
+.table th { text-align: left; font-size: 12px; line-height: 16px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; color: var(--ink-muted); background: var(--surface-subtle); padding: 10px 16px; border-bottom: 1px solid var(--line); white-space: nowrap; }
+/* On a table cell, `height` acts as a minimum: rows hold ~52px and grow when a cell wraps. */
+.table td { padding: 4px 16px; height: 3.25rem; border-bottom: 1px solid var(--line-subtle); vertical-align: middle; }
+.table tr:last-child td { border-bottom: 0; }
+.table .num { font-variant-numeric: tabular-nums; }
+.table .strong { font-weight: 700; }
+.table .end { text-align: right; }
+.visually-hidden { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.empty { padding: 20px; color: var(--ink-muted); }
+
+/* ---- Modal ---- */
+/* The scrim covers the viewport by design (an overlay); a tall dialog scrolls inside it. */
+.scrim { position: fixed; inset: 0; z-index: 10; background: var(--scrim); display: flex; justify-content: center; align-items: flex-start; padding: 0 16px; overflow-y: auto; }
+.modal { margin: clamp(1rem, 8vh, 4rem) 0; width: 100%; max-width: 35rem; background: var(--surface-card); border: 1px solid var(--line); border-radius: var(--radius-lg); }
+.modal h2 { font-size: 20px; line-height: 26px; font-weight: 700; font-stretch: 112%; }
+.modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 12px 16px 20px; border-bottom: 1px solid var(--line-subtle); }
+
+/* ---- Login ---- */
+.login-main { flex: 1; display: flex; align-items: center; justify-content: center; padding: clamp(2rem, 8vh, 4rem) 1.5rem; }
+.login-stack { width: 100%; max-width: 47.5rem; display: flex; flex-direction: column; align-items: center; gap: 32px; }
+.login-heading { display: flex; flex-direction: column; align-items: center; gap: 12px; width: 100%; }
+.login-title { max-width: 100%; font-size: clamp(32px, 5vw, 52px); line-height: 1.1; font-weight: 700; font-stretch: 112%; letter-spacing: -0.01em; overflow-wrap: anywhere; text-wrap: balance; text-align: center; }
+.login-sub { margin: 0; font-size: 16px; line-height: 24px; color: var(--ink-muted); text-align: center; }
+.login-card { width: 100%; max-width: 27.5rem; display: flex; flex-direction: column; gap: 20px; padding: clamp(1.25rem, 4vw, 1.75rem); background: var(--surface-card); border: 1px solid var(--line); border-radius: var(--radius-lg); }
+.login-note { width: 100%; max-width: 27.5rem; }

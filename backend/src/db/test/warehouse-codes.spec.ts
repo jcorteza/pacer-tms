@@ -37,6 +37,7 @@ describe('warehouse codes', () => {
     await expectPgError(
       db.insert(warehouseCodes).values({
         code: 'WH02',
+        name: 'Site WH02',
         managerId: '00000000-0000-0000-0000-000000000000',
         phone: '1',
         address: 'a',
@@ -64,8 +65,45 @@ describe('building codes', () => {
 
   it('given a warehouse that does not exist, when a building references it, then it is rejected', async () => {
     await expectPgError(
-      db.insert(buildingCodes).values({ code: 'A2', warehouseId: 999, building: 'A' }),
+      db.insert(buildingCodes).values({ code: 'A2', warehouseId: 999, name: 'Main', type: 'storage' }),
       '23503',
+    );
+  });
+
+  it('given a type other than storage or transport, when saved, then it is rejected', async () => {
+    const wh = await createWarehouse();
+    await expectPgError(
+      db.insert(buildingCodes).values({ code: 'A2', warehouseId: wh.id, name: 'Main', type: 'garage' as never }),
+      '23514',
+    );
+  });
+
+  it('given no type, when saved, then it is rejected', async () => {
+    const wh = await createWarehouse();
+    await expectPgError(
+      db.insert(buildingCodes).values({ code: 'A2', warehouseId: wh.id, name: 'Main' } as never),
+      '23502',
+    );
+  });
+
+  it('given no letter, when saved, then it is accepted (the letter is optional)', async () => {
+    const wh = await createWarehouse();
+    const [building] = await db
+      .insert(buildingCodes)
+      .values({ code: 'A2', warehouseId: wh.id, name: 'Dock 1', type: 'transport' })
+      .returning();
+    expect(building.building).toBeNull();
+  });
+});
+
+describe('site and building names', () => {
+  it('given a warehouse with no name, when saved, then it is rejected', async () => {
+    const manager = await createUser();
+    await expectPgError(
+      db.insert(warehouseCodes).values({
+        code: 'WH03', managerId: manager.id, phone: '1', address: 'a', city: 'c', state: 'NV', zip: '89501',
+      } as never),
+      '23502',
     );
   });
 });
@@ -104,7 +142,7 @@ describe('item locations', () => {
     const manager = await createUser();
     const [warehouse] = await db
       .insert(warehouseCodes)
-      .values({ code: 'WH09', managerId: manager.id, phone: '1', address: 'a', city: 'c', state: 'NV', zip: '89501' })
+      .values({ code: 'WH09', name: 'Site WH09', managerId: manager.id, phone: '1', address: 'a', city: 'c', state: 'NV', zip: '89501' })
       .returning();
     expect(warehouse.managerId).toBe(manager.id);
   });

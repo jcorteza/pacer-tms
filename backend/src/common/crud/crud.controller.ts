@@ -25,7 +25,7 @@ import { crudSchemas, pageQuery } from './crud.schemas.js';
  * create, update and soft delete, all behind a signed-in session.
  */
 export function createCrudController(config: CrudConfig): Type<unknown> {
-  const { insert, update } = crudSchemas(config.table);
+  const { insert, update } = crudSchemas(config.table, { generatedCode: config.generatedCode === true });
   const idPipe = config.idType === 'int' ? ParseIntPipe : ParseUUIDPipe;
 
   @Controller(config.path)

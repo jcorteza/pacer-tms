@@ -25,12 +25,13 @@ const clientWritable = (table: SoftDeletable) =>
   );
 
 /** Body schemas for POST (all required fields) and PATCH (any non-empty subset); unknown keys are rejected. */
-export function crudSchemas(table: SoftDeletable) {
+export function crudSchemas(table: SoftDeletable, { generatedCode = false } = {}) {
   const keep = clientWritable(table);
   const insertBase = createInsertSchema(table as never) as unknown as BodySchema;
   const updateBase = createUpdateSchema(table as never) as unknown as BodySchema;
 
-  const insert = insertBase.pick(keep).strict();
+  const picked = insertBase.pick(keep);
+  const insert = (generatedCode ? picked.partial({ code: true }) : picked).strict();
   const update = updateBase
     .pick(keep)
     .strict()

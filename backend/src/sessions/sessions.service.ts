@@ -16,7 +16,8 @@ export class SessionsService {
       throw new UnauthorizedException('Invalid email or password');
     }
     const [session] = await this.db.insert(sessions).values({ userId: user.id }).returning();
-    return session;
+    const { id, firstName, lastName, email: userEmail, roles } = user;
+    return { ...session, user: { id, firstName, lastName, email: userEmail, roles } };
   }
 
   /** Logging out removes the row outright (sessions are the one hard delete). */

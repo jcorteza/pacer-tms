@@ -21,8 +21,8 @@ export const CRUD_RESOURCES: CrudConfig[] = [
   resource('documents', 'document', schema.documents, 'int'),
   resource('items', 'item', schema.items, 'int'),
   resource('shipping-addresses', 'shipping-address', schema.shippingAddresses, 'uuid'),
-  resource('warehouse-codes', 'warehouse-code', schema.warehouseCodes, 'int'),
-  resource('building-codes', 'building-code', schema.buildingCodes, 'int'),
-  resource('item-locations', 'item-location', schema.itemLocations, 'int'),
+  resource('warehouse-codes', 'warehouse-code', schema.warehouseCodes, 'int', 50, { generatedCode: true }),
+  resource('building-codes', 'building-code', schema.buildingCodes, 'int', 50, { generatedCode: true }),
+  resource('item-locations', 'item-location', schema.itemLocations, 'int', 50, { generatedCode: true }),
   resource('status-change-log', 'status-change-log', schema.statusChangeLog, 'int', 50, { logsWrites: false }),
 ];

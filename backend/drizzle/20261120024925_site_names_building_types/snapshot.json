@@ -1,0 +1,169 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "4aa50c0f-3aec-401b-807e-77d99c1bb441",
+  "prevIds": [
+    "dd9fa9e4-5e07-42f9-8a36-dc5bb83cec7c"
+  ],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "building_codes",
+        "name"
+      ],
+      "writes": [
+        "s|col|public.building_codes.name",
+        "n|col|public.building_codes.name",
+        "e|col|public.building_codes.name"
+      ],
+      "reads": [
+        "n|tbl|public.building_codes",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "building_codes",
+        "type"
+      ],
+      "writes": [
+        "s|col|public.building_codes.type",
+        "n|col|public.building_codes.type",
+        "e|col|public.building_codes.type"
+      ],
+      "reads": [
+        "n|tbl|public.building_codes",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "warehouse_codes",
+        "name"
+      ],
+      "writes": [
+        "s|col|public.warehouse_codes.name",
+        "n|col|public.warehouse_codes.name",
+        "e|col|public.warehouse_codes.name"
+      ],
+      "reads": [
+        "n|tbl|public.warehouse_codes",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "building_codes",
+        "building"
+      ],
+      "writes": [
+        "s|colprop|public.building_codes.building.notNull"
+      ],
+      "reads": [
+        "n|tbl|public.building_codes",
+        "n|sch|public",
+        "n|col|public.building_codes.building"
+      ],
+      "sqlHash": "e9e907e24c2cc7a8"
+    },
+    {
+      "statementType": "add_check",
+      "statementTarget": [
+        "table",
+        "public",
+        "building_codes"
+      ],
+      "writes": [
+        "s|ck|public.building_codes.building_codes_type",
+        "n|ck|public.building_codes.building_codes_type",
+        "e|ck|public.building_codes.building_codes_type",
+        "n|con|public.building_codes.building_codes_type"
+      ],
+      "reads": [
+        "n|tbl|public.building_codes",
+        "n|sch|public",
+        "n|col|public.building_codes.type"
+      ]
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "building_codes",
+        "name": "name",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "building_codes",
+        "name": "type",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "warehouse_codes",
+        "name": "name",
+        "type": "text",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": null,
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "building_codes",
+        "name": "building_codes_type",
+        "value": "\"type\" in ('storage', 'transport')",
+        "entityType": "checks"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"building_codes\",\"building\"]",
+      "set": {
+        "notNull": false
+      }
+    }
+  ]
+}
