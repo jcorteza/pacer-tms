@@ -1,6 +1,8 @@
 import { Inject, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDrizzle } from '@nestjs/drizzle';
-import { and, count, eq, isNull } from 'drizzle-orm';
+import { and, count, eq, getTableName, isNull, sql } from 'drizzle-orm';
+import type { PgColumn } from 'drizzle-orm/pg-core';
+import { highestCode, nextCode } from '../codes.js';
 import { buildPage, pageWindow } from '../pagination.js';
 import type { Db, Tx } from '../../db/db.js';
 import { StatusChangeLogService } from '../../status-change-log/status-change-log.service.js';
@@ -35,7 +37,8 @@ export class CrudService {
 
   create(config: CrudConfig, userId: string, body: Body) {
     return this.db.transaction(async (tx) => {
-      const [row] = (await tx.insert(config.table).values(body).returning()) as Row[];
+      const values = config.generatedCode && body.code === undefined ? { ...body, code: await this.nextCodeFor(tx, config) } : body;
+      const [row] = (await tx.insert(config.table).values(values).returning()) as Row[];
       await this.record(tx, config, 'create', row.id, userId);
       return row;
     });
@@ -61,6 +64,16 @@ export class CrudService {
       if (!row) throw new NotFoundException();
       await this.record(tx, config, 'delete', id, userId);
     });
+  }
+
+  /**
+   * One past the latest code in the table, deleted rows included so a code is never reused.
+   * The advisory lock makes two simultaneous creates take turns instead of picking the same code.
+   */
+  private async nextCodeFor(tx: Tx, { table }: CrudConfig) {
+    await tx.execute(sql`select pg_advisory_xact_lock(hashtext(${getTableName(table)}))`);
+    const rows = (await tx.select({ code: (table as unknown as { code: PgColumn }).code }).from(table)) as { code: string }[];
+    return nextCode(highestCode(rows.map((r) => r.code)));
   }
 
   private live({ table }: CrudConfig, id: Id) {

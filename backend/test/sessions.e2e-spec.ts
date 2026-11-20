@@ -31,6 +31,26 @@ describe('POST /sessions', () => {
     expect(new Date(res.body.expiresAt).getTime() - Date.now()).toBeLessThanOrEqual(twelveHours);
   });
 
+  it('also returns the signed-in user, without their password hash', async () => {
+    const user = await createUser({
+      firstName: 'Dana',
+      lastName: 'Whitfield',
+      email: 'dana@larkspurfreight.test',
+      roles: ['Dispatcher'],
+      passwordHash: await hashPassword('s3cret-pass'),
+    });
+
+    const res = await api().post('/sessions').send({ email: 'dana@larkspurfreight.test', password: 's3cret-pass' }).expect(201);
+
+    expect(res.body.user).toEqual({
+      id: user.id,
+      firstName: 'Dana',
+      lastName: 'Whitfield',
+      email: 'dana@larkspurfreight.test',
+      roles: ['Dispatcher'],
+    });
+  });
+
   it('given the wrong password, responds 401 and creates no session', async () => {
     await createUser({ email: 'ada@larkspur.test', passwordHash: await hashPassword('s3cret-pass') });
 

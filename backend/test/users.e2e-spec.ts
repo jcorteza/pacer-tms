@@ -4,7 +4,7 @@ import request from 'supertest';
 import { users } from '../src/db/schema.js';
 import { closeDatabase, createUser, db, resetDatabase } from '../src/db/test/helpers.js';
 import { hashPassword, verifyPassword } from '../src/users/password.js';
-import { createTestApp } from './support/app.js';
+import { createTestApp, signedIn } from './support/app.js';
 
 let app: INestApplication;
 const api = () => request(app.getHttpServer());
@@ -49,6 +49,43 @@ describe('POST /users', () => {
 
   it('given no roles, responds 400', async () => {
     await api().post('/users').send({ ...newUser, roles: [] }).expect(400);
+  });
+});
+
+describe('GET /users', () => {
+  it('lists users without their password hashes', async () => {
+    const { header } = await signedIn();
+    await createUser({ firstName: 'Grace', lastName: 'Hopper' });
+
+    const res = await api().get('/users').set(header).expect(200);
+
+    expect(res.body).toMatchObject({ page: 1, pageSize: 50, total: 2 });
+    expect(res.body.data).toHaveLength(2);
+    for (const user of res.body.data) {
+      expect(user).toMatchObject({ id: expect.any(String), firstName: expect.any(String), email: expect.any(String) });
+      expect(user.passwordHash).toBeUndefined();
+    }
+  });
+
+  it('given ?role=, lists only users holding that role', async () => {
+    const { header } = await signedIn({ roles: ['Dispatcher'] });
+    const manager = await createUser({ firstName: 'Priya', roles: ['Warehouse Management', 'Warehouse'] });
+    await createUser({ roles: ['Warehouse'] });
+
+    const res = await api().get('/users').query({ role: 'Warehouse Management' }).set(header).expect(200);
+
+    expect(res.body.total).toBe(1);
+    expect(res.body.data.map((u: { id: string }) => u.id)).toEqual([manager.id]);
+  });
+
+  it('given an unknown role, responds 400', async () => {
+    const { header } = await signedIn();
+
+    await api().get('/users').query({ role: 'Wizard' }).set(header).expect(400);
+  });
+
+  it('given no session, responds 401', async () => {
+    await api().get('/users').expect(401);
   });
 });
 

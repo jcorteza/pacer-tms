@@ -1,6 +1,7 @@
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDrizzle } from '@nestjs/drizzle';
-import { eq, sql } from 'drizzle-orm';
+import { count, eq, sql } from 'drizzle-orm';
+import { buildPage, pageWindow } from '../common/pagination.js';
 import type { Db } from '../db/db.js';
 import { users } from '../db/schema.js';
 import { hashPassword, verifyPassword } from './password.js';
@@ -14,6 +15,17 @@ const toPublic = ({ passwordHash: _hash, ...user }: UserRow) => user;
 @Injectable()
 export class UsersService {
   constructor(@InjectDrizzle() private readonly db: Db) {}
+
+  async list(page: number, role?: Role) {
+    const pageSize = 50;
+    const { limit, offset } = pageWindow(page, pageSize);
+    const where = role ? sql`${role} = any(${users.roles})` : undefined;
+    const [rows, [{ total }]] = await Promise.all([
+      this.db.select().from(users).where(where).orderBy(users.lastName, users.firstName, users.id).limit(limit).offset(offset),
+      this.db.select({ total: count() }).from(users).where(where),
+    ]);
+    return buildPage(rows.map(toPublic), { total, page, pageSize });
+  }
 
   async create(body: { firstName: string; lastName: string; email: string; password: string; roles: Role[] }) {
     const { password, roles, ...profile } = body;

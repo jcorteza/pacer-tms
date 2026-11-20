@@ -1,5 +1,6 @@
 import { randomBytes } from 'node:crypto';
 import { eq } from 'drizzle-orm';
+import { nextCode } from '../../common/codes.js';
 import { ROLES, type Role } from '../../users/roles.js';
 import { hashPassword } from '../../users/password.js';
 import type { Tx } from '../db.js';
@@ -57,26 +58,28 @@ export async function seedUsers(tx: Tx) {
 /** Site A has a single building; site B has three, so the UI can show both layouts. */
 const SITES = [
   {
-    code: 'RNO1', phone: '775-555-0141', address: '1200 Depot Way', city: 'Reno', state: 'NV', zip: '89502',
-    buildings: [
-      { code: 'RN1A', building: 'A', description: 'Main building', locations: ['A101', 'A102', 'A103', 'A104', 'A105', 'A106', 'A107', 'A108'] },
-    ],
+    name: 'Reno Distribution Center', phone: '775-555-0141', address: '1200 Depot Way', city: 'Reno', state: 'NV', zip: '89502',
+    buildings: [{ name: 'Main building', type: 'storage' as const, locations: 8 }],
   },
   {
-    code: 'SLC1', phone: '801-555-0172', address: '455 Rail Spur Rd', city: 'Salt Lake City', state: 'UT', zip: '84104',
+    name: 'Salt Lake Cross-Dock', phone: '801-555-0172', address: '455 Rail Spur Rd', city: 'Salt Lake City', state: 'UT', zip: '84104',
     buildings: [
-      { code: 'SL1A', building: 'A', description: 'Cold storage', locations: ['B101', 'B102', 'B103', 'B104'] },
-      { code: 'SL1B', building: 'B', description: 'General goods', locations: ['B201', 'B202', 'B203', 'B204'] },
-      { code: 'SL1C', building: 'C', description: 'Cross-dock', locations: ['C101', 'C102', 'C103', 'C104'] },
+      { name: 'Cold storage', type: 'storage' as const, locations: 4 },
+      { name: 'General goods', type: 'storage' as const, locations: 4 },
+      { name: 'Cross-dock', type: 'transport' as const, locations: 4 },
     ],
   },
 ];
 
-/** `managers[i]` runs `SITES[i]`. */
+/** `managers[i]` runs `SITES[i]`. Codes follow the same A1, A2, ... sequence the API generates. */
 export async function seedWarehouses(tx: Tx, managers: { id: string }[]) {
+  const nextSiteCode = codeSequence();
+  const nextBuildingCode = codeSequence();
+  const nextLocationCode = codeSequence();
+
   const warehouses = await tx
     .insert(warehouseCodes)
-    .values(SITES.map(({ buildings: _b, ...site }, i) => ({ ...site, managerId: managers[i].id })))
+    .values(SITES.map(({ buildings: _b, ...site }, i) => ({ ...site, code: nextSiteCode(), managerId: managers[i].id })))
     .returning();
 
   const buildings = [];
@@ -85,15 +88,21 @@ export async function seedWarehouses(tx: Tx, managers: { id: string }[]) {
     const warehouse = warehouses[i];
     const inserted = await tx
       .insert(buildingCodes)
-      .values(site.buildings.map(({ locations: _l, ...b }) => ({ ...b, warehouseId: warehouse.id })))
+      .values(site.buildings.map(({ locations: _l, ...b }) => ({ ...b, code: nextBuildingCode(), warehouseId: warehouse.id })))
       .returning();
     buildings.push(...inserted.map((b) => ({ ...b, warehouse })));
     for (const [j, building] of inserted.entries()) {
-      const rows = site.buildings[j].locations.map((code) => ({ code, buildingId: building.id }));
+      const rows = Array.from({ length: site.buildings[j].locations }, () => ({ code: nextLocationCode(), buildingId: building.id }));
       locations.push(...(await tx.insert(itemLocations).values(rows).returning()));
     }
   }
   return { warehouses, buildings, locations };
+}
+
+/** A counter that hands out A1, A2, ... one per call. */
+function codeSequence() {
+  let last: string | undefined;
+  return () => (last = nextCode(last));
 }
 
 /** Each item gets one location; there are a few spare. */

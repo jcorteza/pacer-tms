@@ -1,4 +1,5 @@
 import { z } from 'zod';
+import { pageQuery } from '../common/crud/crud.schemas.js';
 import { ROLES } from './roles.js';
 
 const role = z.enum(ROLES);
@@ -26,3 +27,6 @@ export const settingsBody = z.record(z.string(), z.unknown());
 export const addRoleBody = z.strictObject({ role });
 
 export const roleParam = role;
+
+/** `?page=` plus an optional `?role=` that keeps only users holding that role. */
+export const listUsersQuery = pageQuery.extend({ role: role.optional() });

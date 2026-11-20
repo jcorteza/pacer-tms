@@ -14,6 +14,8 @@ export type CrudConfig = {
   pageSize: number;
   /** The status-change log doesn't log itself. */
   logsWrites?: false;
+  /** `code` may be left out of a create; the server numbers it A1, A2, ... (see common/codes.ts). */
+  generatedCode?: true;
 };
 
 export type Id = number | string;

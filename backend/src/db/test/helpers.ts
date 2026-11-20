@@ -129,6 +129,7 @@ export async function createWarehouse(code = 'WH01') {
     .insert(schema.warehouseCodes)
     .values({
       code,
+      name: `Site ${code}`,
       managerId: manager.id,
       phone: '555-0103',
       address: '5 Depot Way',
@@ -143,7 +144,7 @@ export async function createWarehouse(code = 'WH01') {
 export async function createBuilding(warehouseId: number, code = 'BA01') {
   const [row] = await db
     .insert(schema.buildingCodes)
-    .values({ code, warehouseId, building: 'A' })
+    .values({ code, warehouseId, name: `Building ${code}`, type: 'storage' })
     .returning();
   return row;
 }
