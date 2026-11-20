@@ -14,7 +14,7 @@ export function ConfigurationPage() {
 
   return (
     <>
-      <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+      <div className="page-header">
         <h1 className="page-title">Configuration</h1>
         <div className="anchors">
           {SECTIONS.map(({ href, label }) => (

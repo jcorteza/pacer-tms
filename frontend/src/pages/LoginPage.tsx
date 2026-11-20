@@ -53,7 +53,7 @@ export function LoginPage() {
       </header>
       <main className="login-main">
         <div className="login-stack">
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, width: '100%' }}>
+          <div className="login-heading">
             <h1 className="login-title">{COMPANY_NAME}</h1>
             <p className="login-sub">Sign in with your company email and password.</p>
           </div>
