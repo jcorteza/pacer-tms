@@ -1,5 +1,6 @@
 import { eq } from 'drizzle-orm';
 import { afterAll, beforeEach, describe, expect, it } from 'vitest';
+import type { Role } from '../../users/roles.js';
 import { sessions, users } from '../schema.js';
 import { closeDatabase, createUser, db, expectPgError, resetDatabase } from './helpers.js';
 
@@ -26,8 +27,9 @@ describe('users', () => {
   });
 
   it('given several roles, when a user is saved, then they round-trip as a list', async () => {
-    const user = await createUser({ roles: ['Dispatcher', 'OpsMan'] });
-    expect(user.roles).toEqual(['Dispatcher', 'OpsMan']);
+    const roles: Role[] = ['Dispatcher', 'Operations Management'];
+    const user = await createUser({ roles });
+    expect(user.roles).toEqual(roles);
   });
 
   it('given no settings, when a user is saved, then settings defaults to {}', async () => {

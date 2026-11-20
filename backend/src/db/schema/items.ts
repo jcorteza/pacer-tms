@@ -1,9 +1,10 @@
 import { integer, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { clients } from './clients.js';
-import { exactDecimal, intId } from './columns.js';
+import { deletedAt, exactDecimal, intId } from './columns.js';
 
 export const items = pgTable('items', {
   id: intId(),
+  deletedAt: deletedAt(),
   clientId: uuid('client_id')
     .notNull()
     .references(() => clients.id),

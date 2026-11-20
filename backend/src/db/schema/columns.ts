@@ -11,3 +11,6 @@ export const createdAt = () => timestamptz('created_at').notNull().defaultNow();
 
 /** Money, weights, volumes and dimensions: exact decimals, never floats. */
 export const exactDecimal = (name: string) => numeric(name, { precision: 12, scale: 2 });
+
+/** Soft delete: set instead of removing the row; null means live. */
+export const deletedAt = () => timestamptz('deleted_at');

@@ -1,12 +1,13 @@
 import { sql } from 'drizzle-orm';
 import { check, pgTable, text } from 'drizzle-orm/pg-core';
-import { exactDecimal, intId, timestamptz } from './columns.js';
+import { deletedAt, exactDecimal, intId, timestamptz } from './columns.js';
 import { integer } from 'drizzle-orm/pg-core';
 
 export const carriers = pgTable(
   'carriers',
   {
     id: intId(),
+    deletedAt: deletedAt(),
     name: text('name').notNull(),
     contactName: text('contact_name').notNull(),
     contactPhone: text('contact_phone').notNull(),
@@ -23,6 +24,7 @@ export const carriers = pgTable(
 /** Incoming invoices from carriers (Decision Log #28). Shipments point back here via shipments.carrier_invoice_id. */
 export const carrierInvoices = pgTable('carrier_invoices', {
   id: intId(),
+  deletedAt: deletedAt(),
   receivedAt: timestamptz('received_at').notNull(),
   deadline: timestamptz('deadline').notNull(),
   carrierId: integer('carrier_id')

@@ -1,6 +1,6 @@
 import { sql } from 'drizzle-orm';
 import { char, check, integer, pgTable, text, uuid, varchar } from 'drizzle-orm/pg-core';
-import { intId } from './columns.js';
+import { deletedAt, intId } from './columns.js';
 import { items } from './items.js';
 import { users } from './users.js';
 
@@ -13,6 +13,7 @@ export const warehouseCodes = pgTable(
   'warehouse_codes',
   {
     id: intId(),
+    deletedAt: deletedAt(),
     code: code(),
     managerId: uuid('manager_id')
       .notNull()
@@ -30,6 +31,7 @@ export const buildingCodes = pgTable(
   'building_codes',
   {
     id: intId(),
+    deletedAt: deletedAt(),
     code: code(),
     warehouseId: integer('warehouse_id')
       .notNull()
@@ -45,6 +47,7 @@ export const itemLocations = pgTable(
   'item_locations',
   {
     id: intId(),
+    deletedAt: deletedAt(),
     code: code(),
     buildingId: integer('building_id')
       .notNull()

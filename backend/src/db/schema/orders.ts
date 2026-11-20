@@ -1,13 +1,14 @@
 import { integer, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import { carrierInvoices, carriers } from './carriers.js';
 import { clients, shippingAddresses } from './clients.js';
-import { createdAt, exactDecimal, intId, timestamptz } from './columns.js';
+import { createdAt, deletedAt, exactDecimal, intId, timestamptz } from './columns.js';
 import { items } from './items.js';
 import { users } from './users.js';
 import { buildingCodes, warehouseCodes } from './warehouses.js';
 
 export const orders = pgTable('orders', {
   id: intId(),
+  deletedAt: deletedAt(),
   po: text('po').notNull(),
   createdAt: createdAt(),
   closedAt: timestamptz('closed_at'),
@@ -24,6 +25,7 @@ export const orders = pgTable('orders', {
 /** An order has many shipments; each shipment carries one item (Decision Log #26). */
 export const shipments = pgTable('shipments', {
   id: intId(),
+  deletedAt: deletedAt(),
   trackingCode: uuid('tracking_code').notNull().unique().defaultRandom(),
   orderId: integer('order_id')
     .notNull()
