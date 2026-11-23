@@ -1,6 +1,7 @@
 import { ConflictException, ForbiddenException, Injectable, NotFoundException } from '@nestjs/common';
 import { InjectDrizzle } from '@nestjs/drizzle';
 import { count, eq, sql } from 'drizzle-orm';
+import { isDemoMode } from '../common/demo-mode.js';
 import { buildPage, pageWindow } from '../common/pagination.js';
 import type { Db } from '../db/db.js';
 import { users } from '../db/schema.js';
@@ -43,6 +44,7 @@ export class UsersService {
   }
 
   async changePassword(id: string, currentPassword: string, newPassword: string) {
+    if (isDemoMode()) throw new ForbiddenException('Password changes are disabled in demo mode');
     const user = await this.find(id);
     if (!(await verifyPassword(currentPassword, user.passwordHash))) {
       throw new ForbiddenException('Current password is incorrect');

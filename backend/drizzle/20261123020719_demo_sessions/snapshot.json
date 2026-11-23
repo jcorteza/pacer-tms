@@ -1,0 +1,72 @@
+{
+  "type": "diff",
+  "version": "9",
+  "dialect": "postgres",
+  "id": "74ad276f-14a3-403e-b200-bd6c31805bbe",
+  "prevIds": [
+    "4aa50c0f-3aec-401b-807e-77d99c1bb441"
+  ],
+  "footprints": [
+    {
+      "statementType": "add_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "sessions",
+        "is_demo_user"
+      ],
+      "writes": [
+        "s|col|public.sessions.is_demo_user",
+        "n|col|public.sessions.is_demo_user",
+        "e|col|public.sessions.is_demo_user"
+      ],
+      "reads": [
+        "n|tbl|public.sessions",
+        "n|sch|public"
+      ]
+    },
+    {
+      "statementType": "alter_column",
+      "statementTarget": [
+        "column",
+        "public",
+        "sessions",
+        "user_id"
+      ],
+      "writes": [
+        "s|colprop|public.sessions.user_id.notNull"
+      ],
+      "reads": [
+        "n|tbl|public.sessions",
+        "n|sch|public",
+        "n|col|public.sessions.user_id"
+      ],
+      "sqlHash": "71d4766144259d1e"
+    }
+  ],
+  "deltas": [
+    {
+      "op": "create",
+      "row": {
+        "schema": "public",
+        "table": "sessions",
+        "name": "is_demo_user",
+        "type": "boolean",
+        "typeSchema": null,
+        "notNull": true,
+        "dimensions": 0,
+        "default": "false",
+        "generated": null,
+        "identity": null,
+        "entityType": "columns"
+      }
+    },
+    {
+      "op": "alter",
+      "key": "columns\u0000[\"public\",\"sessions\",\"user_id\"]",
+      "set": {
+        "notNull": true
+      }
+    }
+  ]
+}

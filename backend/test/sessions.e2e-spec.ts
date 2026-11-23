@@ -91,7 +91,8 @@ describe('POST /sessions in demo mode', () => {
     expect(res.body.isDemoUser).toBe(true);
     expect(res.body.userId).toBe(res.body.user.id);
     expect(res.body.user).toMatchObject({ firstName: 'Demo', lastName: 'User' });
-    expect([...res.body.user.roles].sort()).toEqual([...ROLES].sort());
+    expect(res.body.user.roles).toHaveLength(ROLES.length);
+    expect(res.body.user.roles).toEqual(expect.arrayContaining([...ROLES]));
     expect(res.body.user.passwordHash).toBeUndefined();
     expect(new Date(res.body.expiresAt).getTime() - Date.now()).toBeGreaterThan(twelveHours - 60_000);
     expect(new Date(res.body.expiresAt).getTime() - Date.now()).toBeLessThanOrEqual(twelveHours);
