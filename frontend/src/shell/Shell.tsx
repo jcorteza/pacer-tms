@@ -1,4 +1,5 @@
 import { NavLink, Outlet } from 'react-router'
+import { hasAnyRole } from '../auth/roles.ts'
 import { useAuth } from '../auth/useAuth.ts'
 import { Icon } from '../components/Icon.tsx'
 import { COMPANY_NAME, NAV_ITEMS } from '../nav.ts'
@@ -22,7 +23,7 @@ export function Shell() {
       </header>
       <div className="body">
         <nav className="rail" aria-label="Primary">
-          {NAV_ITEMS.map(({ path, label, icon }) => (
+          {NAV_ITEMS.filter(({ roles }) => !roles || (session && hasAnyRole(session.user, roles))).map(({ path, label, icon }) => (
             <NavLink key={path} to={path} className="nav-item">
               <Icon name={icon} />
               {label}

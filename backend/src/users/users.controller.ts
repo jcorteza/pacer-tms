@@ -14,8 +14,9 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CurrentUser } from '../auth/current-user.decorator.js';
+import { RequireAnyRole } from '../auth/roles.guard.js';
 import { SessionGuard } from '../auth/session.guard.js';
-import type { Role } from './roles.js';
+import { MANAGEMENT_ROLES, type Role } from './roles.js';
 import {
   addRoleBody,
   changePasswordBody,
@@ -32,23 +33,29 @@ function ownAccountOnly(id: string, signedInUserId: string) {
   if (id !== signedInUserId) throw new ForbiddenException('You can only change your own account');
 }
 
-/** Every route needs a signed-in session; accounts are created by administrators, never publicly. */
+/**
+ * Every route needs a signed-in session; accounts are created by administrators, never publicly.
+ * Managing people (list, create, edit, roles) is for the management roles; password and settings are personal.
+ */
 @Controller('users')
 @UseGuards(SessionGuard)
 export class UsersController {
   constructor(@Inject(UsersService) private readonly users: UsersService) {}
 
   @Get()
+  @RequireAnyRole(...MANAGEMENT_ROLES)
   list(@Query({ schema: listUsersQuery }) query: { page: number; role?: Role }) {
     return this.users.list(query.page, query.role);
   }
 
   @Post()
+  @RequireAnyRole(...MANAGEMENT_ROLES)
   create(@Body({ schema: createUserBody }) body: Parameters<UsersService['create']>[0]) {
     return this.users.create(body);
   }
 
   @Patch(':id')
+  @RequireAnyRole(...MANAGEMENT_ROLES)
   update(@Param('id', ParseUUIDPipe) id: string, @Body({ schema: updateUserBody }) body: Parameters<UsersService['update']>[1]) {
     return this.users.update(id, body);
   }
@@ -75,11 +82,13 @@ export class UsersController {
   }
 
   @Post(':id/roles')
+  @RequireAnyRole(...MANAGEMENT_ROLES)
   addRole(@Param('id', ParseUUIDPipe) id: string, @Body({ schema: addRoleBody }) body: { role: Role }) {
     return this.users.addRole(id, body.role);
   }
 
   @Delete(':id/roles/:role')
+  @RequireAnyRole(...MANAGEMENT_ROLES)
   removeRole(@Param('id', ParseUUIDPipe) id: string, @Param('role', { schema: roleParam }) role: Role) {
     return this.users.removeRole(id, role);
   }

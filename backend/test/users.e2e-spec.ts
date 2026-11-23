@@ -4,7 +4,8 @@ import request from 'supertest';
 import { users } from '../src/db/schema.js';
 import { closeDatabase, createUser, db, resetDatabase } from '../src/db/test/helpers.js';
 import { hashPassword, verifyPassword } from '../src/users/password.js';
-import { createTestApp, signedIn } from './support/app.js';
+import { ROLES, type Role } from '../src/users/roles.js';
+import { createTestApp, signedIn, signedInManager } from './support/app.js';
 
 let app: INestApplication;
 const api = () => request(app.getHttpServer());
@@ -17,6 +18,10 @@ const newUser = {
   password: 'compiler-queen',
   roles: ['Dispatcher'],
 };
+
+/** The rule under test, written out here rather than imported so the spec states it independently. */
+const MANAGEMENT: Role[] = ['Operations Management', 'Warehouse Management', 'Accounting Management'];
+const NON_MANAGEMENT = ROLES.filter((role) => !MANAGEMENT.includes(role));
 
 beforeAll(async () => {
   app = await createTestApp();
@@ -62,9 +67,67 @@ describe('without a session', () => {
   });
 });
 
+describe('who may manage users', () => {
+  // ':id' is filled in with a real user so a refusal is the role check, not a missing user.
+  const managementRoutes = [
+    ['get', '/users', undefined],
+    ['post', '/users', newUser],
+    ['patch', '/users/:id', { firstName: 'Renamed' }],
+    ['post', '/users/:id/roles', { role: 'Dispatcher' }],
+    ['delete', '/users/:id/roles/Warehouse', undefined],
+  ] as const;
+
+  it.each(managementRoutes)('given no management role, %s %s responds 403', async (method, path, body) => {
+    const { header } = await signedIn({ roles: NON_MANAGEMENT });
+    const target = await createUser({ roles: ['Warehouse', 'Customer Service'] });
+
+    await api()[method](path.replace(':id', target.id)).set(header).send(body).expect(403);
+  });
+
+  it('changes nothing when it refuses', async () => {
+    const { header } = await signedIn({ roles: NON_MANAGEMENT });
+    const target = await createUser({ firstName: 'Ada', roles: ['Warehouse', 'Customer Service'] });
+
+    await api().post('/users').set(header).send(newUser).expect(403);
+    await api().patch(`/users/${target.id}`).set(header).send({ firstName: 'Renamed' }).expect(403);
+    await api().post(`/users/${target.id}/roles`).set(header).send({ role: 'Dispatcher' }).expect(403);
+    await api().delete(`/users/${target.id}/roles/Warehouse`).set(header).expect(403);
+
+    expect(await stored(target.id)).toMatchObject({ firstName: 'Ada', roles: ['Warehouse', 'Customer Service'] });
+    expect(await db.select().from(users)).toHaveLength(2);
+  });
+
+  it.each(MANAGEMENT)('given %s, can list, create, edit, and add and remove roles', async (role) => {
+    const { header } = await signedInManager([role]);
+    const target = await createUser({ roles: ['Warehouse'] });
+
+    await api().get('/users').set(header).expect(200);
+    await api().post('/users').set(header).send(newUser).expect(201);
+    await api().patch(`/users/${target.id}`).set(header).send({ firstName: 'Renamed' }).expect(200);
+    await api().post(`/users/${target.id}/roles`).set(header).send({ role: 'Dispatcher' }).expect(201);
+    await api().delete(`/users/${target.id}/roles/Dispatcher`).set(header).expect(200);
+  });
+
+  it('given a management role among others, still allows it', async () => {
+    const { header } = await signedIn({ roles: ['Warehouse', 'Dispatcher', 'Accounting Management'] });
+
+    await api().post('/users').set(header).send(newUser).expect(201);
+  });
+
+  it('checks roles on every request, so losing the management role takes effect at once', async () => {
+    const { user, header } = await signedInManager();
+    await api().get('/users').set(header).expect(200);
+
+    await db.update(users).set({ roles: ['Warehouse'] }).where(eq(users.id, user.id));
+
+    await api().get('/users').set(header).expect(403);
+    await api().post('/users').set(header).send(newUser).expect(403);
+  });
+});
+
 describe('POST /users', () => {
   it('creates the user, stores only a hash, and never returns it', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
 
     const res = await api().post('/users').set(header).send(newUser).expect(201);
 
@@ -75,20 +138,20 @@ describe('POST /users', () => {
   });
 
   it('given a duplicate email, responds 409', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
     await api().post('/users').set(header).send(newUser).expect(201);
 
     await api().post('/users').set(header).send(newUser).expect(409);
   });
 
   it('given an unknown role, responds 400', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
 
     await api().post('/users').set(header).send({ ...newUser, roles: ['Wizard'] }).expect(400);
   });
 
   it('given no roles, responds 400', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
 
     await api().post('/users').set(header).send({ ...newUser, roles: [] }).expect(400);
   });
@@ -96,7 +159,7 @@ describe('POST /users', () => {
 
 describe('GET /users', () => {
   it('lists users without their password hashes', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
     await createUser({ firstName: 'Grace', lastName: 'Hopper' });
 
     const res = await api().get('/users').set(header).expect(200);
@@ -110,7 +173,7 @@ describe('GET /users', () => {
   });
 
   it('given ?role=, lists only users holding that role', async () => {
-    const { header } = await signedIn({ roles: ['Dispatcher'] });
+    const { header } = await signedInManager(['Operations Management']);
     const manager = await createUser({ firstName: 'Priya', roles: ['Warehouse Management', 'Warehouse'] });
     await createUser({ roles: ['Warehouse'] });
 
@@ -121,7 +184,7 @@ describe('GET /users', () => {
   });
 
   it('given an unknown role, responds 400', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
 
     await api().get('/users').query({ role: 'Wizard' }).set(header).expect(400);
   });
@@ -129,7 +192,7 @@ describe('GET /users', () => {
 
 describe('PATCH /users/:id', () => {
   it('updates profile fields', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
     const user = await createUser();
 
     const res = await api().patch(`/users/${user.id}`).set(header).send({ firstName: 'Renamed' }).expect(200);
@@ -138,7 +201,7 @@ describe('PATCH /users/:id', () => {
   });
 
   it('given a password in the body, rejects it (use the password endpoint)', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
     const user = await createUser({ passwordHash: await hashPassword('old-pass') });
 
     await api().patch(`/users/${user.id}`).set(header).send({ password: 'sneaky' }).expect(400);
@@ -147,7 +210,7 @@ describe('PATCH /users/:id', () => {
   });
 
   it('given an unknown user, responds 404', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
 
     await api().patch('/users/6f1c2f0e-8f3b-4d57-9a38-3f1d2f9a0c11').set(header).send({ firstName: 'x' }).expect(404);
   });
@@ -172,6 +235,15 @@ describe('POST /users/:id/password', () => {
 
   it('given another user\'s id, responds 403 and changes nothing, even with their current password', async () => {
     const { header } = await signedIn();
+    const other = await createUser({ passwordHash: await hashPassword('their-pass') });
+
+    await api().post(`/users/${other.id}/password`).set(header).send({ currentPassword: 'their-pass', newPassword: 'new-pass-1' }).expect(403);
+
+    expect(await verifyPassword('their-pass', (await stored(other.id)).passwordHash)).toBe(true);
+  });
+
+  it('given another user\'s id, a manager is refused too (passwords are personal)', async () => {
+    const { header } = await signedInManager();
     const other = await createUser({ passwordHash: await hashPassword('their-pass') });
 
     await api().post(`/users/${other.id}/password`).set(header).send({ currentPassword: 'their-pass', newPassword: 'new-pass-1' }).expect(403);
@@ -224,11 +296,20 @@ describe('PATCH /users/:id/settings', () => {
 
     expect((await stored(other.id)).settings).toEqual({ theme: 'dark' });
   });
+
+  it('given another user\'s id, a manager is refused too (settings are personal)', async () => {
+    const { header } = await signedInManager();
+    const other = await createUser({ settings: { theme: 'dark' } });
+
+    await api().patch(`/users/${other.id}/settings`).set(header).send({ theme: 'light' }).expect(403);
+
+    expect((await stored(other.id)).settings).toEqual({ theme: 'dark' });
+  });
 });
 
 describe('roles', () => {
   it('POST /users/:id/roles adds a role', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
     const user = await createUser({ roles: ['Warehouse'] });
 
     const res = await api().post(`/users/${user.id}/roles`).set(header).send({ role: 'Dispatcher' }).expect(201);
@@ -237,7 +318,7 @@ describe('roles', () => {
   });
 
   it('POST /users/:id/roles given a role they already have, adds nothing twice', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
     const user = await createUser({ roles: ['Warehouse'] });
 
     const res = await api().post(`/users/${user.id}/roles`).set(header).send({ role: 'Warehouse' }).expect(201);
@@ -246,14 +327,14 @@ describe('roles', () => {
   });
 
   it('POST /users/:id/roles given an unknown role, responds 400', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
     const user = await createUser();
 
     await api().post(`/users/${user.id}/roles`).set(header).send({ role: 'Wizard' }).expect(400);
   });
 
   it('DELETE /users/:id/roles/:role removes a role', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
     const user = await createUser({ roles: ['Warehouse', 'Dispatcher'] });
 
     const res = await api().delete(`/users/${user.id}/roles/Dispatcher`).set(header).expect(200);
@@ -262,7 +343,7 @@ describe('roles', () => {
   });
 
   it('DELETE /users/:id/roles/:role given their only role, responds 409', async () => {
-    const { header } = await signedIn();
+    const { header } = await signedInManager();
     const user = await createUser({ roles: ['Warehouse'] });
 
     await api().delete(`/users/${user.id}/roles/Warehouse`).set(header).expect(409);

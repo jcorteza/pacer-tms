@@ -3,6 +3,7 @@ import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { describe, expect, it } from 'vitest'
 import { serveConfiguration } from '../test/api.ts'
+import { accountingManagerSession, operationsManagerSession, warehouseManagerSession } from '../test/fixtures.ts'
 import { renderApp } from '../test/render.tsx'
 import { server } from '../test/server.ts'
 
@@ -16,7 +17,7 @@ const noDialog = () => waitFor(() => expect(screen.queryByRole('dialog')).not.to
 async function open(route = '/configuration', options: Parameters<typeof serveConfiguration>[0] = {}) {
   const api = serveConfiguration(options)
   const user = userEvent.setup()
-  renderApp(route)
+  renderApp(route, { session: warehouseManagerSession })
   await within(await screen.findByRole('region', { name: 'Sites' })).findByText('Central DC')
   return { api, user }
 }
@@ -41,9 +42,44 @@ describe('configuration page', () => {
 
     it('given the server fails, says the data could not be loaded', async () => {
       server.use(http.get('*/api/*', () => new HttpResponse(null, { status: 500 })))
-      renderApp('/configuration')
+      renderApp('/configuration', { session: warehouseManagerSession })
 
       expect(await screen.findByRole('alert')).toHaveTextContent(/could not load/i)
+    })
+  })
+
+  describe('who sees what', () => {
+    it.each([
+      ['Operations Management', operationsManagerSession],
+      ['Warehouse Management', warehouseManagerSession],
+    ])('given %s, shows the sites, buildings and item locations sections', async (_role, session) => {
+      serveConfiguration()
+      renderApp('/configuration', { session })
+
+      await within(await screen.findByRole('region', { name: 'Sites' })).findByText('Central DC')
+      for (const name of ['Sites', 'Buildings', 'Item locations']) expect(region(name)).toBeInTheDocument()
+    })
+
+    it('given Accounting Management, shows the page name and a placeholder, with no sections and nothing loaded', async () => {
+      const api = serveConfiguration()
+      renderApp('/configuration', { session: accountingManagerSession })
+
+      expect(await screen.findByRole('heading', { level: 1, name: 'Configuration' })).toBeInTheDocument()
+      expect(screen.getByText(/nothing to see here/i)).toBeInTheDocument()
+      for (const name of ['Sites', 'Buildings', 'Item locations']) {
+        expect(screen.queryByRole('region', { name })).not.toBeInTheDocument()
+        expect(screen.queryByRole('link', { name })).not.toBeInTheDocument()
+      }
+      await new Promise((resolve) => setTimeout(resolve, 50)) // long enough for a stray request to show up
+      expect(api.log).toHaveLength(0)
+    })
+
+    it('given no management role, sends them to the first page in the nav instead', async () => {
+      serveConfiguration()
+      renderApp('/configuration')
+
+      expect(await screen.findByRole('heading', { level: 1, name: 'Shipments' })).toBeInTheDocument()
+      expect(screen.queryByRole('heading', { level: 1, name: 'Configuration' })).not.toBeInTheDocument()
     })
   })
 

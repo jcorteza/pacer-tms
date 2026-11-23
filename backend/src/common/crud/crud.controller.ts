@@ -15,6 +15,7 @@ import {
   UseGuards,
 } from '@nestjs/common';
 import { CurrentUser } from '../../auth/current-user.decorator.js';
+import { RequireAnyRole } from '../../auth/roles.guard.js';
 import { SessionGuard } from '../../auth/session.guard.js';
 import type { CrudConfig, Id } from './crud.config.js';
 import { CrudService } from './crud.service.js';
@@ -27,6 +28,8 @@ import { crudSchemas, pageQuery } from './crud.schemas.js';
 export function createCrudController(config: CrudConfig): Type<unknown> {
   const { insert, update } = crudSchemas(config.table, { generatedCode: config.generatedCode === true });
   const idPipe = config.idType === 'int' ? ParseIntPipe : ParseUUIDPipe;
+  // Only writes are role-limited; reads stay open to any signed-in user.
+  const writersOnly = config.writeRoles ? RequireAnyRole(...config.writeRoles) : () => undefined;
 
   @Controller(config.path)
   @UseGuards(SessionGuard)
@@ -44,17 +47,20 @@ export function createCrudController(config: CrudConfig): Type<unknown> {
     }
 
     @Post()
+    @writersOnly
     create(@Body({ schema: insert }) body: Record<string, unknown>, @CurrentUser() userId: string) {
       return this.crud.create(config, userId, body);
     }
 
     @Patch(':id')
+    @writersOnly
     update(@Param('id', idPipe) id: Id, @Body({ schema: update }) body: Record<string, unknown>, @CurrentUser() userId: string) {
       return this.crud.update(config, userId, id, body);
     }
 
     @Delete(':id')
     @HttpCode(204)
+    @writersOnly
     remove(@Param('id', idPipe) id: Id, @CurrentUser() userId: string) {
       return this.crud.remove(config, userId, id);
     }

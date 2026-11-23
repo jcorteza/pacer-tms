@@ -128,6 +128,16 @@ describe('POST /sessions in demo mode', () => {
       .expect(201);
   });
 
+  it('lets the demo user manage users too, since it holds the management roles', async () => {
+    const { body: session } = await api().post('/sessions').expect(201);
+
+    await api()
+      .post('/users')
+      .set({ 'x-session-id': session.id })
+      .send({ firstName: 'Grace', lastName: 'Hopper', email: 'grace@larkspur.test', password: 'compiler-queen', roles: ['Dispatcher'] })
+      .expect(201);
+  });
+
   it('given a real account\'s valid credentials, responds 403 and starts no session (login is disabled)', async () => {
     await createUser({ email: 'ada@larkspur.test', passwordHash: await hashPassword('s3cret-pass') });
 

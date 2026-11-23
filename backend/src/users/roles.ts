@@ -10,3 +10,6 @@ export const ROLES = [
 ] as const;
 
 export type Role = (typeof ROLES)[number];
+
+/** The roles that manage people: they can list, create and edit users and change their roles. */
+export const MANAGEMENT_ROLES: readonly Role[] = ['Operations Management', 'Warehouse Management', 'Accounting Management'];

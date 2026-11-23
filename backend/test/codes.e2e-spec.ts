@@ -15,7 +15,8 @@ afterAll(async () => {
 });
 beforeEach(async () => {
   await resetDatabase();
-  header = (await signedIn()).header;
+  // Sites, buildings and locations are written by warehouse management.
+  header = (await signedIn({ roles: ['Warehouse Management'] })).header;
 });
 
 const api = () => request(app.getHttpServer());

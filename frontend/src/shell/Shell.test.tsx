@@ -4,7 +4,13 @@ import { http, HttpResponse } from 'msw'
 import { describe, expect, it } from 'vitest'
 import { loadSession } from '../auth/session.ts'
 import { serveConfiguration } from '../test/api.ts'
-import { demoSession, session } from '../test/fixtures.ts'
+import {
+  accountingManagerSession,
+  demoSession,
+  operationsManagerSession,
+  session,
+  warehouseManagerSession,
+} from '../test/fixtures.ts'
 import { renderApp } from '../test/render.tsx'
 import { server } from '../test/server.ts'
 
@@ -19,7 +25,7 @@ describe('app shell', () => {
   })
 
   it('lists the sections in order, with no Home page', () => {
-    renderApp('/')
+    renderApp('/', { session: operationsManagerSession })
 
     const nav = screen.getByRole('navigation', { name: 'Primary' })
     expect(within(nav).getAllByRole('link').map((link) => link.textContent)).toEqual([
@@ -29,8 +35,25 @@ describe('app shell', () => {
     ])
   })
 
-  it('opens the first section in the nav at the root address, and marks it current', () => {
+  it.each([
+    ['Operations Management', operationsManagerSession],
+    ['Warehouse Management', warehouseManagerSession],
+    ['Accounting Management', accountingManagerSession],
+  ])('given %s, offers Configuration', (_role, managerSession) => {
+    renderApp('/', { session: managerSession })
+
+    expect(screen.getByRole('link', { name: 'Configuration' })).toBeInTheDocument()
+  })
+
+  it('given no management role, leaves Configuration out of the nav', () => {
     renderApp('/')
+
+    const nav = screen.getByRole('navigation', { name: 'Primary' })
+    expect(within(nav).getAllByRole('link').map((link) => link.textContent)).toEqual(['Shipments', 'Account settings'])
+  })
+
+  it('opens the first section in the nav at the root address, and marks it current', () => {
+    renderApp('/', { session: operationsManagerSession })
 
     const nav = screen.getByRole('navigation', { name: 'Primary' })
     expect(screen.getByRole('heading', { level: 1, name: 'Shipments' })).toBeInTheDocument()
@@ -41,7 +64,7 @@ describe('app shell', () => {
   it('moves between pages from the nav', async () => {
     serveConfiguration()
     const user = userEvent.setup()
-    renderApp('/')
+    renderApp('/', { session: warehouseManagerSession })
 
     await user.click(screen.getByRole('link', { name: 'Configuration' }))
 
@@ -118,7 +141,7 @@ describe('app shell', () => {
 
   it('sends the session id with each request the pages make', async () => {
     const api = serveConfiguration()
-    renderApp('/configuration')
+    renderApp('/configuration', { session: warehouseManagerSession })
 
     await screen.findByRole('heading', { level: 1, name: 'Configuration' })
     await within(await screen.findByRole('region', { name: 'Sites' })).findByText('Central DC')
@@ -129,7 +152,7 @@ describe('app shell', () => {
 
   it('given the server rejects the session, signs out and says the session expired', async () => {
     server.use(http.get('*/api/*', () => new HttpResponse(null, { status: 401 })))
-    renderApp('/configuration')
+    renderApp('/configuration', { session: warehouseManagerSession })
 
     expect(await screen.findByRole('heading', { level: 1, name: 'Larkspur Freight' })).toBeInTheDocument()
     expect(screen.getByRole('alert')).toHaveTextContent(/your session expired/i)
