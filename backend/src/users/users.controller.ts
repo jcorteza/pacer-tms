@@ -1,4 +1,19 @@
-import { Body, Controller, Delete, Get, HttpCode, Inject, Param, ParseUUIDPipe, Patch, Post, Query, UseGuards } from '@nestjs/common';
+import {
+  Body,
+  Controller,
+  Delete,
+  ForbiddenException,
+  Get,
+  HttpCode,
+  Inject,
+  Param,
+  ParseUUIDPipe,
+  Patch,
+  Post,
+  Query,
+  UseGuards,
+} from '@nestjs/common';
+import { CurrentUser } from '../auth/current-user.decorator.js';
 import { SessionGuard } from '../auth/session.guard.js';
 import type { Role } from './roles.js';
 import {
@@ -12,13 +27,18 @@ import {
 } from './users.schemas.js';
 import { UsersService } from './users.service.js';
 
+/** Password and settings are personal: nobody changes another user's, whether or not that user exists. */
+function ownAccountOnly(id: string, signedInUserId: string) {
+  if (id !== signedInUserId) throw new ForbiddenException('You can only change your own account');
+}
+
+/** Every route needs a signed-in session; accounts are created by administrators, never publicly. */
 @Controller('users')
+@UseGuards(SessionGuard)
 export class UsersController {
   constructor(@Inject(UsersService) private readonly users: UsersService) {}
 
-  /** Guarded: the list shows every user's email, unlike creating the first account. */
   @Get()
-  @UseGuards(SessionGuard)
   list(@Query({ schema: listUsersQuery }) query: { page: number; role?: Role }) {
     return this.users.list(query.page, query.role);
   }
@@ -38,12 +58,19 @@ export class UsersController {
   changePassword(
     @Param('id', ParseUUIDPipe) id: string,
     @Body({ schema: changePasswordBody }) body: { currentPassword: string; newPassword: string },
+    @CurrentUser() userId: string,
   ) {
+    ownAccountOnly(id, userId);
     return this.users.changePassword(id, body.currentPassword, body.newPassword);
   }
 
   @Patch(':id/settings')
-  settings(@Param('id', ParseUUIDPipe) id: string, @Body({ schema: settingsBody }) body: Record<string, unknown>) {
+  settings(
+    @Param('id', ParseUUIDPipe) id: string,
+    @Body({ schema: settingsBody }) body: Record<string, unknown>,
+    @CurrentUser() userId: string,
+  ) {
+    ownAccountOnly(id, userId);
     return this.users.mergeSettings(id, body);
   }
 
