@@ -27,9 +27,46 @@ afterAll(async () => {
 });
 beforeEach(resetDatabase);
 
+describe('without a session', () => {
+  const someId = '6f1c2f0e-8f3b-4d57-9a38-3f1d2f9a0c11';
+
+  it.each([
+    ['get', '/users'],
+    ['post', '/users'],
+    ['patch', `/users/${someId}`],
+    ['post', `/users/${someId}/password`],
+    ['patch', `/users/${someId}/settings`],
+    ['post', `/users/${someId}/roles`],
+    ['delete', `/users/${someId}/roles/Dispatcher`],
+  ] as const)('%s %s responds 401', async (method, path) => {
+    await api()[method](path).send({}).expect(401);
+  });
+
+  it('creates no user', async () => {
+    await api().post('/users').send(newUser).expect(401);
+
+    expect(await db.select().from(users)).toHaveLength(0);
+  });
+
+  it('changes nothing on an existing user', async () => {
+    const user = await createUser({ firstName: 'Ada', roles: ['Warehouse'], passwordHash: await hashPassword('old-pass') });
+
+    await api().patch(`/users/${user.id}`).send({ firstName: 'Renamed' }).expect(401);
+    await api().post(`/users/${user.id}/password`).send({ currentPassword: 'old-pass', newPassword: 'new-pass-1' }).expect(401);
+    await api().patch(`/users/${user.id}/settings`).send({ theme: 'dark' }).expect(401);
+    await api().post(`/users/${user.id}/roles`).send({ role: 'Dispatcher' }).expect(401);
+
+    const after = await stored(user.id);
+    expect(after).toMatchObject({ firstName: 'Ada', roles: ['Warehouse'], settings: {} });
+    expect(await verifyPassword('old-pass', after.passwordHash)).toBe(true);
+  });
+});
+
 describe('POST /users', () => {
   it('creates the user, stores only a hash, and never returns it', async () => {
-    const res = await api().post('/users').send(newUser).expect(201);
+    const { header } = await signedIn();
+
+    const res = await api().post('/users').set(header).send(newUser).expect(201);
 
     expect(res.body).toMatchObject({ firstName: 'Grace', email: 'grace@larkspur.test', roles: ['Dispatcher'] });
     expect(res.body.password).toBeUndefined();
@@ -38,17 +75,22 @@ describe('POST /users', () => {
   });
 
   it('given a duplicate email, responds 409', async () => {
-    await api().post('/users').send(newUser).expect(201);
+    const { header } = await signedIn();
+    await api().post('/users').set(header).send(newUser).expect(201);
 
-    await api().post('/users').send(newUser).expect(409);
+    await api().post('/users').set(header).send(newUser).expect(409);
   });
 
   it('given an unknown role, responds 400', async () => {
-    await api().post('/users').send({ ...newUser, roles: ['Wizard'] }).expect(400);
+    const { header } = await signedIn();
+
+    await api().post('/users').set(header).send({ ...newUser, roles: ['Wizard'] }).expect(400);
   });
 
   it('given no roles, responds 400', async () => {
-    await api().post('/users').send({ ...newUser, roles: [] }).expect(400);
+    const { header } = await signedIn();
+
+    await api().post('/users').set(header).send({ ...newUser, roles: [] }).expect(400);
   });
 });
 
@@ -83,49 +125,68 @@ describe('GET /users', () => {
 
     await api().get('/users').query({ role: 'Wizard' }).set(header).expect(400);
   });
-
-  it('given no session, responds 401', async () => {
-    await api().get('/users').expect(401);
-  });
 });
 
 describe('PATCH /users/:id', () => {
   it('updates profile fields', async () => {
+    const { header } = await signedIn();
     const user = await createUser();
 
-    const res = await api().patch(`/users/${user.id}`).send({ firstName: 'Renamed' }).expect(200);
+    const res = await api().patch(`/users/${user.id}`).set(header).send({ firstName: 'Renamed' }).expect(200);
 
     expect(res.body.firstName).toBe('Renamed');
   });
 
-  it('given a password in the body, ignores it (use the password endpoint)', async () => {
+  it('given a password in the body, rejects it (use the password endpoint)', async () => {
+    const { header } = await signedIn();
     const user = await createUser({ passwordHash: await hashPassword('old-pass') });
 
-    await api().patch(`/users/${user.id}`).send({ password: 'sneaky' }).expect(400);
+    await api().patch(`/users/${user.id}`).set(header).send({ password: 'sneaky' }).expect(400);
 
     expect(await verifyPassword('old-pass', (await stored(user.id)).passwordHash)).toBe(true);
   });
 
   it('given an unknown user, responds 404', async () => {
-    await api().patch('/users/6f1c2f0e-8f3b-4d57-9a38-3f1d2f9a0c11').send({ firstName: 'x' }).expect(404);
+    const { header } = await signedIn();
+
+    await api().patch('/users/6f1c2f0e-8f3b-4d57-9a38-3f1d2f9a0c11').set(header).send({ firstName: 'x' }).expect(404);
   });
 });
 
 describe('POST /users/:id/password', () => {
-  it('given the current password, changes it', async () => {
-    const user = await createUser({ passwordHash: await hashPassword('old-pass') });
+  it('given the current password, changes the signed-in user\'s own password', async () => {
+    const { user, header } = await signedIn({ passwordHash: await hashPassword('old-pass') });
 
-    await api().post(`/users/${user.id}/password`).send({ currentPassword: 'old-pass', newPassword: 'new-pass-1' }).expect(204);
+    await api().post(`/users/${user.id}/password`).set(header).send({ currentPassword: 'old-pass', newPassword: 'new-pass-1' }).expect(204);
 
     expect(await verifyPassword('new-pass-1', (await stored(user.id)).passwordHash)).toBe(true);
   });
 
   it('given the wrong current password, responds 403 and changes nothing', async () => {
-    const user = await createUser({ passwordHash: await hashPassword('old-pass') });
+    const { user, header } = await signedIn({ passwordHash: await hashPassword('old-pass') });
 
-    await api().post(`/users/${user.id}/password`).send({ currentPassword: 'guess', newPassword: 'new-pass-1' }).expect(403);
+    await api().post(`/users/${user.id}/password`).set(header).send({ currentPassword: 'guess', newPassword: 'new-pass-1' }).expect(403);
 
     expect(await verifyPassword('old-pass', (await stored(user.id)).passwordHash)).toBe(true);
+  });
+
+  it('given another user\'s id, responds 403 and changes nothing, even with their current password', async () => {
+    const { header } = await signedIn();
+    const other = await createUser({ passwordHash: await hashPassword('their-pass') });
+
+    await api().post(`/users/${other.id}/password`).set(header).send({ currentPassword: 'their-pass', newPassword: 'new-pass-1' }).expect(403);
+
+    expect(await verifyPassword('their-pass', (await stored(other.id)).passwordHash)).toBe(true);
+  });
+
+  it('given an id that matches no user, responds 403 like any other id that is not the caller\'s', async () => {
+    const { header } = await signedIn();
+
+    await api()
+      .post('/users/6f1c2f0e-8f3b-4d57-9a38-3f1d2f9a0c11/password')
+      .set(header)
+      .send({ currentPassword: 'x', newPassword: 'new-pass-1' })
+      .expect(403);
   });
 });
 
@@ -137,60 +198,74 @@ describe('POST /users/:id/password in demo mode', () => {
     vi.unstubAllEnvs();
   });
 
-  it('responds 403 and changes nothing, even with the right current password', async () => {
-    const user = await createUser({ passwordHash: await hashPassword('old-pass') });
+  it('responds 403 and changes nothing, even for the caller\'s own account with the right current password', async () => {
+    const { user, header } = await signedIn({ passwordHash: await hashPassword('old-pass') });
 
-    await api().post(`/users/${user.id}/password`).send({ currentPassword: 'old-pass', newPassword: 'new-pass-1' }).expect(403);
+    await api().post(`/users/${user.id}/password`).set(header).send({ currentPassword: 'old-pass', newPassword: 'new-pass-1' }).expect(403);
 
     expect(await verifyPassword('old-pass', (await stored(user.id)).passwordHash)).toBe(true);
   });
 });
 
 describe('PATCH /users/:id/settings', () => {
-  it('merges the given keys into the existing settings', async () => {
-    const user = await createUser({ settings: { theme: 'dark', timezone: 'UTC' } });
+  it('merges the given keys into the signed-in user\'s own settings', async () => {
+    const { user, header } = await signedIn({ settings: { theme: 'dark', timezone: 'UTC' } });
 
-    const res = await api().patch(`/users/${user.id}/settings`).send({ timezone: 'America/Los_Angeles' }).expect(200);
+    const res = await api().patch(`/users/${user.id}/settings`).set(header).send({ timezone: 'America/Los_Angeles' }).expect(200);
 
     expect(res.body.settings).toEqual({ theme: 'dark', timezone: 'America/Los_Angeles' });
+  });
+
+  it('given another user\'s id, responds 403 and changes nothing', async () => {
+    const { header } = await signedIn();
+    const other = await createUser({ settings: { theme: 'dark' } });
+
+    await api().patch(`/users/${other.id}/settings`).set(header).send({ theme: 'light' }).expect(403);
+
+    expect((await stored(other.id)).settings).toEqual({ theme: 'dark' });
   });
 });
 
 describe('roles', () => {
   it('POST /users/:id/roles adds a role', async () => {
+    const { header } = await signedIn();
     const user = await createUser({ roles: ['Warehouse'] });
 
-    const res = await api().post(`/users/${user.id}/roles`).send({ role: 'Dispatcher' }).expect(201);
+    const res = await api().post(`/users/${user.id}/roles`).set(header).send({ role: 'Dispatcher' }).expect(201);
 
     expect(res.body.roles).toEqual(['Warehouse', 'Dispatcher']);
   });
 
   it('POST /users/:id/roles given a role they already have, adds nothing twice', async () => {
+    const { header } = await signedIn();
     const user = await createUser({ roles: ['Warehouse'] });
 
-    const res = await api().post(`/users/${user.id}/roles`).send({ role: 'Warehouse' }).expect(201);
+    const res = await api().post(`/users/${user.id}/roles`).set(header).send({ role: 'Warehouse' }).expect(201);
 
     expect(res.body.roles).toEqual(['Warehouse']);
   });
 
   it('POST /users/:id/roles given an unknown role, responds 400', async () => {
+    const { header } = await signedIn();
     const user = await createUser();
 
-    await api().post(`/users/${user.id}/roles`).send({ role: 'Wizard' }).expect(400);
+    await api().post(`/users/${user.id}/roles`).set(header).send({ role: 'Wizard' }).expect(400);
   });
 
   it('DELETE /users/:id/roles/:role removes a role', async () => {
+    const { header } = await signedIn();
     const user = await createUser({ roles: ['Warehouse', 'Dispatcher'] });
 
-    const res = await api().delete(`/users/${user.id}/roles/Dispatcher`).expect(200);
+    const res = await api().delete(`/users/${user.id}/roles/Dispatcher`).set(header).expect(200);
 
     expect(res.body.roles).toEqual(['Warehouse']);
   });
 
   it('DELETE /users/:id/roles/:role given their only role, responds 409', async () => {
+    const { header } = await signedIn();
     const user = await createUser({ roles: ['Warehouse'] });
 
-    await api().delete(`/users/${user.id}/roles/Warehouse`).expect(409);
+    await api().delete(`/users/${user.id}/roles/Warehouse`).set(header).expect(409);
 
     expect((await stored(user.id)).roles).toEqual(['Warehouse']);
   });
