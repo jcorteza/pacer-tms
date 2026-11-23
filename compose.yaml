@@ -25,21 +25,25 @@ services:
             db:
                 condition: service_healthy
         env_file: .env
-        # healthcheck:
-        #     test: ["CMD", "curl", "-f", "http://localhost:3000/ping"]
-        #     interval: 5s
-        #     timeout: 5s
-        #     retries: 5
+        # /ping needs the API key like every route; $$ leaves the variables for the container's shell to fill in.
+        healthcheck:
+            test: ["CMD-SHELL", "curl -f -H \"x-api-key: $${API_KEY}\" http://localhost:$${PORT:-3000}/ping"]
+            interval: 5s
+            timeout: 5s
+            retries: 5
+            start_period: 20s
+        # On both networks: the database lives on api, the frontend reaches the backend over ui.
         networks:
             - api
+            - ui
 
     frontend:
         build: ./frontend
         environment:
             API_URL: http://backend:3000
-        # depends_on:
-        #     - backend:
-        #         condition: healthcheck
+        depends_on:
+            backend:
+                condition: service_healthy
         env_file: .env
         ports:
             - "5173:5173"

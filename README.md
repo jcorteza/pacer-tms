@@ -34,6 +34,10 @@ The app is for a single example company, Larkspur Freight, and its staff. There'
 - **Tooling:** pnpm, Vitest, oxlint, Prettier, Docker and a dev container
 - **Hosting (planned):** AWS, with the frontend as static hosting on S3
 
+## Configuration
+
+- `API_KEY` (required, in the root `.env`): every backend route requires it in an `x-api-key` header, and the backend won't start without it. The frontend's dev server adds it to `/api` requests, so it never reaches the browser.
+
 ## How it's built
 
 - Every change starts with a plan and a testing plan, and tests are written and approved before implementation.
