@@ -19,5 +19,5 @@
 skills-lock.json
 
 **/test
-*.spec.*
-*.test.*
+**/*.spec.*
+**/*.test.*

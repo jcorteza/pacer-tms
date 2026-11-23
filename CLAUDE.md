@@ -20,8 +20,6 @@ Warnings or hedging based on assumptions are not helpful. If there’s a possibl
 
 Prefer non-BASH command when you are reading or reviewing something for context or understanding.
 
-You will wrap up work by pushing your approved changes to the branch you created. I will take care of mergining things on my end.
-
 ## Coding Style
 
 * Code for human readability. Humans should be able to skip and still grasp how the code works or what has changed.

@@ -18,5 +18,5 @@
 **/.claude
 
 **/test
-*.spec.*
-*.test.*
+**/*.spec.*
+**/*.test.*
