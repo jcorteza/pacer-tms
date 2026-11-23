@@ -1,14 +1,13 @@
 import type { INestApplication } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
-import request from 'supertest';
 import { users } from '../src/db/schema.js';
 import { closeDatabase, createUser, db, resetDatabase } from '../src/db/test/helpers.js';
 import { hashPassword, verifyPassword } from '../src/users/password.js';
 import { ROLES, type Role } from '../src/users/roles.js';
-import { createTestApp, signedIn, signedInManager } from './support/app.js';
+import { apiClient, createTestApp, signedIn, signedInManager } from './support/app.js';
 
 let app: INestApplication;
-const api = () => request(app.getHttpServer());
+const api = () => apiClient(app);
 const stored = async (id: string) => (await db.select().from(users).where(eq(users.id, id)))[0];
 
 const newUser = {

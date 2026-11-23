@@ -1,4 +1,5 @@
 import { Test } from '@nestjs/testing';
+import request from 'supertest';
 import type { INestApplication } from '@nestjs/common';
 import { sessions } from '../../src/db/schema.js';
 import { db, createUser } from '../../src/db/test/helpers.js';
@@ -14,6 +15,9 @@ export async function createTestApp(): Promise<INestApplication> {
   await app.init();
   return app;
 }
+
+/** Requests to the app with the API key every route requires; use plain supertest to send none. */
+export const apiClient = (app: INestApplication) => request.agent(app.getHttpServer()).set('x-api-key', process.env.API_KEY!);
 
 /** A signed-in user holding a management role, the minimum for listing and managing users. */
 export const signedInManager = (roles: Role[] = ['Operations Management']) => signedIn({ roles });

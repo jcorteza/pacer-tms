@@ -14,5 +14,10 @@
 
 **/.DS_Store
 *.md
-.git
+**/.git
+**/.claude
 skills-lock.json
+
+**/test
+*.spec.*
+*.test.*

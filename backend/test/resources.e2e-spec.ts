@@ -1,11 +1,10 @@
 import type { INestApplication } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { and, eq } from 'drizzle-orm';
-import request from 'supertest';
 import { statusChangeLog } from '../src/db/schema.js';
 import { closeDatabase, db, resetDatabase } from '../src/db/test/helpers.js';
 import { ROLES } from '../src/users/roles.js';
-import { createTestApp, signedIn } from './support/app.js';
+import { apiClient, createTestApp, signedIn } from './support/app.js';
 import { resources, type Resource } from './support/resources.js';
 
 let app: INestApplication;
@@ -21,7 +20,7 @@ afterAll(async () => {
 });
 beforeEach(resetDatabase);
 
-const api = () => request(app.getHttpServer());
+const api = () => apiClient(app);
 
 /** POSTs one row as the signed-in user and returns its body. */
 async function create(resource: Resource, body: Record<string, unknown>) {

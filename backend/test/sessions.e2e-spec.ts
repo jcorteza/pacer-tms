@@ -1,15 +1,14 @@
 import type { INestApplication } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
-import request from 'supertest';
 import { sessions, users } from '../src/db/schema.js';
 import { closeDatabase, db, resetDatabase } from '../src/db/test/helpers.js';
 import { hashPassword } from '../src/users/password.js';
 import { ROLES } from '../src/users/roles.js';
-import { createTestApp, signedIn } from './support/app.js';
+import { apiClient, createTestApp, signedIn } from './support/app.js';
 import { createUser } from '../src/db/test/helpers.js';
 
 let app: INestApplication;
-const api = () => request(app.getHttpServer());
+const api = () => apiClient(app);
 
 beforeAll(async () => {
   app = await createTestApp();

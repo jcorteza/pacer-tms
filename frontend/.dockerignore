@@ -14,4 +14,9 @@
 
 **/.DS_Store
 *.md
-.git
+**/.git
+**/.claude
+
+**/test
+*.spec.*
+*.test.*

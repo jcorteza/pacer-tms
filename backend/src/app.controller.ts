@@ -1,12 +1,20 @@
-import { Controller, Get } from '@nestjs/common';
-import { AppService } from './app.service.js';
+import { Controller, Get, ServiceUnavailableException } from '@nestjs/common';
+import { InjectDrizzle } from '@nestjs/drizzle';
+import { sql } from 'drizzle-orm';
+import type { Db } from './db/db.js';
 
 @Controller()
 export class AppController {
-  constructor(private readonly appService: AppService) {}
+  constructor(@InjectDrizzle() private readonly db: Db) {}
 
-  @Get()
-  getHello(): string {
-    return this.appService.getHello();
+  /** Healthcheck: 200 when the app is serving requests and the database answers, 503 when it does not. */
+  @Get('ping')
+  async ping() {
+    try {
+      await this.db.execute(sql`select 1`);
+    } catch {
+      throw new ServiceUnavailableException('Database unreachable');
+    }
+    return { status: 'ok' };
   }
 }
