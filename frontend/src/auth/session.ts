@@ -9,6 +9,8 @@ export type User = {
 export type Session = {
   id: string
   userId?: string
+  /** True for a session started by demo mode, whose user is a throwaway Demo User. */
+  isDemoUser: boolean
   expiresAt: string
   user: User
 }

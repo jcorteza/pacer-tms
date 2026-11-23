@@ -10,7 +10,7 @@ The project planning is completed on the `Pacer TMS Revamp` page. Code plannign 
 
 I will prompt you to complete some work, providing the context you need to complete it. If context is missing, request it over making assumptions.
 
-For major code changes you will formulate and share your plan (beginning with the testing plan). After we have come to agreement on the plan you can get started on tests. Once those are approved you will begin on the rest.
+For major code changes you will formulate and share your plan (beginning with the testing plan). After we have come to agreement on the plan, create a new git branch (any relevant name works) for this chunk of work, then you can get started on tests. Once those are approved you will begin on the rest.
 
 For minor code changes (renaming variables, improved readability, formatting, small bug fixes, adding helper functions) you can complete the work (including any tests) as soon as I approve the planned changes.
 
@@ -19,6 +19,8 @@ I like to understand what is happening/changing and why. I prefer succinct answe
 Warnings or hedging based on assumptions are not helpful. If there’s a possible concern, investigate it and raise it only when it’s a **concrete** error or problem.
 
 Prefer non-BASH command when you are reading or reviewing something for context or understanding.
+
+You will wrap up work by pushing your approved changes to the branch you created. I will take care of mergining things on my end.
 
 ## Coding Style
 

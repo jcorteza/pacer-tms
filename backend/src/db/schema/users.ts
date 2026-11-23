@@ -1,5 +1,5 @@
 import { sql } from 'drizzle-orm';
-import { check, jsonb, pgTable, text, uuid } from 'drizzle-orm/pg-core';
+import { boolean, check, jsonb, pgTable, text, uuid } from 'drizzle-orm/pg-core';
 import type { Role } from '../../users/roles.js';
 import { timestamptz, uuidId } from './columns.js';
 
@@ -17,11 +17,14 @@ export const users = pgTable(
   (t) => [check('users_has_role', sql`cardinality(${t.roles}) >= 1`)],
 );
 
-/** Login and demo sessions. user_id is null for anonymous visitors. */
+/** Login and demo sessions. A demo session belongs to a user created just for it (is_demo_user). */
 export const sessions = pgTable('sessions', {
   id: uuidId(),
   expiresAt: timestamptz('expires_at')
     .notNull()
     .default(sql`now() + interval '12 hours'`),
-  userId: uuid('user_id').references(() => users.id, { onDelete: 'cascade' }),
+  userId: uuid('user_id')
+    .notNull()
+    .references(() => users.id, { onDelete: 'cascade' }),
+  isDemoUser: boolean('is_demo_user').notNull().default(false),
 });

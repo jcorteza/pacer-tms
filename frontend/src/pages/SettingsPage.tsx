@@ -20,6 +20,7 @@ function validate({ current, next, confirm }: Values): Errors<Values> {
 export function SettingsPage() {
   const { session, api } = useAuth()
   const user = session!.user
+  const demo = session!.isDemoUser
   const { values, setValues, errors, setErrors, set } = useForm<Values>(BLANK)
   const [done, setDone] = useState(false)
   const [failure, setFailure] = useState<string | null>(null)
@@ -83,9 +84,10 @@ export function SettingsPage() {
               <h2 id="password-heading">Change password</h2>
             </div>
             <div className="card-body">
-              <TextField label="Current password" required type="password" autoComplete="current-password" value={values.current} onChange={set('current')} error={errors.current} />
-              <TextField label="New password" required type="password" autoComplete="new-password" value={values.next} onChange={set('next')} error={errors.next} />
-              <TextField label="Confirm new password" required type="password" autoComplete="new-password" value={values.confirm} onChange={set('confirm')} error={errors.confirm} />
+              {demo && <div className="message">Password changes are disabled in demo mode.</div>}
+              <TextField label="Current password" required type="password" autoComplete="current-password" value={values.current} onChange={set('current')} error={errors.current} disabled={demo} />
+              <TextField label="New password" required type="password" autoComplete="new-password" value={values.next} onChange={set('next')} error={errors.next} disabled={demo} />
+              <TextField label="Confirm new password" required type="password" autoComplete="new-password" value={values.confirm} onChange={set('confirm')} error={errors.confirm} disabled={demo} />
               {done && (
                 <div className="message message-status" role="status">
                   Password updated.
@@ -101,7 +103,7 @@ export function SettingsPage() {
               <button className="btn-secondary" type="button" onClick={reset}>
                 Cancel
               </button>
-              <button className="btn" type="submit" disabled={busy}>
+              <button className="btn" type="submit" disabled={busy || demo}>
                 Update password
               </button>
             </div>

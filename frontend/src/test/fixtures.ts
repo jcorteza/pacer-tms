@@ -11,8 +11,33 @@ export const dana = {
 export const session = {
   id: '0a7a2c64-3b1f-4c0e-8a55-0d9f3d2b7e10',
   userId: dana.id,
+  isDemoUser: false,
   expiresAt: '2099-01-01T00:00:00.000Z',
   user: dana,
+}
+
+export const demoUser = {
+  id: '3b8e5d1a-6c42-4f0b-9d7e-1a2b3c4d5e6f',
+  firstName: 'Demo',
+  lastName: 'User',
+  email: 'demo-3b8e5d1a@larkspurfreight.test',
+  roles: [
+    'Operations Management',
+    'Warehouse Management',
+    'Warehouse',
+    'Dispatcher',
+    'Customer Service',
+    'Accounting Operations',
+    'Accounting Management',
+  ],
+}
+
+export const demoSession = {
+  id: '9d4c7e22-5a10-4b8f-8c3d-7e6f5a4b3c2d',
+  userId: demoUser.id,
+  isDemoUser: true,
+  expiresAt: '2099-01-01T00:00:00.000Z',
+  user: demoUser,
 }
 
 export const managers = [

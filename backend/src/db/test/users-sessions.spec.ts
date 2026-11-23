@@ -47,12 +47,23 @@ describe('users', () => {
 });
 
 describe('sessions', () => {
-  it('given an anonymous visitor, when a session is created, then user_id is null and it expires in ~12 hours', async () => {
-    const [session] = await db.insert(sessions).values({}).returning();
-    expect(session.userId).toBeNull();
+  it('given a user, when a session is created, then it is not a demo session and expires in ~12 hours', async () => {
+    const user = await createUser();
+    const [session] = await db.insert(sessions).values({ userId: user.id }).returning();
+    expect(session.isDemoUser).toBe(false);
     const hours = (session.expiresAt.getTime() - Date.now()) / 3_600_000;
     expect(hours).toBeGreaterThan(11.9);
     expect(hours).toBeLessThan(12.1);
+  });
+
+  it('given no user, when a session is saved, then it is rejected', async () => {
+    await expectPgError(db.insert(sessions).values({} as never), '23502');
+  });
+
+  it('given a demo session, when it is saved, then is_demo_user round-trips as true', async () => {
+    const user = await createUser();
+    const [session] = await db.insert(sessions).values({ userId: user.id, isDemoUser: true }).returning();
+    expect(session.isDemoUser).toBe(true);
   });
 
   it('given a user that does not exist, when a session references it, then it is rejected', async () => {

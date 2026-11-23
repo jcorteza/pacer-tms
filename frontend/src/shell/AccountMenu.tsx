@@ -1,11 +1,13 @@
 import { useEffect, useId, useRef, useState } from 'react'
+import { DEMO_DISABLED } from '../auth/demo.ts'
 import { shortName, type User } from '../auth/session.ts'
 import { useAuth } from '../auth/useAuth.ts'
 import { Icon } from '../components/Icon.tsx'
 
 /** The signed-in user's button in the header; opens a menu with Sign out. */
 export function AccountMenu({ user }: { user: User }) {
-  const { signOut } = useAuth()
+  const { session, signOut } = useAuth()
+  const demo = session?.isDemoUser === true
   const [open, setOpen] = useState(false)
   const root = useRef<HTMLDivElement>(null)
   const menuId = useId()
@@ -39,7 +41,16 @@ export function AccountMenu({ user }: { user: User }) {
       </button>
       {open && (
         <div className="menu" id={menuId} role="menu">
-          <button type="button" role="menuitem" onClick={() => void signOut()}>
+          <button
+            type="button"
+            role="menuitem"
+            // aria-disabled, not disabled: browsers often hide the tooltip of a natively disabled button.
+            aria-disabled={demo || undefined}
+            title={demo ? DEMO_DISABLED : undefined}
+            onClick={() => {
+              if (!demo) void signOut()
+            }}
+          >
             Sign out
           </button>
         </div>

@@ -65,6 +65,8 @@ h1, h2 { margin: 0; }
 .menu { position: absolute; right: 0; top: calc(100% + 0.5rem); z-index: 5; min-width: 11rem; padding: 6px; background: var(--surface-card); border: 1px solid var(--line); border-radius: var(--radius-md); }
 .menu button { display: block; width: 100%; min-height: var(--control); padding: 0 12px; border: 0; border-radius: 8px; background: transparent; color: var(--ink); font: inherit; font-weight: 600; text-align: left; cursor: pointer; }
 .menu button:hover { background: var(--line-subtle); }
+.menu button[aria-disabled='true'] { color: var(--disabled-ink); cursor: not-allowed; }
+.menu button[aria-disabled='true']:hover { background: transparent; }
 
 /* Rail beside the page; below 760px the rail becomes a scrolling strip above it. */
 .body { flex: 1; display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); align-items: stretch; }

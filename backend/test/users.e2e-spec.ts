@@ -129,6 +129,23 @@ describe('POST /users/:id/password', () => {
   });
 });
 
+describe('POST /users/:id/password in demo mode', () => {
+  beforeEach(() => {
+    vi.stubEnv('DEMO_MODE', 'true');
+  });
+  afterEach(() => {
+    vi.unstubAllEnvs();
+  });
+
+  it('responds 403 and changes nothing, even with the right current password', async () => {
+    const user = await createUser({ passwordHash: await hashPassword('old-pass') });
+
+    await api().post(`/users/${user.id}/password`).send({ currentPassword: 'old-pass', newPassword: 'new-pass-1' }).expect(403);
+
+    expect(await verifyPassword('old-pass', (await stored(user.id)).passwordHash)).toBe(true);
+  });
+});
+
 describe('PATCH /users/:id/settings', () => {
   it('merges the given keys into the existing settings', async () => {
     const user = await createUser({ settings: { theme: 'dark', timezone: 'UTC' } });

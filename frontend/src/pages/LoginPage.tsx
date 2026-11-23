@@ -15,7 +15,7 @@ function failureMessage(error: unknown) {
 }
 
 export function LoginPage() {
-  const { session, expired, signIn } = useAuth()
+  const { session, expired, signingInAsDemo, signIn } = useAuth()
   const location = useLocation()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
@@ -23,6 +23,7 @@ export function LoginPage() {
   const [busy, setBusy] = useState(false)
 
   // Signing in, or already being signed in, goes to the page that was asked for, else the app's first page.
+  if (signingInAsDemo) return null
   if (session) return <Navigate to={(location.state as { from?: string } | null)?.from ?? '/'} replace />
 
   const submit = async (event: FormEvent) => {
