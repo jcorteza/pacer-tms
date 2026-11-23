@@ -2,7 +2,7 @@ import { screen } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { describe, expect, it } from 'vitest'
-import { dana } from '../test/fixtures.ts'
+import { dana, demoSession } from '../test/fixtures.ts'
 import { renderApp } from '../test/render.tsx'
 import { server } from '../test/server.ts'
 
@@ -118,6 +118,16 @@ describe('account settings page', () => {
     await user.click(update())
 
     expect(await screen.findByRole('alert')).toHaveTextContent(/could not update your password/i)
+  })
+
+  it('given a demo session, disables the password form and explains why', () => {
+    const calls = servePasswordChange()
+    renderApp('/settings', { session: demoSession })
+
+    for (const field of [current(), next(), confirm()]) expect(field).toBeDisabled()
+    expect(update()).toBeDisabled()
+    expect(screen.getByText(/password changes are disabled in demo mode/i)).toBeInTheDocument()
+    expect(calls).toHaveLength(0)
   })
 
   it('clears the form on Cancel', async () => {

@@ -4,7 +4,7 @@ import { http, HttpResponse } from 'msw'
 import { describe, expect, it } from 'vitest'
 import { loadSession } from '../auth/session.ts'
 import { serveConfiguration } from '../test/api.ts'
-import { session } from '../test/fixtures.ts'
+import { demoSession, session } from '../test/fixtures.ts'
 import { renderApp } from '../test/render.tsx'
 import { server } from '../test/server.ts'
 
@@ -83,6 +83,37 @@ describe('app shell', () => {
 
     expect(await screen.findByRole('heading', { level: 1, name: 'Larkspur Freight' })).toBeInTheDocument()
     expect(loadSession()).toBeNull()
+  })
+
+  it('given a demo session, shows Sign out disabled with a tooltip and does nothing when clicked', async () => {
+    let deletes = 0
+    server.use(http.delete('*/api/sessions/:id', () => {
+      deletes++
+      return new HttpResponse(null, { status: 204 })
+    }))
+    const user = userEvent.setup()
+    renderApp('/', { session: demoSession })
+
+    await user.click(screen.getByRole('button', { name: 'Account: Demo U.' }))
+    const signOut = screen.getByRole('menuitem', { name: 'Sign out' })
+    expect(signOut).toHaveAttribute('aria-disabled', 'true')
+    expect(signOut).toHaveAttribute('title', 'Disabled in demo mode')
+    await user.click(signOut)
+
+    expect(deletes).toBe(0)
+    expect(screen.getByRole('button', { name: 'Account: Demo U.' })).toBeInTheDocument()
+    expect(loadSession()).not.toBeNull()
+  })
+
+  it('given a regular session, leaves Sign out enabled', async () => {
+    const user = userEvent.setup()
+    renderApp('/')
+
+    await user.click(screen.getByRole('button', { name: 'Account: Dana W.' }))
+
+    const signOut = screen.getByRole('menuitem', { name: 'Sign out' })
+    expect(signOut).not.toHaveAttribute('aria-disabled', 'true')
+    expect(signOut).not.toHaveAttribute('title')
   })
 
   it('sends the session id with each request the pages make', async () => {
