@@ -1,6 +1,6 @@
 import { useState, type FormEvent } from 'react'
 import { Navigate, useLocation } from 'react-router'
-import { ApiError } from '../api/client.ts'
+import { ApiError, tooManyAttemptsMessage } from '../api/client.ts'
 import { useAuth } from '../auth/useAuth.ts'
 import { TextField } from '../components/fields.tsx'
 import { Icon } from '../components/Icon.tsx'
@@ -9,6 +9,8 @@ import { COMPANY_NAME } from '../nav.ts'
 const EXPIRED = 'Your session expired. Sign in again.'
 
 function failureMessage(error: unknown) {
+  const tooMany = tooManyAttemptsMessage(error)
+  if (tooMany) return tooMany
   if (error instanceof ApiError && error.status === 401) return 'Email or password is incorrect.'
   if (error instanceof ApiError && error.status === 0) return 'Could not reach the server. Try again.'
   return 'Something went wrong. Try again.'

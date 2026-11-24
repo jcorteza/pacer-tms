@@ -1,12 +1,23 @@
 /** A failed API call. Status 0 means the server could not be reached at all. */
 export class ApiError extends Error {
   readonly status: number
+  /** On a 429: how long the server says to wait, when it said. */
+  readonly retryAfterSeconds?: number
 
-  constructor(status: number, message: string) {
+  constructor(status: number, message: string, retryAfterSeconds?: number) {
     super(message)
     this.name = 'ApiError'
     this.status = status
+    this.retryAfterSeconds = retryAfterSeconds
   }
+}
+
+/** What to tell someone the backend's rate limit turned away, or null when the failure is anything else. */
+export function tooManyAttemptsMessage(error: unknown) {
+  if (!(error instanceof ApiError) || error.status !== 429) return null
+  if (error.retryAfterSeconds === undefined) return 'Too many attempts. Wait a few minutes, then try again.'
+  const minutes = Math.max(1, Math.ceil(error.retryAfterSeconds / 60))
+  return `Too many attempts. Try again in ${minutes} ${minutes === 1 ? 'minute' : 'minutes'}.`
 }
 
 export type Query = Record<string, string | number | undefined>
@@ -40,6 +51,12 @@ async function messageOf(response: Response) {
   }
 }
 
+/** The `Retry-After` header as seconds, or undefined when it is missing or not a number. */
+function retryAfterSeconds(response: Response) {
+  const seconds = Number(response.headers.get('retry-after'))
+  return response.headers.has('retry-after') && Number.isFinite(seconds) ? seconds : undefined
+}
+
 export function createApi({ getSessionId, onUnauthorized, baseUrl = '/api' }: Options): Api {
   async function request<T>(method: string, path: string, body?: unknown, query?: Query): Promise<T> {
     const url = new URL(`${baseUrl}${path}`, window.location.origin)
@@ -58,7 +75,7 @@ export function createApi({ getSessionId, onUnauthorized, baseUrl = '/api' }: Op
       throw new ApiError(0, 'Could not reach the server')
     }
     if (response.status === 401) onUnauthorized()
-    if (!response.ok) throw new ApiError(response.status, await messageOf(response))
+    if (!response.ok) throw new ApiError(response.status, await messageOf(response), retryAfterSeconds(response))
     if (response.status === 204) return undefined as T
     return response.json()
   }

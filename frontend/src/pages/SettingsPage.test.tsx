@@ -120,6 +120,19 @@ describe('account settings page', () => {
     expect(await screen.findByRole('alert')).toHaveTextContent(/could not update your password/i)
   })
 
+  it('given too many attempts, says how long to wait and keeps what was typed', async () => {
+    server.use(http.post('*/api/users/:id/password', () => HttpResponse.json({ message: 'Too Many Requests' }, { status: 429, headers: { 'Retry-After': '300' } })))
+    const user = userEvent.setup()
+    renderApp('/settings')
+
+    await fillForm(user, { current: 'old-password', next: 'new-password-1', confirm: 'new-password-1' })
+    await user.click(update())
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Too many attempts. Try again in 5 minutes.')
+    expect(screen.queryByText(/current password is incorrect/i)).not.toBeInTheDocument()
+    expect(next()).toHaveValue('new-password-1')
+  })
+
   it('given a demo session, disables the password form and explains why', () => {
     const calls = servePasswordChange()
     renderApp('/settings', { session: demoSession })
