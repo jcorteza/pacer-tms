@@ -34,6 +34,11 @@ The app is for a single example company, Larkspur Freight, and its staff. There'
 - **Tooling:** pnpm, Vitest, oxlint, Prettier, Docker and a dev container
 - **Hosting (planned):** AWS, with the frontend as static hosting on S3
 
+## Configuration
+
+- `API_KEY` (required, in the root `.env`): every backend route requires it in an `x-api-key` header, and the backend won't start without it. The frontend's dev server adds it to `/api` requests, so it never reaches the browser.
+- `RATE_LIMIT_DEFAULT` (optional, default 150, i.e. 30 a minute): requests a signed-in user may make to one route in 5 minutes; past it the backend answers 429 with a `Retry-After` header. Stricter limits are fixed in code ([`rate-limits.ts`](./backend/src/auth/rate-limits.ts)): login is 5 attempts per email and the password change is 3 attempts per user, each followed by a 5 minute lockout, and `/ping` (the compose healthcheck) is 75. Counters are kept in memory, so they reset when the backend restarts and are not shared between instances.
+
 ## How it's built
 
 - Every change starts with a plan and a testing plan, and tests are written and approved before implementation.

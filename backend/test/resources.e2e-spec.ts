@@ -1,10 +1,10 @@
 import type { INestApplication } from '@nestjs/common';
 import { randomUUID } from 'node:crypto';
 import { and, eq } from 'drizzle-orm';
-import request from 'supertest';
 import { statusChangeLog } from '../src/db/schema.js';
 import { closeDatabase, db, resetDatabase } from '../src/db/test/helpers.js';
-import { createTestApp, signedIn } from './support/app.js';
+import { ROLES } from '../src/users/roles.js';
+import { apiClient, createTestApp, signedIn } from './support/app.js';
 import { resources, type Resource } from './support/resources.js';
 
 let app: INestApplication;
@@ -18,14 +18,9 @@ afterAll(async () => {
   await app.close();
   await closeDatabase();
 });
-beforeEach(async () => {
-  await resetDatabase();
-  const { user, header: h } = await signedIn();
-  actorId = user.id;
-  header = h;
-});
+beforeEach(resetDatabase);
 
-const api = () => request(app.getHttpServer());
+const api = () => apiClient(app);
 
 /** POSTs one row as the signed-in user and returns its body. */
 async function create(resource: Resource, body: Record<string, unknown>) {
@@ -34,6 +29,51 @@ async function create(resource: Resource, body: Record<string, unknown>) {
 }
 
 describe.each(resources)('/$path', (resource) => {
+  // The acting user holds a role that may write to this resource, so the generic tests below stay about behavior.
+  beforeEach(async () => {
+    const { user, header: h } = await signedIn({ roles: [resource.writeRoles?.[0] ?? 'Warehouse'] });
+    actorId = user.id;
+    header = h;
+  });
+
+  if (resource.writeRoles) {
+    const allowed = resource.writeRoles;
+    const others = ROLES.filter((role) => !allowed.includes(role));
+
+    describe('who may write', () => {
+      it.each(allowed)('given %s, can create, update and delete', async (role) => {
+        const { header: writer } = await signedIn({ roles: [role] });
+        const body = (await resource.setup())(1);
+
+        const created = (await api().post(`/${resource.path}`).set(writer).send(body).expect(201)).body;
+        await api().patch(`/${resource.path}/${created.id}`).set(writer).send(resource.patch).expect(200);
+        await api().delete(`/${resource.path}/${created.id}`).set(writer).expect(204);
+      });
+
+      it('given any other role, refuses POST, PATCH and DELETE with 403 and changes nothing', async () => {
+        const body = await resource.setup();
+        const created = await create(resource, body(1));
+        const { header: outsider } = await signedIn({ roles: others });
+
+        await api().post(`/${resource.path}`).set(outsider).send(body(2)).expect(403);
+        await api().patch(`/${resource.path}/${created.id}`).set(outsider).send(resource.patch).expect(403);
+        await api().delete(`/${resource.path}/${created.id}`).set(outsider).expect(403);
+
+        const list = await api().get(`/${resource.path}`).set(header).expect(200);
+        expect(list.body.total).toBe(1);
+        expect(list.body.data[0]).toMatchObject(created);
+      });
+
+      it('still lets any signed-in user read', async () => {
+        const created = await create(resource, (await resource.setup())(1));
+        const { header: reader } = await signedIn({ roles: ['Warehouse'] });
+
+        await api().get(`/${resource.path}`).set(reader).expect(200);
+        await api().get(`/${resource.path}/${created.id}`).set(reader).expect(200);
+      });
+    });
+  }
+
   describe('POST', () => {
     it('given a valid body, creates the row and returns it with its id', async () => {
       const body = (await resource.setup())(1);

@@ -79,6 +79,19 @@ describe('login page', () => {
     expect(loadSession()).toBeNull()
   })
 
+  it('given too many attempts, says how long to wait instead of a generic error', async () => {
+    server.use(http.post('*/api/sessions', () => HttpResponse.json({ message: 'Too Many Requests' }, { status: 429, headers: { 'Retry-After': '300' } })))
+    const user = userEvent.setup()
+    renderApp('/login', { session: null })
+
+    await user.type(email(), dana.email)
+    await user.type(password(), 'a-good-password')
+    await user.click(signInButton())
+
+    expect(await screen.findByRole('alert')).toHaveTextContent('Too many attempts. Try again in 5 minutes.')
+    expect(loadSession()).toBeNull()
+  })
+
   it('given empty fields, asks for them without calling the server', async () => {
     let requests = 0
     server.use(http.post('*/api/sessions', () => {

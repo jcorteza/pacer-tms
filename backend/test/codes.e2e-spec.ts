@@ -1,7 +1,6 @@
 import type { INestApplication } from '@nestjs/common';
-import request from 'supertest';
 import { closeDatabase, createBuilding, createUser, createWarehouse, resetDatabase } from '../src/db/test/helpers.js';
-import { createTestApp, signedIn } from './support/app.js';
+import { apiClient, createTestApp, signedIn } from './support/app.js';
 
 let app: INestApplication;
 let header: Record<string, string>;
@@ -15,10 +14,11 @@ afterAll(async () => {
 });
 beforeEach(async () => {
   await resetDatabase();
-  header = (await signedIn()).header;
+  // Sites, buildings and locations are written by warehouse management.
+  header = (await signedIn({ roles: ['Warehouse Management'] })).header;
 });
 
-const api = () => request(app.getHttpServer());
+const api = () => apiClient(app);
 const post = (path: string, body: Record<string, unknown>) => api().post(`/${path}`).set(header).send(body);
 const del = (path: string, id: number) => api().delete(`/${path}/${id}`).set(header).expect(204);
 

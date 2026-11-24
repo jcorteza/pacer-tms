@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw'
 import { describe, expect, it, vi } from 'vitest'
 import { server } from '../test/server.ts'
 import { pageOf } from '../test/api.ts'
-import { ApiError, createApi } from './client.ts'
+import { ApiError, createApi, tooManyAttemptsMessage } from './client.ts'
 
 const setup = (sessionId: string | null = 'sess-1') => {
   const onUnauthorized = vi.fn()
@@ -55,6 +55,18 @@ describe('api client', () => {
     expect(onUnauthorized).toHaveBeenCalled()
   })
 
+  it('reads how long to wait from a 429, in seconds', async () => {
+    server.use(http.post('*/api/sessions', () => HttpResponse.json({ message: 'Too Many Requests' }, { status: 429, headers: { 'Retry-After': '300' } })))
+
+    await expect(setup(null).api.post('/sessions', {})).rejects.toMatchObject({ status: 429, retryAfterSeconds: 300 })
+  })
+
+  it('given no Retry-After header, leaves the wait unknown', async () => {
+    server.use(http.get('*/api/orders', () => new HttpResponse(null, { status: 429 })))
+
+    await expect(setup().api.get('/orders')).rejects.toMatchObject({ status: 429, retryAfterSeconds: undefined })
+  })
+
   it('treats a 401 as an expired session', async () => {
     server.use(http.get('*/api/orders', () => new HttpResponse(null, { status: 401 })))
     const { api, onUnauthorized } = setup()
@@ -77,6 +89,22 @@ describe('api client', () => {
     server.use(http.delete('*/api/sessions/s1', () => new HttpResponse(null, { status: 204 })))
 
     await expect(setup().api.delete('/sessions/s1')).resolves.toBeUndefined()
+  })
+
+  describe('tooManyAttemptsMessage', () => {
+    it.each([
+      [300, 'Too many attempts. Try again in 5 minutes.'],
+      [61, 'Too many attempts. Try again in 2 minutes.'],
+      [30, 'Too many attempts. Try again in 1 minute.'],
+      [undefined, 'Too many attempts. Wait a few minutes, then try again.'],
+    ])('given a 429 to wait %s seconds, says "%s"', (seconds, message) => {
+      expect(tooManyAttemptsMessage(new ApiError(429, 'Too Many Requests', seconds))).toBe(message)
+    })
+
+    it('given any other failure, has no message', () => {
+      expect(tooManyAttemptsMessage(new ApiError(401, 'nope'))).toBeNull()
+      expect(tooManyAttemptsMessage(new Error('boom'))).toBeNull()
+    })
   })
 
   describe('fetchAll', () => {

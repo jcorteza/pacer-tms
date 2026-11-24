@@ -4,7 +4,9 @@ import { SelectField, TextField } from '../../components/fields.tsx'
 import { changedFields, hasErrors, requiredErrors, useForm } from '../../components/form.ts'
 import { Modal } from '../../components/Modal.tsx'
 import { SectionCard } from './SectionCard.tsx'
-import type { Building, ConfigData, SectionProps } from './types.ts'
+import { createBuilding, updateBuilding } from '../../api/building-codes.ts'
+import type { Building } from '../../api/types.ts'
+import type { ConfigData, SectionProps } from './types.ts'
 
 const TYPES = [
   { value: 'storage', label: 'Storage' },
@@ -39,9 +41,9 @@ function BuildingDialog({ building, sites, onClose, onSaved }: DialogProps) {
       })
       if (building) {
         const changes = changedFields(values, initial)
-        if (Object.keys(changes).length > 0) await api.patch(`/building-codes/${building.id}`, toBody(changes))
+        if (Object.keys(changes).length > 0) await updateBuilding(api, building.id, toBody(changes))
       } else {
-        await api.post('/building-codes', toBody(values))
+        await createBuilding(api, toBody(values))
       }
       await onSaved()
     } catch {

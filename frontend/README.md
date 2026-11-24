@@ -7,8 +7,11 @@ React, TypeScript and Vite. Built so far: sign in, account settings, and configu
 | Command | What it does |
 |---|---|
 | `pnpm dev` | Dev server. Requests to `/api/...` are proxied to the backend (`API_URL`, default `http://localhost:3000`) with the `/api` prefix removed. |
-| `pnpm test` | Vitest with Testing Library; `msw` fakes the API, and any request a test didn't plan fails it. |
-| `pnpm lint` / `pnpm build` | ESLint / type-check and production build. |
+| `pnpm build` | Type-check (`tsc -b`), then production build with Vite into `dist/`. |
+| `pnpm preview` | Serve the production build locally; run `build` first. |
+| `pnpm lint` | ESLint over the whole project. |
+| `pnpm test` | Run the tests once: Vitest with Testing Library; `msw` fakes the API, and any request a test didn't plan fails it. |
+| `pnpm test:watch` | The same tests in watch mode. |
 
 ## Layout
 

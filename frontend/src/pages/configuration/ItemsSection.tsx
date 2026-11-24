@@ -4,7 +4,10 @@ import { SelectField, TextField, type Option } from '../../components/fields.tsx
 import { changedFields, hasErrors, requiredErrors, useForm, type Errors } from '../../components/form.ts'
 import { Modal } from '../../components/Modal.tsx'
 import { SectionCard } from './SectionCard.tsx'
-import type { ConfigData, Item, ItemLocation, SectionProps } from './types.ts'
+import { createItemLocation, updateItemLocation } from '../../api/item-locations.ts'
+import { createItem, updateItem } from '../../api/items.ts'
+import type { Item, ItemLocation } from '../../api/types.ts'
+import type { ConfigData, SectionProps } from './types.ts'
 
 const NONE = 'none'
 const NEW = 'new'
@@ -95,9 +98,9 @@ function ItemDialog({ item, data, onClose, onChanged, onSaved }: DialogProps) {
   const place = async (itemId: number) => {
     if (values.location === NONE) return
     if (values.location === NEW) {
-      await api.post('/item-locations', { buildingId: Number(values.newBuilding), itemId, description: values.newSpot.trim() })
+      await createItemLocation(api, { buildingId: Number(values.newBuilding), itemId, description: values.newSpot.trim() })
     } else {
-      await api.patch(`/item-locations/${values.location}`, { itemId })
+      await updateItemLocation(api, Number(values.location), { itemId })
     }
   }
 
@@ -115,14 +118,14 @@ function ItemDialog({ item, data, onClose, onChanged, onSaved }: DialogProps) {
     try {
       if (item) {
         const changes = changedFields(itemFields, initialItemFields)
-        if (Object.keys(changes).length > 0) await api.patch(`/items/${item.id}`, trimmed(changes))
+        if (Object.keys(changes).length > 0) await updateItem(api, item.id, trimmed(changes))
         if (values.location !== initial.location) {
           // An item has one location, so it must leave the old one before taking another.
-          if (current) await api.patch(`/item-locations/${current.id}`, { itemId: null })
+          if (current) await updateItemLocation(api, current.id, { itemId: null })
           await place(item.id)
         }
       } else {
-        const created = await api.post<{ id: number }>('/items', trimmed(itemFields))
+        const created = await createItem(api, trimmed(itemFields))
         try {
           await place(created.id)
         } catch {

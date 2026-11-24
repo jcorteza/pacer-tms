@@ -1,22 +1,19 @@
-import { Test, TestingModule } from '@nestjs/testing';
+import { ServiceUnavailableException } from '@nestjs/common';
+import type { Db } from './db/db.js';
 import { AppController } from './app.controller.js';
-import { AppService } from './app.service.js';
 
-describe('AppController', () => {
-  let appController: AppController;
+const controllerWith = (execute: () => Promise<unknown>) => new AppController({ execute } as unknown as Db);
 
-  beforeEach(async () => {
-    const app: TestingModule = await Test.createTestingModule({
-      controllers: [AppController],
-      providers: [AppService],
-    }).compile();
+describe('AppController ping', () => {
+  it('given the database answers, reports ok', async () => {
+    const controller = controllerWith(() => Promise.resolve([]));
 
-    appController = app.get<AppController>(AppController);
+    await expect(controller.ping()).resolves.toEqual({ status: 'ok' });
   });
 
-  describe('root', () => {
-    it('should return "Hello World!"', () => {
-      expect(appController.getHello()).toBe('Hello World!');
-    });
+  it('given the database is down, responds 503 so the healthcheck fails', async () => {
+    const controller = controllerWith(() => Promise.reject(new Error('connection refused')));
+
+    await expect(controller.ping()).rejects.toThrow(ServiceUnavailableException);
   });
 });

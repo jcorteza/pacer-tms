@@ -1,5 +1,6 @@
 import { useState } from 'react'
-import { ApiError } from '../api/client.ts'
+import { ApiError, tooManyAttemptsMessage } from '../api/client.ts'
+import { changePassword } from '../api/users.ts'
 import { useAuth } from '../auth/useAuth.ts'
 import { TextField } from '../components/fields.tsx'
 import { hasErrors, useForm, type Errors } from '../components/form.ts'
@@ -42,12 +43,12 @@ export function SettingsPage() {
 
     setBusy(true)
     try {
-      await api.post(`/users/${user.id}/password`, { currentPassword: values.current, newPassword: values.next })
+      await changePassword(api, user.id, { currentPassword: values.current, newPassword: values.next })
       setValues(BLANK)
       setDone(true)
     } catch (error) {
       if (error instanceof ApiError && error.status === 403) setErrors({ current: 'Current password is incorrect.' })
-      else setFailure('Could not update your password. Try again.')
+      else setFailure(tooManyAttemptsMessage(error) ?? 'Could not update your password. Try again.')
     } finally {
       setBusy(false)
     }

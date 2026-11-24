@@ -1,15 +1,14 @@
 import type { INestApplication } from '@nestjs/common';
 import { eq } from 'drizzle-orm';
-import request from 'supertest';
 import { sessions, users } from '../src/db/schema.js';
 import { closeDatabase, db, resetDatabase } from '../src/db/test/helpers.js';
 import { hashPassword } from '../src/users/password.js';
 import { ROLES } from '../src/users/roles.js';
-import { createTestApp, signedIn } from './support/app.js';
+import { apiClient, createTestApp, signedIn } from './support/app.js';
 import { createUser } from '../src/db/test/helpers.js';
 
 let app: INestApplication;
-const api = () => request(app.getHttpServer());
+const api = () => apiClient(app);
 
 beforeAll(async () => {
   app = await createTestApp();
@@ -125,6 +124,16 @@ describe('POST /sessions in demo mode', () => {
         billingContact: { name: 'Bill', email: 'bill@c.test', phone: '555-0100' },
         shippingContact: { name: 'Ship', email: 'ship@c.test', phone: '555-0101' },
       })
+      .expect(201);
+  });
+
+  it('lets the demo user manage users too, since it holds the management roles', async () => {
+    const { body: session } = await api().post('/sessions').expect(201);
+
+    await api()
+      .post('/users')
+      .set({ 'x-session-id': session.id })
+      .send({ firstName: 'Grace', lastName: 'Hopper', email: 'grace@larkspur.test', password: 'compiler-queen', roles: ['Dispatcher'] })
       .expect(201);
   });
 

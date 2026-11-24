@@ -1,3 +1,5 @@
+import { CONFIGURATION_ROLES, hasAnyRole } from '../auth/roles.ts'
+import { useAuth } from '../auth/useAuth.ts'
 import { BuildingsSection } from './configuration/BuildingsSection.tsx'
 import { ItemsSection } from './configuration/ItemsSection.tsx'
 import { SitesSection } from './configuration/SitesSection.tsx'
@@ -9,7 +11,23 @@ const SECTIONS = [
   { href: '#items', label: 'Item locations' },
 ]
 
+/** Every manager opens this page, but only warehouse and operations management have anything on it. */
 export function ConfigurationPage() {
+  const { session } = useAuth()
+
+  if (!hasAnyRole(session!.user, CONFIGURATION_ROLES)) {
+    return (
+      <>
+        <h1 className="page-title">Configuration</h1>
+        <div className="message">Nothing to see here.</div>
+      </>
+    )
+  }
+  return <ConfigurationSections />
+}
+
+/** Its own component so the data is only requested for users who can see it. */
+function ConfigurationSections() {
   const { data, failed, reload } = useConfigData()
 
   return (

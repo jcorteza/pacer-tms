@@ -1,5 +1,6 @@
 import type { PgColumn, PgTable } from 'drizzle-orm/pg-core';
 import * as schema from '../../src/db/schema.js';
+import type { Role } from '../../src/users/roles.js';
 import {
   createBuilding,
   createCarrier,
@@ -27,7 +28,12 @@ export type Resource = {
   patch: Record<string, unknown>;
   /** The status-change log doesn't log itself. */
   logsWrites?: false;
+  /** Roles allowed to create, update and delete. Left out, any signed-in user may. Reads are open either way. */
+  writeRoles?: readonly Role[];
 };
+
+/** The configuration resources are edited from the Configuration page's sections. */
+const CONFIGURATION_WRITERS: readonly Role[] = ['Warehouse Management', 'Operations Management'];
 
 const code = (prefix: string, n: number) => `${prefix}${String(n).padStart(2, '0')}`;
 const at = '2027-01-10T00:00:00.000Z';
@@ -164,6 +170,7 @@ export const resources: Resource[] = [
       });
     },
     patch: { stock: 5 },
+    writeRoles: CONFIGURATION_WRITERS,
   },
   {
     path: 'shipping-addresses',
@@ -195,6 +202,7 @@ export const resources: Resource[] = [
       });
     },
     patch: { phone: '555-0199' },
+    writeRoles: CONFIGURATION_WRITERS,
   },
   {
     path: 'building-codes',
@@ -206,6 +214,7 @@ export const resources: Resource[] = [
       return (n) => ({ code: code('BA', n), warehouseId: warehouse.id, name: `Building ${n}`, type: 'storage' });
     },
     patch: { type: 'transport' },
+    writeRoles: CONFIGURATION_WRITERS,
   },
   {
     path: 'item-locations',
@@ -217,6 +226,7 @@ export const resources: Resource[] = [
       return (n) => ({ code: code('LC', n), buildingId: building.id });
     },
     patch: { description: 'Aisle 4, shelf 2' },
+    writeRoles: CONFIGURATION_WRITERS,
   },
   {
     path: 'status-change-log',

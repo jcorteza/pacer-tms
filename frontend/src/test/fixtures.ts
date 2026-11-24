@@ -16,6 +16,13 @@ export const session = {
   user: dana,
 }
 
+/** Dana's session, but signed in holding `roles`. The default `session` is a Dispatcher, a non-manager. */
+export const sessionWithRoles = (...roles: string[]) => ({ ...session, user: { ...dana, roles } })
+
+export const operationsManagerSession = sessionWithRoles('Operations Management')
+export const warehouseManagerSession = sessionWithRoles('Warehouse Management')
+export const accountingManagerSession = sessionWithRoles('Accounting Management')
+
 export const demoUser = {
   id: '3b8e5d1a-6c42-4f0b-9d7e-1a2b3c4d5e6f',
   firstName: 'Demo',
