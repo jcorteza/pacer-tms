@@ -5,6 +5,11 @@
 **/coverage
 **/*.tsbuildinfo
 
+**/.oxlintrc.json
+**/.prettierrc
+**/eslint.config.js
+**/vitest.config*.ts
+
 **/.env
 **/.env.*
 **/*.local
@@ -16,6 +21,10 @@
 *.md
 **/.git
 **/.claude
+skills-lock.json
+
+**/.dockerignore
+**/Dockerfile
 
 **/test
 **/*.spec.*

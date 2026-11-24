@@ -24,5 +24,6 @@ Prefer non-BASH command when you are reading or reviewing something for context 
 
 * Code for human readability. Humans should be able to skip and still grasp how the code works or what has changed.
 * Code for reusability. Use helper functions and functional modules where appropriate to simplify the logic and reduce redundant code.
+* When choosing between reusability and readability, opt for readability.
 * All work should be test driven, i.e. test driven development combined with behavior driven development (given, when, then). Prefer behavior driven for major features and test driven for helper functions and modules.
 * Do not write tests to the code. Tests are meant to catch bugs and should be written to do so.
