@@ -13,7 +13,9 @@ import {
   Query,
   UseGuards,
 } from '@nestjs/common';
+import { Throttle, ThrottlerGuard } from '@nestjs/throttler';
 import { CurrentUser } from '../auth/current-user.decorator.js';
+import { PASSWORD_LIMIT } from '../auth/rate-limits.js';
 import { RequireAnyRole } from '../auth/roles.guard.js';
 import { SessionGuard } from '../auth/session.guard.js';
 import { MANAGEMENT_ROLES, type Role } from './roles.js';
@@ -36,9 +38,10 @@ function ownAccountOnly(id: string, signedInUserId: string) {
 /**
  * Every route needs a signed-in session; accounts are created by administrators, never publicly.
  * Managing people (list, create, edit, roles) is for the management roles; password and settings are personal.
+ * Each user's requests to a route are rate limited; the password route is held to a much stricter limit.
  */
 @Controller('users')
-@UseGuards(SessionGuard)
+@UseGuards(SessionGuard, ThrottlerGuard)
 export class UsersController {
   constructor(@Inject(UsersService) private readonly users: UsersService) {}
 
@@ -61,6 +64,7 @@ export class UsersController {
   }
 
   @Post(':id/password')
+  @Throttle(PASSWORD_LIMIT)
   @HttpCode(204)
   changePassword(
     @Param('id', ParseUUIDPipe) id: string,
