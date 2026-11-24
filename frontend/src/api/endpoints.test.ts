@@ -2,7 +2,7 @@ import { http, HttpResponse } from 'msw'
 import { describe, expect, it } from 'vitest'
 import { pageOf } from '../test/api.ts'
 import { server } from '../test/server.ts'
-import { createApi } from './client.ts'
+import { createApi, type Api } from './client.ts'
 import { createBuilding, listBuildings, updateBuilding } from './building-codes.ts'
 import { listClients } from './clients.ts'
 import { createItemLocation, listItemLocations, updateItemLocation } from './item-locations.ts'
@@ -41,7 +41,7 @@ describe('listing', () => {
     ['listItems', listItems, '/items'],
     ['listItemLocations', listItemLocations, '/item-locations'],
     ['listClients', listClients, '/clients'],
-  ])('%s reads every row of %s', async (_name, list, path) => {
+  ])('%s reads every row of %s', async (_name: string, list: (api: Api) => Promise<unknown[]>, path: string) => {
     const rows = [{ id: 1 }, { id: 2 }, { id: 3 }]
     const seen = serve(() => HttpResponse.json(pageOf(rows)))
 
@@ -67,7 +67,12 @@ describe('creating and updating', () => {
     ['building', createBuilding, updateBuilding, '/building-codes'],
     ['item', createItem, updateItem, '/items'],
     ['item location', createItemLocation, updateItemLocation, '/item-locations'],
-  ] as const)('a %s is created with POST and changed with PATCH by id', async (_name, create, update, path) => {
+  ] as const)('a %s is created with POST and changed with PATCH by id', async (
+    _name: string,
+    create: (api: Api, body: never) => Promise<unknown>,
+    update: (api: Api, id: number, body: never) => Promise<unknown>,
+    path: string,
+  ) => {
     const seen = serve(() => HttpResponse.json({ id: 7 }, { status: 201 }))
 
     const created = await create(api, { name: 'New' } as never)

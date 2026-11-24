@@ -15,6 +15,10 @@ type FieldBase = {
 const labelText = ({ label, required, optional }: Pick<FieldBase, 'label' | 'required' | 'optional'>) =>
   required ? `${label} (required)` : optional ? `${label} (optional)` : label
 
+/** Points the input at whichever of its hint and error are showing. */
+const describedBy = (id: string, { hint, error }: Pick<FieldBase, 'hint' | 'error'>) =>
+  [hint && `${id}-hint`, error && `${id}-error`].filter(Boolean).join(' ') || undefined
+
 /** A labelled text input with its hint and error wired up for screen readers. */
 export function TextField({
   type = 'text',
@@ -24,7 +28,6 @@ export function TextField({
   ...field
 }: FieldBase & { type?: string; inputMode?: 'numeric' | 'decimal'; autoComplete?: string; disabled?: boolean }) {
   const id = useId()
-  const describedBy = [field.hint && `${id}-hint`, field.error && `${id}-error`].filter(Boolean).join(' ') || undefined
   return (
     <div className="field">
       <label className="label" htmlFor={id}>
@@ -40,7 +43,7 @@ export function TextField({
         required={field.required}
         value={field.value}
         aria-invalid={field.error ? true : undefined}
-        aria-describedby={describedBy}
+        aria-describedby={describedBy(id, field)}
         onChange={(event) => field.onChange(event.target.value)}
       />
       {field.hint && (
@@ -48,12 +51,19 @@ export function TextField({
           {field.hint}
         </span>
       )}
-      {field.error && (
-        <span className="error" id={`${id}-error`}>
-          {field.error}
-        </span>
-      )}
+      <FieldError id={`${id}-error`} error={field.error} />
     </div>
+  )
+}
+
+/** A field's error: an icon beside the words, so the message never relies on the border or colour alone. */
+function FieldError({ id, error }: { id: string; error?: string }) {
+  if (!error) return null
+  return (
+    <span className="error" id={id}>
+      <Icon name="xcircle" size={16} />
+      {error}
+    </span>
   )
 }
 
@@ -74,7 +84,7 @@ export function SelectField({ options, placeholder, ...field }: FieldBase & { op
           required={field.required}
           value={field.value}
           aria-invalid={field.error ? true : undefined}
-          aria-describedby={field.error ? `${id}-error` : undefined}
+          aria-describedby={describedBy(id, field)}
           onChange={(event) => field.onChange(event.target.value)}
         >
           {placeholder && <option value="">{placeholder}</option>}
@@ -86,12 +96,12 @@ export function SelectField({ options, placeholder, ...field }: FieldBase & { op
         </select>
         <Icon name="chevron" size={18} />
       </div>
-      {field.hint && <span className="hint">{field.hint}</span>}
-      {field.error && (
-        <span className="error" id={`${id}-error`}>
-          {field.error}
+      {field.hint && (
+        <span className="hint" id={`${id}-hint`}>
+          {field.hint}
         </span>
       )}
+      <FieldError id={`${id}-error`} error={field.error} />
     </div>
   )
 }

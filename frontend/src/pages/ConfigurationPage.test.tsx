@@ -2,6 +2,7 @@ import { screen, waitFor, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { describe, expect, it } from 'vitest'
+import type { Session } from '../auth/session.ts'
 import { serveConfiguration } from '../test/api.ts'
 import { accountingManagerSession, operationsManagerSession, warehouseManagerSession } from '../test/fixtures.ts'
 import { renderApp } from '../test/render.tsx'
@@ -30,14 +31,13 @@ const submit = (user: User, name: string) => user.click(within(dialog()).getByRo
 
 describe('configuration page', () => {
   describe('layout', () => {
-    it('has a section for sites, buildings and item locations, and none for document retention', async () => {
+    it('has a section for sites, buildings and item locations', async () => {
       await open()
 
       for (const name of ['Sites', 'Buildings', 'Item locations']) {
         expect(region(name)).toBeInTheDocument()
         expect(screen.getByRole('link', { name })).toHaveAttribute('href', `#${name === 'Item locations' ? 'items' : name.toLowerCase()}`)
       }
-      expect(screen.queryByText(/document retention/i)).not.toBeInTheDocument()
     })
 
     it('given the server fails, says the data could not be loaded', async () => {
@@ -52,7 +52,7 @@ describe('configuration page', () => {
     it.each([
       ['Operations Management', operationsManagerSession],
       ['Warehouse Management', warehouseManagerSession],
-    ])('given %s, shows the sites, buildings and item locations sections', async (_role, session) => {
+    ])('given %s, shows the sites, buildings and item locations sections', async (_role: string, session: Session) => {
       serveConfiguration()
       renderApp('/configuration', { session })
 

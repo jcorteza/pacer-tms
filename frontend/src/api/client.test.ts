@@ -97,7 +97,7 @@ describe('api client', () => {
       [61, 'Too many attempts. Try again in 2 minutes.'],
       [30, 'Too many attempts. Try again in 1 minute.'],
       [undefined, 'Too many attempts. Wait a few minutes, then try again.'],
-    ])('given a 429 to wait %s seconds, says "%s"', (seconds, message) => {
+    ])('given a 429 to wait %s seconds, says "%s"', (seconds: number | undefined, message: string) => {
       expect(tooManyAttemptsMessage(new ApiError(429, 'Too Many Requests', seconds))).toBe(message)
     })
 

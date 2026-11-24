@@ -3,7 +3,7 @@ import { MANAGEMENT_ROLES } from './auth/roles.ts'
 
 export const COMPANY_NAME = 'Larkspur Freight'
 
-type NavItem = {
+export type NavItem = {
   path: string
   label: string
   icon: IconName

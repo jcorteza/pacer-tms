@@ -17,6 +17,8 @@
   --msg-info-bg: #e8ebef;
   --msg-status-bg: #ddefd0;
   --msg-status-ink: #1f3f10;
+  --msg-warning-bg: #f6e7c8;
+  --msg-warning-ink: #5a3d00;
   --msg-alert-bg: #342e37;
   --msg-alert-ink: #ffffff;
   --scrim: rgba(52, 46, 55, 0.55);
@@ -29,7 +31,8 @@
    */
   --control: 2.75rem; /* 44px: the minimum comfortable target for a pointer or finger */
   --control-lg: 3rem; /* the primary action on the login card */
-  --rail: clamp(13.75rem, 16vw, 17rem); /* nav rail: ~220px, a little wider on big screens */
+  --rail-collapsed: 4.5rem; /* 72px: icons only */
+  --rail-expanded: 13.75rem; /* 220px: icon and page name */
   --content-max: 90rem; /* stops tables and forms stretching edge to edge on very wide screens */
   --page-gutter: clamp(1rem, 2vw, 1.75rem);
 }
@@ -68,11 +71,15 @@ h1, h2 { margin: 0; }
 .menu button[aria-disabled='true'] { color: var(--disabled-ink); cursor: not-allowed; }
 .menu button[aria-disabled='true']:hover { background: transparent; }
 
-/* Rail beside the page; below 760px the rail becomes a scrolling strip above it. */
-.body { flex: 1; display: grid; grid-template-columns: var(--rail) minmax(0, 1fr); align-items: stretch; }
-.rail { display: flex; flex-direction: column; gap: 4px; padding: 16px 12px; background: var(--surface-card); border-right: 1px solid var(--line); }
-.nav-item { display: flex; align-items: center; gap: 12px; min-height: var(--control); padding: 0 12px; border-radius: var(--radius-md); color: var(--ink-muted); text-decoration: none; font-weight: 600; white-space: nowrap; }
-.nav-item:hover { background: var(--line-subtle); }
+/* Rail beside the page. It is collapsed (icons only) or expanded (icons and names); below 760px it becomes a scrolling icon strip above the page. */
+.body { flex: 1; display: grid; grid-template-columns: auto minmax(0, 1fr); align-items: stretch; }
+.rail { width: var(--rail-collapsed); display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 14px 0; background: var(--surface-card); border-right: 1px solid var(--line); }
+.rail-expanded { width: var(--rail-expanded); align-items: stretch; padding: 14px 12px; }
+.nav-item, .rail-toggle { display: flex; align-items: center; justify-content: center; gap: 12px; width: 3rem; height: 3rem; padding: 0; border: 0; border-radius: var(--radius-md); background: transparent; color: var(--ink-muted); text-decoration: none; font: inherit; font-weight: 600; white-space: nowrap; cursor: pointer; }
+.rail-expanded .nav-item, .rail-expanded .rail-toggle { width: auto; height: 2.875rem; justify-content: flex-start; padding: 0 12px; }
+.rail-sep { width: 2rem; height: 1px; margin: 2px 0; background: var(--line); }
+.rail-expanded .rail-sep { width: auto; margin: 2px 4px; }
+.nav-item:hover, .rail-toggle:hover { background: var(--line-subtle); }
 .nav-item[aria-current="page"] { background: var(--brand); color: var(--ink-inverse); }
 .nav-item[aria-current="page"]:hover { background: var(--brand-pressed); }
 .main { min-width: 0; max-width: var(--content-max); padding: 1.5rem var(--page-gutter); display: flex; flex-direction: column; gap: 20px; }
@@ -85,46 +92,65 @@ h1, h2 { margin: 0; }
 
 @media (max-width: 760px) {
   .body { grid-template-columns: minmax(0, 1fr); }
-  .rail { flex-direction: row; overflow-x: auto; border-right: 0; border-bottom: 1px solid var(--line); }
+  .rail, .rail-expanded { width: auto; flex-direction: row; align-items: center; overflow-x: auto; padding: 8px; border-right: 0; border-bottom: 1px solid var(--line); }
+  .rail .nav-item, .rail-expanded .nav-item { width: 3rem; height: 3rem; justify-content: center; padding: 0; }
+  .rail-toggle, .rail-sep, .nav-label { display: none; }
   .account-btn span { display: none; }
 }
 
 /* ---- Cards ---- */
 .card { background: var(--surface-card); border: 1px solid var(--line); border-radius: var(--radius-lg); min-width: 0; }
-.card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 16px 20px; border-bottom: 1px solid var(--line-subtle); }
+.card-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; flex-wrap: wrap; padding: 16px 20px; border-bottom: 1px solid var(--line); }
 .card-head h2 { font-size: 16px; line-height: 22px; font-weight: 700; }
 .caption { font-size: 12px; line-height: 16px; color: var(--ink-muted); }
 .card-body { padding: 20px; display: flex; flex-direction: column; gap: 16px; }
 .card-foot { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 12px; padding: 16px 20px; background: var(--surface-subtle); border-top: 1px solid var(--line-subtle); border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
 
+/* A footer whose buttons sit under a line of explanation. */
+.card-foot-stack { flex-direction: column; align-items: stretch; gap: 12px; }
+.card-foot-stack .btn { align-self: flex-end; }
+
 /* ---- Forms ---- */
-.field { display: flex; flex-direction: column; gap: 4px; min-width: 0; }
+.field { display: flex; flex-direction: column; gap: 6px; min-width: 0; }
 /* Fields side by side share the row, each at least ~10rem before wrapping to the next line. */
 .row { display: flex; flex-wrap: wrap; gap: 12px; }
 .row > .field { flex: 1 1 10rem; }
 .label { font-size: 13px; line-height: 18px; font-weight: 600; }
 .hint { font-size: 12px; line-height: 16px; color: var(--ink-muted); }
-.error { font-size: 12px; line-height: 16px; font-weight: 600; color: var(--ink); }
+.error { display: flex; gap: 6px; align-items: flex-start; font-size: 13px; line-height: 18px; font-weight: 700; color: var(--ink); }
+.error svg { margin-top: 1px; }
 .input { min-height: var(--control); width: 100%; padding: 0 12px; border: 1px solid var(--control-border); border-radius: var(--radius-md); background: var(--surface-card); color: var(--ink); font: inherit; font-stretch: 105%; }
 .input:disabled { background: var(--disabled-bg); border-color: var(--disabled-border); color: var(--disabled-ink); }
-.input[aria-invalid="true"] { border-width: 2px; }
+/* An alert thickens the border without moving the text, so the state shows even without reading the message. */
+.input[aria-invalid="true"] { border-color: var(--ink); box-shadow: 0 0 0 1px var(--ink); }
 .select { position: relative; }
 .select select { appearance: none; -webkit-appearance: none; padding-right: 36px; }
 .select svg { position: absolute; right: 12px; top: 50%; transform: translateY(-50%); pointer-events: none; color: var(--ink); }
 
-.btn { min-height: var(--control); padding: 0 20px; border: 0; border-radius: var(--radius-md); background: var(--brand); color: var(--ink-inverse); font: inherit; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
+.btn { min-height: var(--control); padding: 0 18px; border: 0; border-radius: var(--radius-md); background: var(--brand); color: var(--ink-inverse); font: inherit; font-weight: 700; cursor: pointer; display: inline-flex; align-items: center; gap: 8px; }
 .btn:hover { background: var(--brand-pressed); }
 .btn:disabled { background: var(--disabled-bg); color: var(--disabled-ink); cursor: not-allowed; }
 .btn-block { width: 100%; min-height: var(--control-lg); justify-content: center; font-size: 15px; }
-.btn-secondary { min-height: var(--control); padding: 0 16px; border: 1px solid var(--control-border); border-radius: var(--radius-md); background: var(--surface-card); color: var(--ink); font: inherit; font-weight: 600; cursor: pointer; }
+.btn-secondary { min-height: var(--control); padding: 0 18px; border: 1px solid var(--control-border); border-radius: var(--radius-md); background: var(--surface-card); color: var(--ink); font: inherit; font-weight: 700; cursor: pointer; }
+.btn-secondary:hover { background: var(--surface-page); }
 .link-btn { min-height: 2.5rem; padding: 0 8px; border: 0; background: transparent; color: var(--brand); font: inherit; font-weight: 700; text-decoration: underline; cursor: pointer; }
 .icon-btn { min-width: var(--control); min-height: var(--control); padding: 0; border: 0; background: transparent; border-radius: var(--radius-md); display: grid; place-items: center; color: var(--ink); cursor: pointer; flex: none; }
 .icon-btn:hover { background: var(--line-subtle); }
 
 /* ---- Messages ---- */
-.message { display: flex; gap: 8px; align-items: flex-start; padding: 12px 14px; border-radius: var(--radius-md); font-size: 13px; line-height: 18px; background: var(--msg-info-bg); }
-.message-alert { background: var(--msg-alert-bg); color: var(--msg-alert-ink); font-weight: 600; }
-.message-status { background: var(--msg-status-bg); color: var(--msg-status-ink); font-weight: 600; }
+.message { display: flex; gap: 12px; align-items: flex-start; padding: 12px 14px; border-radius: var(--radius-md); font-size: 14px; line-height: 20px; }
+.message svg { flex: none; }
+.message-title { font-weight: 700; }
+.message-info { background: var(--msg-info-bg); color: var(--ink); }
+.message-status { background: var(--msg-status-bg); color: var(--msg-status-ink); }
+.message-warning { background: var(--msg-warning-bg); color: var(--msg-warning-ink); }
+.message-alert { background: var(--msg-alert-bg); color: var(--msg-alert-ink); }
+/* Plain: no fill and no side padding. The tone comes from the icon and the text colour. */
+.message-plain { background: none; padding: 2px 0; border-radius: 0; }
+.message-plain.message-info { color: var(--ink-muted); }
+.message-plain.message-status { color: var(--msg-status-ink); }
+.message-plain.message-warning { color: var(--msg-warning-ink); }
+.message-plain.message-alert { color: var(--ink); font-weight: 600; }
 
 /* ---- Tables ---- */
 .table-wrap { overflow-x: auto; }
@@ -141,10 +167,14 @@ h1, h2 { margin: 0; }
 
 /* ---- Modal ---- */
 /* The scrim covers the viewport by design (an overlay); a tall dialog scrolls inside it. */
-.scrim { position: fixed; inset: 0; z-index: 10; background: var(--scrim); display: flex; justify-content: center; align-items: flex-start; padding: 0 16px; overflow-y: auto; }
-.modal { margin: clamp(1rem, 8vh, 4rem) 0; width: 100%; max-width: 35rem; background: var(--surface-card); border: 1px solid var(--line); border-radius: var(--radius-lg); }
+.scrim { position: fixed; inset: 0; z-index: 10; background: var(--scrim); display: flex; justify-content: center; padding: 24px; overflow-y: auto; }
+/* `margin: auto` centres the dialog, and a tall one starts at the top and scrolls instead of being cut off. */
+.modal { margin: auto; width: 100%; max-width: 35rem; background: var(--surface-card); border: 1px solid var(--line); border-radius: var(--radius-lg); }
 .modal h2 { font-size: 20px; line-height: 26px; font-weight: 700; font-stretch: 112%; }
-.modal-head { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px 12px 16px 20px; border-bottom: 1px solid var(--line-subtle); }
+.modal-head { display: flex; align-items: flex-start; justify-content: space-between; gap: 16px; padding: 20px 24px 0; }
+.modal-head .icon-btn { margin: -8px -12px 0 0; }
+.modal-body { display: flex; flex-direction: column; gap: 16px; padding: 20px 24px; }
+.modal-foot { display: flex; justify-content: flex-end; flex-wrap: wrap; gap: 12px; padding: 16px 24px; background: var(--surface-subtle); border-top: 1px solid var(--line); border-radius: 0 0 var(--radius-lg) var(--radius-lg); }
 
 /* ---- Login ---- */
 .login-main { flex: 1; display: flex; align-items: center; justify-content: center; padding: clamp(2rem, 8vh, 4rem) 1.5rem; }

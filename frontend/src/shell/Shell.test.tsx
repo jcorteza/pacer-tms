@@ -2,7 +2,7 @@ import { screen, within } from '@testing-library/react'
 import userEvent from '@testing-library/user-event'
 import { http, HttpResponse } from 'msw'
 import { describe, expect, it } from 'vitest'
-import { loadSession } from '../auth/session.ts'
+import { loadSession, type Session } from '../auth/session.ts'
 import { serveConfiguration } from '../test/api.ts'
 import {
   accountingManagerSession,
@@ -13,6 +13,15 @@ import {
 } from '../test/fixtures.ts'
 import { renderApp } from '../test/render.tsx'
 import { server } from '../test/server.ts'
+
+const primaryNav = () => screen.getByRole('navigation', { name: 'Primary' })
+const navToggle = () => within(primaryNav()).getByRole('button', { name: /(expand|collapse) navigation/i })
+/** The links in order, by accessible name: a collapsed rail shows icons only, so its names are not visible text. */
+const expectLinks = (names: string[]) => {
+  const links = within(primaryNav()).getAllByRole('link')
+  expect(links).toHaveLength(names.length)
+  names.forEach((name, index) => expect(links[index]).toHaveAccessibleName(name))
+}
 
 describe('app shell', () => {
   it('shows the product, the customer and who is signed in', () => {
@@ -27,19 +36,14 @@ describe('app shell', () => {
   it('lists the sections in order, with no Home page', () => {
     renderApp('/', { session: operationsManagerSession })
 
-    const nav = screen.getByRole('navigation', { name: 'Primary' })
-    expect(within(nav).getAllByRole('link').map((link) => link.textContent)).toEqual([
-      'Shipments',
-      'Configuration',
-      'Account settings',
-    ])
+    expectLinks(['Shipments', 'Configuration', 'Account settings'])
   })
 
   it.each([
     ['Operations Management', operationsManagerSession],
     ['Warehouse Management', warehouseManagerSession],
     ['Accounting Management', accountingManagerSession],
-  ])('given %s, offers Configuration', (_role, managerSession) => {
+  ])('given %s, offers Configuration', (_role: string, managerSession: Session) => {
     renderApp('/', { session: managerSession })
 
     expect(screen.getByRole('link', { name: 'Configuration' })).toBeInTheDocument()
@@ -48,8 +52,7 @@ describe('app shell', () => {
   it('given no management role, leaves Configuration out of the nav', () => {
     renderApp('/')
 
-    const nav = screen.getByRole('navigation', { name: 'Primary' })
-    expect(within(nav).getAllByRole('link').map((link) => link.textContent)).toEqual(['Shipments', 'Account settings'])
+    expectLinks(['Shipments', 'Account settings'])
   })
 
   it('opens the first section in the nav at the root address, and marks it current', () => {
@@ -70,6 +73,74 @@ describe('app shell', () => {
 
     expect(await screen.findByRole('heading', { level: 1, name: 'Configuration' })).toBeInTheDocument()
     expect(screen.getByRole('link', { name: 'Configuration' })).toHaveAttribute('aria-current', 'page')
+  })
+
+  describe('navigation rail', () => {
+    it('starts collapsed: icon-only links that are still named and titled by their page', () => {
+      renderApp('/')
+
+      expect(navToggle()).toHaveAccessibleName('Expand navigation')
+      expect(navToggle()).toHaveAttribute('aria-expanded', 'false')
+      expectLinks(['Shipments', 'Account settings'])
+      expect(screen.getByRole('link', { name: 'Shipments' })).toHaveAttribute('title', 'Shipments')
+      expect(within(primaryNav()).queryByText('Shipments')).not.toBeInTheDocument()
+    })
+
+    it('expands to show each page name when the toggle is clicked', async () => {
+      const user = userEvent.setup()
+      renderApp('/')
+
+      await user.click(navToggle())
+
+      expect(navToggle()).toHaveAccessibleName('Collapse navigation')
+      expect(navToggle()).toHaveAttribute('aria-expanded', 'true')
+      expect(navToggle()).toHaveTextContent('Collapse')
+      expect(within(primaryNav()).getByText('Shipments')).toBeInTheDocument()
+      expect(within(primaryNav()).getByText('Account settings')).toBeInTheDocument()
+    })
+
+    it('collapses again when the toggle is clicked a second time', async () => {
+      const user = userEvent.setup()
+      renderApp('/')
+
+      await user.click(navToggle())
+      await user.click(navToggle())
+
+      expect(navToggle()).toHaveAccessibleName('Expand navigation')
+      expect(within(primaryNav()).queryByText('Shipments')).not.toBeInTheDocument()
+    })
+
+    it.each([
+      ['collapsed', false],
+      ['expanded', true],
+    ])('when %s, still marks the current page and moves between pages', async (_state: string, expand: boolean) => {
+      const user = userEvent.setup()
+      renderApp('/')
+      if (expand) await user.click(navToggle())
+      expect(screen.getByRole('link', { name: 'Shipments' })).toHaveAttribute('aria-current', 'page')
+
+      await user.click(screen.getByRole('link', { name: 'Account settings' }))
+
+      expect(await screen.findByRole('heading', { level: 1, name: 'Account settings' })).toBeInTheDocument()
+      expect(screen.getByRole('link', { name: 'Account settings' })).toHaveAttribute('aria-current', 'page')
+      expect(screen.getByRole('link', { name: 'Shipments' })).not.toHaveAttribute('aria-current')
+    })
+
+    it('remembers whether it was left expanded or collapsed when the app is opened again', async () => {
+      const user = userEvent.setup()
+      const first = renderApp('/')
+      await user.click(navToggle())
+      first.unmount()
+
+      const second = renderApp('/')
+      expect(navToggle()).toHaveAttribute('aria-expanded', 'true')
+
+      await user.click(navToggle())
+      second.unmount()
+
+      renderApp('/')
+      expect(navToggle()).toHaveAttribute('aria-expanded', 'false')
+    })
   })
 
   it('has a placeholder page for what is not built yet', () => {

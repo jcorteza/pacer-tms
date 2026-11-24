@@ -4,6 +4,7 @@ import { changePassword } from '../api/users.ts'
 import { useAuth } from '../auth/useAuth.ts'
 import { TextField } from '../components/fields.tsx'
 import { hasErrors, useForm, type Errors } from '../components/form.ts'
+import { Message } from '../components/Message.tsx'
 
 const BLANK = { current: '', next: '', confirm: '' }
 type Values = typeof BLANK
@@ -26,13 +27,6 @@ export function SettingsPage() {
   const [done, setDone] = useState(false)
   const [failure, setFailure] = useState<string | null>(null)
   const [busy, setBusy] = useState(false)
-
-  const reset = () => {
-    setValues(BLANK)
-    setErrors({})
-    setFailure(null)
-    setDone(false)
-  }
 
   const submit = async () => {
     setDone(false)
@@ -85,25 +79,14 @@ export function SettingsPage() {
               <h2 id="password-heading">Change password</h2>
             </div>
             <div className="card-body">
-              {demo && <div className="message">Password changes are disabled in demo mode.</div>}
               <TextField label="Current password" required type="password" autoComplete="current-password" value={values.current} onChange={set('current')} error={errors.current} disabled={demo} />
               <TextField label="New password" required type="password" autoComplete="new-password" value={values.next} onChange={set('next')} error={errors.next} disabled={demo} />
               <TextField label="Confirm new password" required type="password" autoComplete="new-password" value={values.confirm} onChange={set('confirm')} error={errors.confirm} disabled={demo} />
-              {done && (
-                <div className="message message-status" role="status">
-                  Password updated.
-                </div>
-              )}
-              {failure && (
-                <div className="message message-alert" role="alert">
-                  {failure}
-                </div>
-              )}
+              {done && <Message tone="status">Password updated.</Message>}
+              {failure && <Message tone="alert">{failure}</Message>}
             </div>
-            <div className="card-foot">
-              <button className="btn-secondary" type="button" onClick={reset}>
-                Cancel
-              </button>
+            <div className="card-foot card-foot-stack">
+              {demo && <Message plain>Password changes are disabled in demo mode.</Message>}
               <button className="btn" type="submit" disabled={busy || demo}>
                 Update password
               </button>

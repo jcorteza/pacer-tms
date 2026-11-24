@@ -1,5 +1,6 @@
 import { CONFIGURATION_ROLES, hasAnyRole } from '../auth/roles.ts'
 import { useAuth } from '../auth/useAuth.ts'
+import { Message } from '../components/Message.tsx'
 import { BuildingsSection } from './configuration/BuildingsSection.tsx'
 import { ItemsSection } from './configuration/ItemsSection.tsx'
 import { SitesSection } from './configuration/SitesSection.tsx'
@@ -19,7 +20,7 @@ export function ConfigurationPage() {
     return (
       <>
         <h1 className="page-title">Configuration</h1>
-        <div className="message">Nothing to see here.</div>
+        <Message>Nothing to see here.</Message>
       </>
     )
   }
@@ -43,9 +44,7 @@ function ConfigurationSections() {
         </div>
       </div>
       {failed && !data && (
-        <div className="message message-alert" role="alert">
-          Could not load the configuration. Refresh the page to try again.
-        </div>
+        <Message tone="alert">Could not load the configuration. Refresh the page to try again.</Message>
       )}
       {data && (
         <>

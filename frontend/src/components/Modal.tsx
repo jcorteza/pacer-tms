@@ -1,5 +1,6 @@
 import { useEffect, useId, useRef, type FormEvent, type KeyboardEvent, type ReactNode } from 'react'
 import { Icon } from './Icon.tsx'
+import { Message } from './Message.tsx'
 
 type Props = {
   title: string
@@ -59,15 +60,11 @@ export function Modal({ title, submitLabel, onSubmit, onClose, busy, submitDisab
           </button>
         </div>
         <form noValidate onSubmit={handleSubmit}>
-          <div className="card-body">
+          <div className="modal-body">
             {children}
-            {error && (
-              <div className="message message-alert" role="alert">
-                {error}
-              </div>
-            )}
+            {error && <Message tone="alert">{error}</Message>}
           </div>
-          <div className="card-foot">
+          <div className="modal-foot">
             <button className="btn-secondary" type="button" onClick={onClose}>
               Cancel
             </button>

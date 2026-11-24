@@ -4,6 +4,7 @@ import { ApiError, tooManyAttemptsMessage } from '../api/client.ts'
 import { useAuth } from '../auth/useAuth.ts'
 import { TextField } from '../components/fields.tsx'
 import { Icon } from '../components/Icon.tsx'
+import { Message } from '../components/Message.tsx'
 import { COMPANY_NAME } from '../nav.ts'
 
 const EXPIRED = 'Your session expired. Sign in again.'
@@ -63,19 +64,12 @@ export function LoginPage() {
           <form className="login-card" noValidate onSubmit={submit}>
             <TextField label="Company email" required type="email" autoComplete="username" value={email} onChange={setEmail} />
             <TextField label="Password" required type="password" autoComplete="current-password" value={password} onChange={setPassword} />
-            {message && (
-              <div className="message message-alert" role="alert">
-                {message}
-              </div>
-            )}
+            {message && <Message tone="alert">{message}</Message>}
             <button className="btn btn-block" type="submit" disabled={busy}>
               Sign in
             </button>
           </form>
-          <div className="message login-note">
-            <Icon name="info" size={18} />
-            <span>Accounts are created by your administrator. If you cannot sign in, contact them.</span>
-          </div>
+          <Message className="login-note">Accounts are created by your administrator. If you cannot sign in, contact them.</Message>
         </div>
       </main>
     </div>

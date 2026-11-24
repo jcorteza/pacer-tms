@@ -142,16 +142,4 @@ describe('account settings page', () => {
     expect(screen.getByText(/password changes are disabled in demo mode/i)).toBeInTheDocument()
     expect(calls).toHaveLength(0)
   })
-
-  it('clears the form on Cancel', async () => {
-    const user = userEvent.setup()
-    renderApp('/settings')
-
-    await fillForm(user, { current: 'old-password', next: 'new-password-1', confirm: 'new-password-1' })
-    await user.click(screen.getByRole('button', { name: 'Cancel' }))
-
-    expect(current()).toHaveValue('')
-    expect(next()).toHaveValue('')
-    expect(confirm()).toHaveValue('')
-  })
 })

@@ -9,7 +9,7 @@ describe('isDemoMode', () => {
     expect(isDemoMode()).toBe(true)
   })
 
-  it.each(['false', '', '1', 'yes', 'TRUE'])('given VITE_DEMO_MODE=%j, is off', (value) => {
+  it.each(['false', '', '1', 'yes', 'TRUE'])('given VITE_DEMO_MODE=%j, is off', (value: string) => {
     vi.stubEnv('VITE_DEMO_MODE', value)
     expect(isDemoMode()).toBe(false)
   })
