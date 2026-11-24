@@ -1,6 +1,6 @@
 # CLAUDE.md
 
-Welcome to working on Pacer TMS. Familiarize yourself with the project by reading the README.md and package.json files in `./`, `./backend`, and `./frontend`.
+Welcome to working on Pacer TMS. Familiarize yourself with the project by reading the READMEs and package.json files in `./`, `./backend`, and `./frontend`.
 
 ## Notion
 

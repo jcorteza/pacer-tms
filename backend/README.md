@@ -31,31 +31,29 @@
 $ pnpm install
 ```
 
-## Compile and run the project
+## Scripts
 
-```bash
-# development
-$ pnpm run start
+Run any of these with `pnpm <script>`.
 
-# watch mode
-$ pnpm run start:dev
-
-# production mode
-$ pnpm run start:prod
-```
-
-## Run tests
-
-```bash
-# unit tests
-$ pnpm run test
-
-# e2e tests
-$ pnpm run test:e2e
-
-# test coverage
-$ pnpm run test:cov
-```
+| Script | What it does |
+|---|---|
+| `build` | Compile with `nest build` into `dist/`. |
+| `start` | Run the app once. |
+| `start:dev` | Run with file watching (restarts on change). |
+| `start:debug` | Run with the Node debugger attached and file watching. |
+| `start:prod` | Run the compiled app (`node dist/main`); run `build` first. |
+| `deploy` | Deploy with `nest deploy` (NestJS Mau). |
+| `lint` | Type-aware lint with oxlint over `src/` and `test/`. |
+| `typecheck` | Type-check with `tsc --noEmit`. |
+| `format` | Rewrite `src/` and `test/` with Prettier. |
+| `db:seed` | Fill an empty database with the Larkspur Freight sample data. `pnpm db:seed --reset` wipes it first. Uses `DATABASE_URL`. |
+| `test` | All three suites below, in order: `test:unit`, `test:db`, `test:e2e`. |
+| `test:unit` | Unit specs (`vitest run`). No database needed. |
+| `test:db` | Database specs against the throwaway `pacer_test` database (derived from `DATABASE_URL`, so dev data is never touched). |
+| `test:e2e` | End-to-end specs: the real Nest app against `pacer_test`. Files run one at a time because they share the database. |
+| `test:watch` | Unit specs in watch mode. |
+| `test:cov` | Unit specs with a coverage report. |
+| `test:debug` | Unit specs with the Node inspector, paused on start, files run one at a time. |
 
 ## Deployment
 
