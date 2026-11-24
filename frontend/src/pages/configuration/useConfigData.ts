@@ -1,7 +1,12 @@
 import { useCallback, useEffect, useState } from 'react'
-import type { User } from '../../auth/session.ts'
+import { listBuildings } from '../../api/building-codes.ts'
+import { listClients } from '../../api/clients.ts'
+import { listItemLocations } from '../../api/item-locations.ts'
+import { listItems } from '../../api/items.ts'
+import { listWarehouseManagers } from '../../api/users.ts'
+import { listSites } from '../../api/warehouse-codes.ts'
 import { useAuth } from '../../auth/useAuth.ts'
-import type { Building, Client, ConfigData, Item, ItemLocation, Site } from './types.ts'
+import type { ConfigData } from './types.ts'
 
 /** Loads every list the page needs. `reload` refreshes them after a save. */
 export function useConfigData() {
@@ -12,12 +17,12 @@ export function useConfigData() {
   const load = useCallback(
     () =>
       Promise.all([
-        api.fetchAll<Site>('/warehouse-codes'),
-        api.fetchAll<Building>('/building-codes'),
-        api.fetchAll<Item>('/items'),
-        api.fetchAll<ItemLocation>('/item-locations'),
-        api.fetchAll<Client>('/clients'),
-        api.fetchAll<User>('/users', { role: 'Warehouse Management' }),
+        listSites(api),
+        listBuildings(api),
+        listItems(api),
+        listItemLocations(api),
+        listClients(api),
+        listWarehouseManagers(api),
       ]).then(([sites, buildings, items, locations, clients, managers]): ConfigData => ({
         sites,
         buildings,

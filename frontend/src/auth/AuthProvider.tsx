@@ -1,5 +1,6 @@
 import { useCallback, useEffect, useMemo, useRef, useState, type ReactNode } from 'react'
 import { createApi } from '../api/client.ts'
+import { signIn, signOut, startDemoSession } from '../api/sessions.ts'
 import { AuthContext, type AuthValue } from './context.ts'
 import { isDemoMode } from './demo.ts'
 import { clearSession, loadSession, peekSession, saveSession, type Session } from './session.ts'
@@ -44,8 +45,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     if (!signingInAsDemo || demoRequested.current) return
     demoRequested.current = true
-    api
-      .post<Session>('/sessions', undefined)
+    startDemoSession(api)
       .then(begin)
       .catch(() => setDemoFailed(true))
       .finally(() => {
@@ -60,12 +60,12 @@ export function AuthProvider({ children }: { children: ReactNode }) {
       signingInAsDemo,
       api,
       async signIn(email, password) {
-        begin(await api.post<Session>('/sessions', { email, password }))
+        begin(await signIn(api, email, password))
       },
       async signOut() {
         const id = peekSession()?.id
         // Sign out locally even if the server cannot be reached.
-        if (id) await api.delete(`/sessions/${id}`).catch(() => undefined)
+        if (id) await signOut(api, id).catch(() => undefined)
         end()
       },
     }),

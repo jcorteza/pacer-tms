@@ -5,7 +5,9 @@ import { changedFields, hasErrors, requiredErrors, useForm, type Errors } from '
 import { Modal } from '../../components/Modal.tsx'
 import { SectionCard } from './SectionCard.tsx'
 import { STATES } from './states.ts'
-import type { SectionProps, Site } from './types.ts'
+import type { Site } from '../../api/types.ts'
+import { createSite, updateSite } from '../../api/warehouse-codes.ts'
+import type { SectionProps } from './types.ts'
 import type { User } from '../../auth/session.ts'
 
 type Values = { name: string; address: string; city: string; state: string; zip: string; phone: string; managerId: string }
@@ -52,9 +54,9 @@ function SiteDialog({ site, managers, onClose, onSaved }: DialogProps) {
     try {
       if (site) {
         const changes = changedFields(values, initial)
-        if (Object.keys(changes).length > 0) await api.patch(`/warehouse-codes/${site.id}`, changes)
+        if (Object.keys(changes).length > 0) await updateSite(api, site.id, changes)
       } else {
-        await api.post('/warehouse-codes', Object.fromEntries(Object.entries(values).map(([k, v]) => [k, v.trim()])))
+        await createSite(api, Object.fromEntries(Object.entries(values).map(([k, v]) => [k, v.trim()])))
       }
       await onSaved()
     } catch {
